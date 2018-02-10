@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDMailer.BLL", "CDMailer.BLL\CDMailer.BLL.csproj", "{FFFFEC11-923F-41ED-A959-FE7225EB4966}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDMailer", "CDMailer\CDMailer.csproj", "{D258CF43-7FA8-46EF-B60C-4E0135863CB2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{EA93D5CD-A703-43CA-9F8F-2E482E6839A4}"
+	ProjectSection(SolutionItems) = preProject
+		templates\[OpportunityName] Business .docx = templates\[OpportunityName] Business .docx
+		templates\[OpportunityName] Business follow up.docx = templates\[OpportunityName] Business follow up.docx
+		templates\[OpportunityName] Claimant follow up.docx = templates\[OpportunityName] Claimant follow up.docx
+		templates\[OpportunityName] Claimant.docx = templates\[OpportunityName] Claimant.docx
+		templates\[OpportunityName] Estate .docx = templates\[OpportunityName] Estate .docx
+		templates\[OpportunityName] Estate follow up.docx = templates\[OpportunityName] Estate follow up.docx
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sol", "sol", "{5231D845-0244-4E71-9613-54F8791E52EE}"
+	ProjectSection(SolutionItems) = preProject
+		versions.xlsx = versions.xlsx
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FFFFEC11-923F-41ED-A959-FE7225EB4966}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFFFEC11-923F-41ED-A959-FE7225EB4966}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFFFEC11-923F-41ED-A959-FE7225EB4966}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFFFEC11-923F-41ED-A959-FE7225EB4966}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D258CF43-7FA8-46EF-B60C-4E0135863CB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D258CF43-7FA8-46EF-B60C-4E0135863CB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D258CF43-7FA8-46EF-B60C-4E0135863CB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D258CF43-7FA8-46EF-B60C-4E0135863CB2}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8BA23870-5DF5-4663-B4BD-53429951CAFB}
+	EndGlobalSection
+EndGlobal
