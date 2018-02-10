@@ -12,6 +12,17 @@ using System.Collections;
 /// </summary>
 public static class XLogger
 {
+    #region timer
+    /*
+    XLogger.Application = String.Format("SentimentExe||{0}||{1}", Config.ExeVersion, DateTime.Now.ToString("yyyyMMddHHmmss"));
+    Stopwatch timer = Stopwatch.StartNew();
+    XLogger.Info("BEGIN:\t Scheduled Task Execution");
+    TimeSpan ts = timer.Elapsed;
+    var elapsed = String.Format("{0:00}:{1:00}:{2:00}.{3:000}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+    XLogger.Info($"END:{elapsed}\t Scheduled Task Execution");
+    */
+    #endregion timer
+
     #region FLD
     private delegate void LogMessageHandler(LogEntry entry, ILogFormatter formatter);
     private static event LogMessageHandler LogMessage;
@@ -34,14 +45,19 @@ public static class XLogger
     public static string Application = "";
     public static LogType Type = LogType.File | LogType.Console | LogType.Context;
     public static LogStatus Sensitivity = LogStatus.Info;
-    public static string Target = @"c:\X\logs.txt";
+    private static string target;
+    public static string Target { get { return target; } set { target = value; LogMessage = null; LogMessage += (new FileLog(Target)).Log; } }
     public static LogFormat Format = LogFormat.Text;
     #endregion PROP
 
     static XLogger()
     {
+        //Target = @"c:\X\logs.txt";
+        if (String.IsNullOrEmpty(target))
+            target = @"logs.txt";
+
         // initialize log targets ...
-        if ((Type & LogType.File) == LogType.File) LogMessage += (new FileLog()).Log;
+        if ((Type & LogType.File) == LogType.File) LogMessage += (new FileLog(Target)).Log;
         if ((Type & LogType.Console) == LogType.Console) LogMessage += (new ConsoleLog()).Log;
         if ((Type & LogType.EventLog) == LogType.EventLog) LogMessage += (new EventLog()).Log;
 
@@ -315,17 +331,18 @@ public static class XLogger
         #region Fields
 
         private bool _Enabled = true;
-        private string _Location = @"c:\X\logs.txt";
+        private string _Location;
 
         #endregion
 
         /// <summary>
         /// Initializes a new instance of the <see cref="FileLog"/> class.
         /// </summary>
-        public FileLog()
+        public FileLog(string userLocation = null)
         {
-            _Enabled = Initialize();
+            _Enabled = Initialize(userLocation);
         }
+
 
         /// <summary>
         /// Logs the specified entry.
@@ -349,10 +366,12 @@ public static class XLogger
         /// Initializes this instance.
         /// </summary>
         /// <returns></returns>
-        private bool Initialize()
+        private bool Initialize(string userLocation = null)
         {
             try
             {
+                if (!String.IsNullOrWhiteSpace(userLocation))
+                    _Location = userLocation;
                 FileInfo _File = new FileInfo(_Location);
                 if (!_File.Directory.Exists) _File.Directory.Create();
                 if (!_File.Exists) using (_File.Create()) { }
@@ -498,12 +517,12 @@ public static class XLogger
             if (logEntry == null) return "";
 
             return string.Format(CultureInfo.InvariantCulture, "{0}[{1}] {2}[{3}]:{4}{5}{0}"
-                , (logEntry.Status == LogStatus.Error) ? Environment.NewLine : String.Empty                 //0
-                , logEntry.Time.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)               //1
-                , !String.IsNullOrEmpty(logEntry.Application) ? string.Format("[{0}].", logEntry.Application) : String.Empty  //2
-                , logEntry.Status                                                                           //3
-                , Environment.NewLine                                                                       //4
-                , logEntry.Message                                                                          //5
+                , (logEntry.Status == LogStatus.Error) ? Environment.NewLine : String.Empty                                     //0
+                , logEntry.Time.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.InvariantCulture)                                   //1
+                , !String.IsNullOrEmpty(logEntry.Application) ? string.Format("[{0}].", logEntry.Application) : String.Empty    //2
+                , logEntry.Status                                                                                               //3
+                , logEntry.Status == LogStatus.Error ? Environment.NewLine : " "                                                 //4
+                , logEntry.Message                                                                                              //5
                 , (logEntry.Status == LogStatus.Error) ? Environment.NewLine : String.Empty);
         }
     }

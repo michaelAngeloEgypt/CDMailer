@@ -17,6 +17,8 @@ namespace CDMailer.BLL
         public string FilenameTimestamp { get { return $"{BeginTimestamp.ToString("yyyyMMdd")}_{BeginTimestamp.ToString("HHmmss")}"; } }
 
 
+        public List<Contact> Contacts { get; private set; }
+
         public ExecutionVariables()
         {
             Reset();
@@ -27,6 +29,7 @@ namespace CDMailer.BLL
             CancellationPending = false;
             //ExecutionTimestamp = "";
             //OutputSheetPath = "";
+            Contacts = new List<Contact>();
         }
     }
 }

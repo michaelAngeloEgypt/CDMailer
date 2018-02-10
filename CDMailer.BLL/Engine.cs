@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CsvHelper;
+using CsvHelper.Configuration;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -51,6 +53,72 @@ namespace CDMailer.BLL
         {
             Lookups.Reset();
             ExecutionStatus.Reset();
+        }
+        public static void DoTask(Config config)
+        {
+            try
+            {
+                Variables.Contacts.AddRange(ReadRecords(config.UI.ContactsFile));
+                GenerateMessages(Variables.Contacts);
+            }
+            catch
+            { throw; }
+        }
+
+        private static List<Contact> ReadRecords(string contactsFilepath)
+        {
+            try
+            {
+                var res = new List<Contact>();
+                var contactsLines = File.ReadAllLines(contactsFilepath);
+                foreach (var line in contactsLines.Skip(1))
+                {
+                    var lineParts = line.Split(',').ToList();
+                    Contact contact = null;
+                    contact = new Contact(line);
+                    res.Add(contact);
+                }
+
+                return res;
+            }
+            catch (Exception x)
+            {
+                x.Data.Add("contactsFilepath", contactsFilepath);
+                throw;
+            }
+        }
+        private static void GenerateMessages(List<Contact> contacts)
+        {
+        }
+
+        /// <summary>
+        /// returns empty records, not sure why
+        /// </summary>
+        /// <param name="contactsFilepath"></param>
+        /// <returns></returns>
+        private static List<Contact> ReadRecords_CsvHelper(string contactsFilepath)
+        {
+            try
+            {
+                var res = new List<Contact>();
+                if (String.IsNullOrWhiteSpace(contactsFilepath) || !File.Exists(contactsFilepath))
+                    throw new ArgumentNullException("contactsFilepath");
+
+                var csvConfig = new Configuration() { Delimiter = ",", HasHeaderRecord = true, IgnoreBlankLines = true };
+                csvConfig.RegisterClassMap(new ContactMap());
+                using (var csv = new CsvReader(new StreamReader(contactsFilepath), csvConfig))
+                {
+                    var records = csv.GetRecords<Contact>();
+                    res.AddRange(records);
+                }
+
+                return res;
+            }
+            catch (Exception x)
+            {
+                x.Data.Add("contactsFilepath", contactsFilepath);
+                throw;
+            }
         }
 
         private static void CallUpdateStatus(string msg)

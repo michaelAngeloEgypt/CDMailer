@@ -207,6 +207,8 @@ namespace CDMailer
         {
             try
             {
+                var config = myUI.BuildConfig();
+                Engine.DoTask(config);
             }
             catch (Exception x)
             {
@@ -215,6 +217,8 @@ namespace CDMailer
                     Engine.ExecutionStatus.Message = x.Message;
                 else
                     Engine.ExecutionStatus.Message = MSG.UnknownError;
+
+                XLogger.Error(x);
             }
         }
 

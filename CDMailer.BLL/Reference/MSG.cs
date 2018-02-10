@@ -8,12 +8,12 @@ namespace CDMailer.BLL
 {
     public class MSG
     {
-        public const string UnknownError = @"An unknown error occured, please check the logs at c:\x\logs.txt";
+        public const string UnknownError = @"An unknown error occured, please check the logs";
 
         public const string GenerationSuccessful = "Successfully generated cleaned-up entries in the output folder";
-        public const string FailedToGenerateOutput = @"Failed to generate tickets. Please check the log at c:\x\logs.txt";
-        public const string ErrorWhileReadingInputs = @"An error occured while reading input files. Please check the log at c:\x\logs.txt";
-        public const string UnableToSaveConfig = @"An error occured while saving the configuration. Please check the log at c:\x\logs.txt";
+        public const string FailedToGenerateOutput = @"Failed to generate messages. Please check the logs";
+        public const string ErrorWhileReadingInputs = @"An error occured while reading input files. Please check the logs";
+        public const string UnableToSaveConfig = @"An error occured while saving the configuration. Please check the logs";
         public const string InvalidFolderPath = @"Please input a valid folder.";
 
         public const string IllegalGroupInOutputFile = "This file contains one or more combinations of (package,solution) that are not defined in the map";

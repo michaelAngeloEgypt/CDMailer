@@ -66,6 +66,8 @@ namespace CDMailer.BLL
         }
 
 
+
+
         /// <summary>
         /// http://stackoverflow.com/questions/876473/is-there-a-way-to-check-if-a-file-is-in-use
         /// </summary>

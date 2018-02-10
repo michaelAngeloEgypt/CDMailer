@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>CDMailer</RootNamespace>
     <AssemblyName>CDMailer</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -74,6 +75,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\CDMailer.BLL.InputFile.datasource" />
@@ -98,20 +100,13 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
-    <templates Include="$(SolutionDir)templates\**\*.*" >
+    <templates Include="$(SolutionDir)templates\**\*.*">
       <InProject>false</InProject>
     </templates>
   </ItemGroup>
   <Target Name="BeforeBuild">
   </Target>
   <Target Name="AfterBuild">
-     <Copy
-          SourceFiles="@(templates)"
-          DestinationFolder="$(OutputPath)\templates\%(RecursiveDir)"
-          SkipUnchangedFiles="true"
-          OverwriteReadOnlyFiles="true"
-          Retries="3"
-          RetryDelayMilliseconds="300"
-          ContinueOnError="true"/>
+    <Copy SourceFiles="@(templates)" DestinationFolder="$(OutputPath)\templates\%(RecursiveDir)" SkipUnchangedFiles="true" OverwriteReadOnlyFiles="true" Retries="3" RetryDelayMilliseconds="300" ContinueOnError="true" />
   </Target>
 </Project>
