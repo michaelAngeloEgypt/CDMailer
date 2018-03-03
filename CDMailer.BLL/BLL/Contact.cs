@@ -21,6 +21,7 @@ namespace CDMailer.BLL
         public string Title { get; set; }
         public string Template { get; set; }
 
+        public Contact() { }
         public Contact(string sourceLine)
         {
             try
@@ -49,6 +50,14 @@ namespace CDMailer.BLL
             }
         }
 
+        internal string GetMappedVar(string varName)
+        {
+            var propInfo = this.GetType().GetProperty(varName);
+            if (propInfo != null)
+                return propInfo.GetValue(this) as string;
+            else
+                return "";
+        }
     }
 
     internal static class ContactExtender

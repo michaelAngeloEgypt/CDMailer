@@ -6,6 +6,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CDMailer.BLL
@@ -65,7 +66,63 @@ namespace CDMailer.BLL
             return alpha[idx].ToString();
         }
 
+        /// <summary>
+        /// Get string value between [first] a and [last] b.
+        /// </summary>
+        public static string Between(this string value, string a, string b)
+        {
+            /*
+            int posA = value.IndexOf(a);
+            int posB = value.LastIndexOf(b);
+            if (posA == -1)
+            {
+                return "";
+            }
+            if (posB == -1)
+            {
+                return "";
+            }
+            int adjustedPosA = posA + a.Length;
+            if (adjustedPosA >= posB)
+            {
+                return "";
+            }
+            return value.Substring(adjustedPosA, posB - adjustedPosA);
+            */
 
+            if (String.IsNullOrEmpty(value))
+                return "";
+
+            int start = value.IndexOf(a) + a.Length;
+            if (value.StartsWith(a)) start++;
+            int end = value.IndexOf(b, start);
+            if (end == -1) return "";
+            string result = value.Substring(start, end - start);
+            return result;
+        }
+
+        /// <summary>
+        /// <see cref="http://stackoverflow.com/questions/10485903/regex-extract-value-from-the-string-between-delimiters"/>
+        /// <see cref="http://stackoverflow.com/questions/378415/how-do-i-extract-text-that-lies-between-parentheses-round-brackets"/>
+        /// <seealso cref="https://regex101.com"/>
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="startDelimiter"></param>
+        /// <param name="endDelimiter"></param>
+        /// <param name="includeDelimiters"></param>
+        /// <returns></returns>
+        public static string ExtractStringBetweenDelimiters(this string source, string startDelimiter, string endDelimiter, bool includeDelimiters = true)
+        {
+            if (String.IsNullOrWhiteSpace(source))
+                return String.Empty;
+
+            string victim = Regex.Match(source, String.Format(@"{0}(.*?){1}", startDelimiter, endDelimiter)).Value;
+
+            if (!includeDelimiters)
+                victim = victim.Between(startDelimiter, endDelimiter);
+
+            return victim;
+        }
 
 
         /// <summary>

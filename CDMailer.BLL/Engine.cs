@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CDMailer.BLL
@@ -25,11 +26,12 @@ namespace CDMailer.BLL
         public static event MarkCompletedEventHandler MarkCompletedEvent;
         #endregion DLG
 
-
+        static string contactsFolder = "";
         public enum ExecutionResult
         {
             ErrorOccured,
             Successful,
+            PartialPass,
         }
         public class ExecutionStatus
         {
@@ -58,8 +60,10 @@ namespace CDMailer.BLL
         {
             try
             {
+                var templatesPath = Path.Combine(Environment.CurrentDirectory, "templates");
+                contactsFolder = Path.GetDirectoryName(config.UI.ContactsFile);
                 Variables.Contacts.AddRange(ReadRecords(config.UI.ContactsFile));
-                GenerateMessages(Variables.Contacts);
+                Engine.ExecutionStatus.Result = GenerateMessages(templatesPath, Variables.Contacts);
             }
             catch
             { throw; }
@@ -87,8 +91,58 @@ namespace CDMailer.BLL
                 throw;
             }
         }
-        private static void GenerateMessages(List<Contact> contacts)
+        private static ExecutionResult GenerateMessages(string templatesFolder, List<Contact> contacts)
         {
+            var successfulContacts = new List<String>();
+            var failedContacts = new List<String>();
+
+            Contact contact = new Contact();
+            for (int i = 0; i < contacts.Count; i++)
+            {
+                try
+                {
+                    contact = contacts[i];
+                    CallUpdateStatus($"Processing contact {i + 1} of {contacts.Count} contacts");
+                    var templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.Template), ".docx");
+                    if (!File.Exists(templateFile))
+                    {
+                        XLogger.Info($"Missing template file: {templateFile}");
+                        continue;
+                    }
+                    var requiredVar =
+                    contact.Template.Split(new string[] { "[", "]" }, StringSplitOptions.None)[1]
+      .Split('-')[0]
+      .Trim();
+                    var mappedVar = contact.GetMappedVar(requiredVar);
+                    string generatedFilename = string.Concat(contact.Template.Replace($"[{requiredVar}]", mappedVar), ".docx");
+                    string generatedFilePath = Path.Combine(contactsFolder, generatedFilename);
+                    //File.Copy(templateFile, generatedFilePath);
+                    DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePath, contact);
+                    successfulContacts.Add(contact.OppName);
+                }
+                catch (Exception x)
+                {
+                    if (!x.Data.Contains("contact.OppName")) x.Data.Add("contact.OppName", contact.OppName);
+                    XLogger.Error(x);
+                    failedContacts.Add(contact.OppName);
+                }
+            }
+
+            if (successfulContacts.Count == contacts.Count())
+            {
+                CallUpdateStatus("Operation passed and filled templates are generated in the Output folder");
+                return ExecutionResult.Successful;
+            }
+            else if (failedContacts.Count == contacts.Count())
+            {
+                CallUpdateStatus("There was a problem in generating all the contacts files");
+                return ExecutionResult.ErrorOccured;
+            }
+            else
+            {
+                CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nThese are the failed contacts:\n{String.Join("\n", failedContacts)}");
+                return ExecutionResult.PartialPass;
+            }
         }
 
         /// <summary>

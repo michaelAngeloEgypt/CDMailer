@@ -17,6 +17,9 @@ namespace CDMailer
 
     public partial class Main : Form
     {
+        delegate void SetTextCallback(string text);
+        delegate void SetCompletedCallback(string finalMessage);
+
         private UI myUI = new UI();
         class UI
         {
@@ -69,6 +72,37 @@ namespace CDMailer
                     myUI.SignalSuccess(MSG.GenerationSuccessful);
                     break;
             }
+        }
+        private void UpdateProgress(String Message)
+        {
+            if (this.txtResult.InvokeRequired)
+            {
+                SetTextCallback d = new SetTextCallback(UpdateProgress);
+                this.Invoke(d, new object[] { Message });
+            }
+            else
+            {
+                this.txtResult.Text = Message;
+                XLogger.Info(Message);
+            }
+        }
+        private void MarkCompleted(string finalMessage)
+        {
+            //String finalMessage = "Completed the Process";
+
+            if (this.txtResult.InvokeRequired)
+            {
+                SetCompletedCallback d = new SetCompletedCallback(MarkCompleted);
+                this.Invoke(d, new Object[] { finalMessage });
+            }
+            else
+            {
+                this.txtResult.Text = finalMessage;
+            }
+
+            loadingCircle1.Active = false;
+            //btnStartStop.Text = "START";
+            //btnStartStop.Enabled = true;
         }
 
 
@@ -153,6 +187,17 @@ namespace CDMailer
             }
         }
 
+        private void DetachEvents()
+        {
+            Engine.UpdateStatusEvent -= UpdateProgress;
+            Engine.MarkCompletedEvent -= MarkCompleted;
+        }
+        private void AttachEvents()
+        {
+            Engine.UpdateStatusEvent += UpdateProgress;
+            Engine.MarkCompletedEvent += MarkCompleted;
+        }
+
         private void btnOutputFolder_Click(object sender, EventArgs e)
         {
             try
@@ -221,7 +266,6 @@ namespace CDMailer
                 XLogger.Error(x);
             }
         }
-
         private void btnReset_Click(object sender, EventArgs e)
         {
             Reset();
@@ -246,6 +290,7 @@ namespace CDMailer
                     e.Cancel = true;
                 else
                 {
+                    AttachEvents();
                     DoProcess();
                 }
             }
@@ -255,7 +300,7 @@ namespace CDMailer
         private void bgwProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             loadingCircle1.Active = false;
-            UpdateProgress();
+            //UpdateProgress();
         }
     }
 }
