@@ -33,8 +33,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>CDMailer.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
@@ -110,6 +109,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\CDMailer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CDMailer.ico" />
   </ItemGroup>
   <Target Name="BeforeBuild">
   </Target>
