@@ -58,6 +58,21 @@ namespace CDMailer.BLL
             else
                 return "";
         }
+
+        internal void TrimFields()
+        {
+            FirstName = !String.IsNullOrWhiteSpace(FirstName) ? FirstName.Trim() : string.Empty;
+            LastName = !String.IsNullOrWhiteSpace(LastName) ? LastName.Trim() : string.Empty;
+            OppName = !String.IsNullOrWhiteSpace(OppName) ? OppName.Trim() : string.Empty;
+            CaseType = !String.IsNullOrWhiteSpace(CaseType) ? CaseType.Trim() : string.Empty;
+            AddressLine1 = !String.IsNullOrWhiteSpace(AddressLine1) ? AddressLine1.Trim() : string.Empty;
+            AddressLine2 = !String.IsNullOrWhiteSpace(AddressLine2) ? AddressLine2.Trim() : string.Empty;
+            City = !String.IsNullOrWhiteSpace(City) ? City.Trim() : string.Empty;
+            State = !String.IsNullOrWhiteSpace(State) ? State.Trim() : string.Empty;
+            ZipCode = !String.IsNullOrWhiteSpace(ZipCode) ? ZipCode.Trim() : string.Empty;
+            Title = !String.IsNullOrWhiteSpace(Title) ? Title.Trim() : string.Empty;
+            Template = !String.IsNullOrWhiteSpace(Template) ? Template.Trim() : string.Empty;
+        }
     }
 
     internal static class ContactExtender

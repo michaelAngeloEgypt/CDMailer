@@ -55,6 +55,7 @@ namespace CDMailer.BLL
         {
             Lookups.Reset();
             ExecutionStatus.Reset();
+            Variables.Reset();
         }
         public static void DoTask(Config config)
         {
@@ -65,8 +66,15 @@ namespace CDMailer.BLL
                 Variables.Contacts.AddRange(ReadRecords(config.UI.ContactsFile));
                 Engine.ExecutionStatus.Result = GenerateMessages(templatesPath, config.UI.OutputFolder, Variables.Contacts);
             }
-            catch
-            { throw; }
+            catch (Exception x)
+            {
+                if (x is ApplicationException)
+                    CallMarkCompleted(x.Message);
+                else
+                    CallMarkCompleted("Something went wrong in the middle of the process. Please check the logs.txt file.");
+
+                XLogger.Error(x);
+            }
         }
 
         private static List<Contact> ReadRecords_Manual(string contactsFilepath)
@@ -105,10 +113,8 @@ namespace CDMailer.BLL
                     CallUpdateStatus($"Processing contact {i + 1} of {contacts.Count} contacts");
                     var templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.Template), ".docx");
                     if (!File.Exists(templateFile))
-                    {
-                        XLogger.Info($"Missing template file: {templateFile}");
-                        continue;
-                    }
+                        throw new ApplicationException($"Missing template file: {templateFile}");
+
                     var requiredVar =
                     contact.Template.Split(new string[] { "[", "]" }, StringSplitOptions.None)[1]
       .Split('-')[0]
@@ -140,7 +146,7 @@ namespace CDMailer.BLL
             }
             else
             {
-                CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nThese are the failed contacts:\n{String.Join("\n", failedContacts)}");
+                CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nThese are the failed contacts:\n\n{String.Join("\n", failedContacts)}");
                 return ExecutionResult.PartialPass;
             }
         }
@@ -161,7 +167,14 @@ namespace CDMailer.BLL
                     res.AddRange(records);
                 }
 
+                res.ForEach(r => r.TrimFields());
                 return res;
+            }
+            catch (IOException io)
+            {
+                io.Data.Add("contactsFilepath", contactsFilepath);
+                var x = new ApplicationException("An error occured while reading the csv file. Please make sure it is not open in Excel.", io);
+                throw x;
             }
             catch (Exception x)
             {

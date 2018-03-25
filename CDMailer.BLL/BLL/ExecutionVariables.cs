@@ -27,7 +27,7 @@ namespace CDMailer.BLL
         {
             ExecutionTime = new Stopwatch();
             CancellationPending = false;
-            //ExecutionTimestamp = "";
+            BeginTimestamp = DateTime.Now;
             //OutputSheetPath = "";
             Contacts = new List<Contact>();
         }

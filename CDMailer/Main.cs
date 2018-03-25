@@ -277,6 +277,7 @@ namespace CDMailer
             {
                 Engine.Reset();
                 myUI.ClearSignals();
+                DetachEvents();
             }
         }
 
