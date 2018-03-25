@@ -63,13 +63,13 @@ namespace CDMailer.BLL
                 var templatesPath = Path.Combine(Environment.CurrentDirectory, "templates");
                 contactsFolder = Path.GetDirectoryName(config.UI.ContactsFile);
                 Variables.Contacts.AddRange(ReadRecords(config.UI.ContactsFile));
-                Engine.ExecutionStatus.Result = GenerateMessages(templatesPath, Variables.Contacts);
+                Engine.ExecutionStatus.Result = GenerateMessages(templatesPath, config.UI.OutputFolder, Variables.Contacts);
             }
             catch
             { throw; }
         }
 
-        private static List<Contact> ReadRecords(string contactsFilepath)
+        private static List<Contact> ReadRecords_Manual(string contactsFilepath)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace CDMailer.BLL
                 throw;
             }
         }
-        private static ExecutionResult GenerateMessages(string templatesFolder, List<Contact> contacts)
+        private static ExecutionResult GenerateMessages(string templatesFolder, string outputFolder, List<Contact> contacts)
         {
             var successfulContacts = new List<String>();
             var failedContacts = new List<String>();
@@ -115,7 +115,7 @@ namespace CDMailer.BLL
       .Trim();
                     var mappedVar = contact.GetMappedVar(requiredVar);
                     string generatedFilename = string.Concat(contact.Template.Replace($"[{requiredVar}]", mappedVar), ".docx");
-                    string generatedFilePath = Path.Combine(contactsFolder, generatedFilename);
+                    string generatedFilePath = Path.Combine(outputFolder, generatedFilename);
                     //File.Copy(templateFile, generatedFilePath);
                     DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePath, contact);
                     successfulContacts.Add(contact.OppName);
@@ -145,12 +145,7 @@ namespace CDMailer.BLL
             }
         }
 
-        /// <summary>
-        /// returns empty records, not sure why
-        /// </summary>
-        /// <param name="contactsFilepath"></param>
-        /// <returns></returns>
-        private static List<Contact> ReadRecords_CsvHelper(string contactsFilepath)
+        private static List<Contact> ReadRecords(string contactsFilepath)
         {
             try
             {
@@ -162,7 +157,7 @@ namespace CDMailer.BLL
                 csvConfig.RegisterClassMap(new ContactMap());
                 using (var csv = new CsvReader(new StreamReader(contactsFilepath), csvConfig))
                 {
-                    var records = csv.GetRecords<Contact>();
+                    var records = csv.GetRecords<Contact>().ToList();
                     res.AddRange(records);
                 }
 

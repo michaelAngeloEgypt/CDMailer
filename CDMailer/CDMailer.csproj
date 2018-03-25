@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>CDMailer.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <HintPath>..\packages\Ookii.Dialogs.WindowsForms.1.0\lib\net35\Ookii.Dialogs.dll</HintPath>
@@ -103,6 +106,12 @@
     <templates Include="$(SolutionDir)templates\**\*.*">
       <InProject>false</InProject>
     </templates>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="CDMailer.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CDMailer.ico" />
   </ItemGroup>
   <Target Name="BeforeBuild">
   </Target>
