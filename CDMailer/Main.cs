@@ -26,6 +26,19 @@ namespace CDMailer
             public Main o;
             public string ContactsFile { get { return o.txtContactsFile.Text; } set { o.txtContactsFile.Text = value; } }
             public string OutputFolder { get { return o.txtOutputFolder.Text; } set { o.txtOutputFolder.Text = value; } }
+            public Lookups.GeneratePerContact GeneratePerContact
+            {
+                get
+                {
+                    var selectedTag = o.gbInputs.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag.ToString();
+                    return (Lookups.GeneratePerContact)Enum.Parse(typeof(Lookups.GeneratePerContact), selectedTag);
+                }
+                set
+                {
+                    var selectedCheckbox = o.gbInputs.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Tag.Equals(value.ToString()));
+                    selectedCheckbox.Checked = true;
+                }
+            }
             public string Result { get { return o.txtResult.Text; } set { o.txtResult.Text = value; } }
 
             public void SignalError(string msg)
@@ -56,6 +69,7 @@ namespace CDMailer
                 {
                     ContactsFile = ContactsFile,
                     OutputFolder = OutputFolder,
+                    GeneratePerContact = GeneratePerContact,
                 };
                 return conf;
             }
@@ -149,6 +163,11 @@ namespace CDMailer
                 else
                     missingKeys.Add(ConfigKeys.UI.OutputFolder);
                 //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.GeneratePerContact))
+                    myUI.GeneratePerContact = (Lookups.GeneratePerContact)Enum.Parse(typeof(Lookups.GeneratePerContact),config.AppSettings.Settings[ConfigKeys.UI.GeneratePerContact].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.GeneratePerContact);
+                //------------------------------------------------------------------------------------------
 
 
                 if (missingKeys.Count > 0)
@@ -176,6 +195,11 @@ namespace CDMailer
                     config.AppSettings.Settings.Add(ConfigKeys.UI.OutputFolder, myUI.OutputFolder);
                 else
                     config.AppSettings.Settings[ConfigKeys.UI.OutputFolder].Value = myUI.OutputFolder;
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.GeneratePerContact))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.GeneratePerContact, myUI.GeneratePerContact.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.GeneratePerContact].Value = myUI.GeneratePerContact.ToString();
                 //------------------------------------------------------------------------------------------
 
                 config.Save(ConfigurationSaveMode.Modified);

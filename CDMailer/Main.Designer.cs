@@ -31,7 +31,11 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.btnOutputFolder = new System.Windows.Forms.Button();
             this.txtOutputFolder = new System.Windows.Forms.TextBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.gbInputs = new System.Windows.Forms.GroupBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.radioButton3 = new System.Windows.Forms.RadioButton();
+            this.rbEnvelop = new System.Windows.Forms.RadioButton();
+            this.rbLetter = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.txtContactsFile = new System.Windows.Forms.TextBox();
             this.btnContactsFile = new System.Windows.Forms.Button();
@@ -42,7 +46,7 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.bgwProcess = new System.ComponentModel.BackgroundWorker();
             this.loadingCircle1 = new CDMailer.LoadingCircle();
-            this.groupBox1.SuspendLayout();
+            this.gbInputs.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,20 +68,68 @@
             this.txtOutputFolder.Size = new System.Drawing.Size(647, 20);
             this.txtOutputFolder.TabIndex = 8;
             // 
-            // groupBox1
+            // gbInputs
             // 
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.txtContactsFile);
-            this.groupBox1.Controls.Add(this.btnContactsFile);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.txtOutputFolder);
-            this.groupBox1.Controls.Add(this.btnOutputFolder);
-            this.groupBox1.Location = new System.Drawing.Point(32, 25);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(909, 118);
-            this.groupBox1.TabIndex = 10;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Inputs";
+            this.gbInputs.Controls.Add(this.label2);
+            this.gbInputs.Controls.Add(this.radioButton3);
+            this.gbInputs.Controls.Add(this.rbEnvelop);
+            this.gbInputs.Controls.Add(this.rbLetter);
+            this.gbInputs.Controls.Add(this.label3);
+            this.gbInputs.Controls.Add(this.txtContactsFile);
+            this.gbInputs.Controls.Add(this.btnContactsFile);
+            this.gbInputs.Controls.Add(this.label1);
+            this.gbInputs.Controls.Add(this.txtOutputFolder);
+            this.gbInputs.Controls.Add(this.btnOutputFolder);
+            this.gbInputs.Location = new System.Drawing.Point(32, 25);
+            this.gbInputs.Name = "gbInputs";
+            this.gbInputs.Size = new System.Drawing.Size(909, 154);
+            this.gbInputs.TabIndex = 10;
+            this.gbInputs.TabStop = false;
+            this.gbInputs.Text = "Inputs";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(5, 109);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(108, 13);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Generate per contact";
+            // 
+            // radioButton3
+            // 
+            this.radioButton3.AutoSize = true;
+            this.radioButton3.Location = new System.Drawing.Point(310, 107);
+            this.radioButton3.Name = "radioButton3";
+            this.radioButton3.Size = new System.Drawing.Size(103, 17);
+            this.radioButton3.TabIndex = 19;
+            this.radioButton3.Tag = "LetterAndEnvelop";
+            this.radioButton3.Text = "Letter + Envelop";
+            this.radioButton3.UseVisualStyleBackColor = true;
+            // 
+            // rbEnvelop
+            // 
+            this.rbEnvelop.AutoSize = true;
+            this.rbEnvelop.Location = new System.Drawing.Point(213, 107);
+            this.rbEnvelop.Name = "rbEnvelop";
+            this.rbEnvelop.Size = new System.Drawing.Size(86, 17);
+            this.rbEnvelop.TabIndex = 18;
+            this.rbEnvelop.Tag = "Envelop";
+            this.rbEnvelop.Text = "Envelop only";
+            this.rbEnvelop.UseVisualStyleBackColor = true;
+            // 
+            // rbLetter
+            // 
+            this.rbLetter.AutoSize = true;
+            this.rbLetter.Checked = true;
+            this.rbLetter.Location = new System.Drawing.Point(128, 107);
+            this.rbLetter.Name = "rbLetter";
+            this.rbLetter.Size = new System.Drawing.Size(74, 17);
+            this.rbLetter.TabIndex = 17;
+            this.rbLetter.TabStop = true;
+            this.rbLetter.Tag = "Letter";
+            this.rbLetter.Text = "Letter only";
+            this.rbLetter.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -118,7 +170,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.txtResult);
-            this.groupBox3.Location = new System.Drawing.Point(36, 190);
+            this.groupBox3.Location = new System.Drawing.Point(33, 238);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(906, 100);
             this.groupBox3.TabIndex = 19;
@@ -138,7 +190,7 @@
             // 
             // btnGO
             // 
-            this.btnGO.Location = new System.Drawing.Point(869, 161);
+            this.btnGO.Location = new System.Drawing.Point(866, 209);
             this.btnGO.Name = "btnGO";
             this.btnGO.Size = new System.Drawing.Size(75, 23);
             this.btnGO.TabIndex = 20;
@@ -148,7 +200,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(41, 296);
+            this.btnReset.Location = new System.Drawing.Point(38, 344);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 22;
@@ -168,7 +220,7 @@
             this.loadingCircle1.Active = false;
             this.loadingCircle1.Color = System.Drawing.Color.DarkGray;
             this.loadingCircle1.InnerCircleRadius = 6;
-            this.loadingCircle1.Location = new System.Drawing.Point(836, 161);
+            this.loadingCircle1.Location = new System.Drawing.Point(833, 209);
             this.loadingCircle1.Name = "loadingCircle1";
             this.loadingCircle1.OuterCircleRadius = 7;
             this.loadingCircle1.RotationSpeed = 100;
@@ -182,19 +234,19 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(974, 333);
+            this.ClientSize = new System.Drawing.Size(998, 399);
             this.Controls.Add(this.loadingCircle1);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnGO);
             this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.gbInputs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
             this.Text = "Cash Discoveries Mailer";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Shown += new System.EventHandler(this.Main_Shown);
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.gbInputs.ResumeLayout(false);
+            this.gbInputs.PerformLayout();
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -204,7 +256,7 @@
 
         private System.Windows.Forms.Button btnOutputFolder;
         private System.Windows.Forms.TextBox txtOutputFolder;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox gbInputs;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.RichTextBox txtResult;
         private System.Windows.Forms.Button btnGO;
@@ -215,6 +267,10 @@
         private System.Windows.Forms.Button btnReset;
         private LoadingCircle loadingCircle1;
         private System.ComponentModel.BackgroundWorker bgwProcess;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.RadioButton rbEnvelop;
+        private System.Windows.Forms.RadioButton rbLetter;
     }
 }
 

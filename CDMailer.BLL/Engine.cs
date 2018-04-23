@@ -64,7 +64,7 @@ namespace CDMailer.BLL
                 var templatesPath = Path.Combine(Environment.CurrentDirectory, "templates");
                 contactsFolder = Path.GetDirectoryName(config.UI.ContactsFile);
                 Variables.Contacts.AddRange(ReadRecords(config.UI.ContactsFile));
-                Engine.ExecutionStatus.Result = GenerateMessages(templatesPath, config.UI.OutputFolder, Variables.Contacts);
+                Engine.ExecutionStatus.Result = GenerateMessages(templatesPath, config.UI.OutputFolder, config.UI.GeneratePerContact, Variables.Contacts);
             }
             catch (Exception x)
             {
@@ -99,12 +99,16 @@ namespace CDMailer.BLL
                 throw;
             }
         }
-        private static ExecutionResult GenerateMessages(string templatesFolder, string outputFolder, List<Contact> contacts)
+        private static ExecutionResult GenerateMessages(string templatesFolder, string outputFolder, Lookups.GeneratePerContact generatePerContact, List<Contact> contacts)
         {
             var successfulContacts = new List<String>();
             var failedContacts = new List<String>();
 
             Contact contact = new Contact();
+            var envelopFile = Path.Combine(templatesFolder, "[OppName] Envelop.docx");
+            if (!File.Exists(envelopFile))
+                throw new ApplicationException($"Missing envelop template file: {envelopFile}");
+
             for (int i = 0; i < contacts.Count; i++)
             {
                 try
@@ -112,18 +116,25 @@ namespace CDMailer.BLL
                     contact = contacts[i];
                     CallUpdateStatus($"Processing contact {i + 1} of {contacts.Count} contacts");
                     var templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.Template), ".docx");
+
+                    switch (generatePerContact)
+                    {
+                        case Lookups.GeneratePerContact.Letter:
+                            GenerateFilled(outputFolder, contact, templateFile);
+                            break;
+                        case Lookups.GeneratePerContact.Envelop:
+                            GenerateFilled(outputFolder, contact, envelopFile);
+                            break;
+                        case Lookups.GeneratePerContact.LetterAndEnvelop:
+                            GenerateFilled(outputFolder, contact, templateFile);
+                            GenerateFilled(outputFolder, contact, envelopFile);
+                            break;
+                        default:
+                            break;
+                    }
+
                     if (!File.Exists(templateFile))
                         throw new ApplicationException($"Missing template file: {templateFile}");
-
-                    var requiredVar =
-                    contact.Template.Split(new string[] { "[", "]" }, StringSplitOptions.None)[1]
-      .Split('-')[0]
-      .Trim();
-                    var mappedVar = contact.GetMappedVar(requiredVar);
-                    string generatedFilename = string.Concat(contact.Template.Replace($"[{requiredVar}]", mappedVar), ".docx");
-                    string generatedFilePath = Path.Combine(outputFolder, generatedFilename);
-                    //File.Copy(templateFile, generatedFilePath);
-                    DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePath, contact);
                     successfulContacts.Add(contact.OppName);
                 }
                 catch (Exception x)
@@ -149,6 +160,19 @@ namespace CDMailer.BLL
                 CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nThese are the failed contacts:\n\n{String.Join("\n", failedContacts)}");
                 return ExecutionResult.PartialPass;
             }
+        }
+
+        private static void GenerateFilled(string outputFolder, Contact contact, string templateFile)
+        {
+            var requiredVar =
+            contact.Template.Split(new string[] { "[", "]" }, StringSplitOptions.None)[1]
+.Split('-')[0]
+.Trim();
+            var mappedVar = contact.GetMappedVar(requiredVar);
+            string generatedFilename = Path.GetFileName(templateFile.Replace($"[{requiredVar}]", mappedVar));
+            string generatedFilePath = Path.Combine(outputFolder, generatedFilename);
+            //File.Copy(templateFile, generatedFilePath);
+            DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePath, contact);
         }
 
         private static List<Contact> ReadRecords(string contactsFilepath)

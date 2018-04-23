@@ -17,6 +17,7 @@ namespace CDMailer.BLL
         {
             public const string ContactsFile = "UI.ContactsFile";
             public const string OutputFolder = "UI.OutputFolder";
+            public const string GeneratePerContact = "UI.GeneratePerContact";
         }
     }
 }

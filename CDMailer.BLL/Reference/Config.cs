@@ -16,6 +16,7 @@ namespace CDMailer.BLL
         {
             public string ContactsFile { get; set; }
             public string OutputFolder { get; set; }
+            public Lookups.GeneratePerContact GeneratePerContact { get; set; }
         }
     }
 }

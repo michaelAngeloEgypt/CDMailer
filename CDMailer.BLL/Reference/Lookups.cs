@@ -13,6 +13,12 @@ namespace CDMailer.BLL
         //
         #endregion CLS
 
+        public enum GeneratePerContact
+        {
+            Letter,
+            Envelop,
+            LetterAndEnvelop
+        }
 
         static Lookups()
         {

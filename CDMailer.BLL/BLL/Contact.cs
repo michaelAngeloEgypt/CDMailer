@@ -87,18 +87,20 @@ namespace CDMailer.BLL
     {
         public ContactMap()
         {
-            //AutoMap();
+            AutoMap();
+            /*
             Map(m => m.FirstName).Name("FirstName", "First Name");
             Map(m => m.LastName).Name("LastName", "Last Name");
             Map(m => m.OppName).Name("OppName", "Opp Name");
             Map(m => m.CaseType).Name("CaseType", "Case Type");
-            Map(m => m.AddressLine1).Name("AddressLine1", ". - Address Line1");
+            Map(m => m.AddressLine1).Name("AddressLine1", "AddressLine1");
             Map(m => m.AddressLine2).Name("AddressLine2", ". - Address Line2");
             Map(m => m.City).Name("City", ". - City");
             Map(m => m.State).Name("State", ". - State");
             Map(m => m.ZipCode).Name("ZipCode", ". - Zip Code");
             Map(m => m.Title).Name("Title", "Titles");
             Map(m => m.Template).Name("Template", "Template");
+            */
         }
     }
 }
