@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Management;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -138,6 +139,8 @@ namespace CDMailer
 
             XLogger.Application = String.Format("CDMailer||{0}||{1}", Engine.Config.ExeVersion, Engine.Variables.ExecutionTimestamp);
             this.Text = "Cash Discoveries Mailer||" + Engine.Config.ExeVersion;
+
+            listPrinters();
         }
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -325,7 +328,37 @@ namespace CDMailer
         private void bgwProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             loadingCircle1.Active = false;
+            DetachEvents();
             //UpdateProgress();
+        }
+
+        private void btnPrintAll_Click(object sender, EventArgs e)
+        {
+            var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx");
+            if (documentsToPrint.Count() == 0)
+                MessageBox.Show("No Word documents were found in the output folder");
+
+            Engine.PrintAll(documentsToPrint.ToList(), "");
+        }
+
+        private void listPrinters()
+        {
+            var printers = new List<string>();
+            var printerQuery = new ManagementObjectSearcher("SELECT * from Win32_Printer");
+            foreach (var printer in printerQuery.Get())
+            {
+                var name = printer.GetPropertyValue("Name");
+                var status = printer.GetPropertyValue("Status");
+                var isDefault = printer.GetPropertyValue("Default");
+                var isNetworkPrinter = printer.GetPropertyValue("Network");
+
+                Console.WriteLine("{0} (Status: {1}, Default: {2}, Network: {3}",
+                            name, status, isDefault, isNetworkPrinter);
+
+                printers.Add(name.ToString());
+            }
+
+            cboPrinters.DataSource = printers;
         }
     }
 }

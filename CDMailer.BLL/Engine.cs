@@ -2,11 +2,13 @@
 using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CDMailer.BLL
 {
@@ -75,6 +77,75 @@ namespace CDMailer.BLL
 
                 XLogger.Error(x);
             }
+        }
+        /// <summary>
+        /// <see cref="https://wurstkoffer.wordpress.com/2013/05/18/c-printing-to-word-programmatically-in-3-way/"/>
+        /// </summary>
+        /// <param name="documents"></param>
+        public static void PrintAll(List<string> documents, string printer)
+        {
+            try
+            {
+                foreach (var filename in documents)
+                {
+                    //Print1(filename, printer);
+                    Print2(filename);
+                    //Print3(filename);
+                }
+            }
+            catch (Exception x)
+            {
+                if (x is ApplicationException)
+                    CallMarkCompleted(x.Message);
+                else
+                    CallMarkCompleted("Something went wrong while printing. Please check the logs.txt file.");
+
+                XLogger.Error(x);
+            }
+        }
+
+        private static void Print1(string filename, string printer)
+        {
+            using (PrintDialog printDialog1 = new PrintDialog())
+            {
+                printDialog1.PrinterSettings.PrinterName = printer;
+                if (printDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo(filename);
+                    //info.Arguments = “\”” + printDialog1.PrinterSettings.PrinterName + “\””;
+                    info.Arguments = "\"" +printer + "\"";
+                    info.CreateNoWindow = true;
+                    info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+                    info.UseShellExecute = true;
+                    info.Verb = "PrintTo";
+                    System.Diagnostics.Process.Start(info);
+                }
+            }
+        }
+
+        /// <summary>
+        /// shows the dialog of the printer and opens the word document
+        /// </summary>
+        /// <param name="filename"></param>
+        private static void Print2(string filename)
+        {
+            ProcessStartInfo info2 = new ProcessStartInfo(filename);
+            info2.Verb = "Print";
+            info2.CreateNoWindow = true;
+            info2.WindowStyle = ProcessWindowStyle.Hidden;
+            Process.Start(info2);
+        }
+
+        private static void Print3(string filename)
+        {
+            Microsoft.Office.Interop.Word.Application wordInstance = new Microsoft.Office.Interop.Word.Application();
+            //MemoryStream documentStream = getDocStream();
+            FileInfo wordFile = new FileInfo(filename);
+            object fileObject = wordFile.FullName;
+            object oMissing = System.Reflection.Missing.Value;
+            Microsoft.Office.Interop.Word.Document doc = wordInstance.Documents.Open(ref fileObject, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing);
+            doc.Activate();
+            doc.PrintOut(oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing);
         }
 
         private static List<Contact> ReadRecords_Manual(string contactsFilepath)

@@ -45,6 +45,8 @@
             this.btnGO = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.bgwProcess = new System.ComponentModel.BackgroundWorker();
+            this.btnPrintAll = new System.Windows.Forms.Button();
+            this.cboPrinters = new System.Windows.Forms.ComboBox();
             this.loadingCircle1 = new CDMailer.LoadingCircle();
             this.gbInputs.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -70,6 +72,8 @@
             // 
             // gbInputs
             // 
+            this.gbInputs.Controls.Add(this.cboPrinters);
+            this.gbInputs.Controls.Add(this.btnPrintAll);
             this.gbInputs.Controls.Add(this.label2);
             this.gbInputs.Controls.Add(this.radioButton3);
             this.gbInputs.Controls.Add(this.rbEnvelop);
@@ -215,6 +219,25 @@
             this.bgwProcess.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcess_DoWork);
             this.bgwProcess.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcess_RunWorkerCompleted);
             // 
+            // btnPrintAll
+            // 
+            this.btnPrintAll.Location = new System.Drawing.Point(443, 104);
+            this.btnPrintAll.Name = "btnPrintAll";
+            this.btnPrintAll.Size = new System.Drawing.Size(75, 23);
+            this.btnPrintAll.TabIndex = 24;
+            this.btnPrintAll.Text = "Print All";
+            this.btnPrintAll.UseVisualStyleBackColor = true;
+            this.btnPrintAll.Click += new System.EventHandler(this.btnPrintAll_Click);
+            // 
+            // cboPrinters
+            // 
+            this.cboPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboPrinters.FormattingEnabled = true;
+            this.cboPrinters.Location = new System.Drawing.Point(524, 106);
+            this.cboPrinters.Name = "cboPrinters";
+            this.cboPrinters.Size = new System.Drawing.Size(343, 21);
+            this.cboPrinters.TabIndex = 25;
+            // 
             // loadingCircle1
             // 
             this.loadingCircle1.Active = false;
@@ -271,6 +294,8 @@
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.RadioButton rbEnvelop;
         private System.Windows.Forms.RadioButton rbLetter;
+        private System.Windows.Forms.Button btnPrintAll;
+        private System.Windows.Forms.ComboBox cboPrinters;
     }
 }
 
