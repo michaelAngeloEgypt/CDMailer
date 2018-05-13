@@ -13,6 +13,7 @@ namespace CDMailer.BLL
         public string LastName { get; set; }
         public string OppName { get; set; }
         public string CaseType { get; set; }
+        public string Address { get; set; }
         public string AddressLine1 { get; set; }
         public string AddressLine2 { get; set; }
         public string City { get; set; }
@@ -35,6 +36,7 @@ namespace CDMailer.BLL
                 LastName = lineParts[++i].ReadContactString();
                 OppName = lineParts[++i].ReadContactString();
                 CaseType = lineParts[++i].ReadContactString();
+                Address = lineParts[++i].ReadContactString();
                 AddressLine1 = lineParts[++i].ReadContactString();
                 AddressLine2 = lineParts[++i].ReadContactString();
                 City = lineParts[++i].ReadContactString();
@@ -65,6 +67,7 @@ namespace CDMailer.BLL
             LastName = !String.IsNullOrWhiteSpace(LastName) ? LastName.Trim() : string.Empty;
             OppName = !String.IsNullOrWhiteSpace(OppName) ? OppName.Trim() : string.Empty;
             CaseType = !String.IsNullOrWhiteSpace(CaseType) ? CaseType.Trim() : string.Empty;
+            Address = !String.IsNullOrWhiteSpace(Address) ? Address.Trim() : string.Empty;
             AddressLine1 = !String.IsNullOrWhiteSpace(AddressLine1) ? AddressLine1.Trim() : string.Empty;
             AddressLine2 = !String.IsNullOrWhiteSpace(AddressLine2) ? AddressLine2.Trim() : string.Empty;
             City = !String.IsNullOrWhiteSpace(City) ? City.Trim() : string.Empty;
@@ -93,6 +96,7 @@ namespace CDMailer.BLL
             Map(m => m.LastName).Name("LastName", "Last Name");
             Map(m => m.OppName).Name("OppName", "Opp Name");
             Map(m => m.CaseType).Name("CaseType", "Case Type");
+            Map(m => m.Address).Name("Address", "Address");
             Map(m => m.AddressLine1).Name("AddressLine1", "AddressLine1");
             Map(m => m.AddressLine2).Name("AddressLine2", ". - Address Line2");
             Map(m => m.City).Name("City", ". - City");
