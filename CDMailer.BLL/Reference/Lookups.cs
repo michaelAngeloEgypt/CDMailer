@@ -30,6 +30,7 @@ namespace CDMailer.BLL
         public static class Constants
         {
             public const string CleanFileExtension = "CLEAN.xlsx";
+            public const string EnvelopTemplate = "[FirstName] [LastName] - Envelop.docx";
         }
     }
 }

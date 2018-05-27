@@ -113,7 +113,7 @@ namespace CDMailer.BLL
                 {
                     System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo(filename);
                     //info.Arguments = “\”” + printDialog1.PrinterSettings.PrinterName + “\””;
-                    info.Arguments = "\"" +printer + "\"";
+                    info.Arguments = "\"" + printer + "\"";
                     info.CreateNoWindow = true;
                     info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
                     info.UseShellExecute = true;
@@ -176,7 +176,7 @@ namespace CDMailer.BLL
             var failedContacts = new List<String>();
 
             Contact contact = new Contact();
-            var envelopFile = Path.Combine(templatesFolder, "[OppName] Envelop.docx");
+            var envelopFile = Path.Combine(templatesFolder, Lookups.Constants.EnvelopTemplate);
             if (!File.Exists(envelopFile))
                 throw new ApplicationException($"Missing envelop template file: {envelopFile}");
 
@@ -235,15 +235,58 @@ namespace CDMailer.BLL
 
         private static void GenerateFilled(string outputFolder, Contact contact, string templateFile)
         {
-            var requiredVar =
-            contact.Template.Split(new string[] { "[", "]" }, StringSplitOptions.None)[1]
-.Split('-')[0]
-.Trim();
-            var mappedVar = contact.GetMappedVar(requiredVar);
-            string generatedFilename = Path.GetFileName(templateFile.Replace($"[{requiredVar}]", mappedVar));
-            string generatedFilePath = Path.Combine(outputFolder, generatedFilename);
-            //File.Copy(templateFile, generatedFilePath);
-            DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePath, contact);
+            if (!contact.Template.Contains("[") && !contact.Template.Contains("]"))
+                throw new ApplicationException("Invalid template column");
+
+            //if (contact.FirstName.Contains("Beth"))
+            //    1.ToString();
+
+            string filledTemplate = GetFilledTemplate(contact);
+            if (Path.GetFileName(templateFile).MatchesString(Lookups.Constants.EnvelopTemplate))
+                filledTemplate = GetFilledTemplate(contact, Lookups.Constants.EnvelopTemplate);
+
+            var envlopContacts = contact.GetAddressContacts();
+            for (int i = 0; i < envlopContacts.Count; i++)
+            {
+                string generatedFilenameEnvelop = $"{Path.GetFileNameWithoutExtension(filledTemplate)} - {i + 1}.docx";
+                string generatedFilePathEnvelop = Path.Combine(outputFolder, generatedFilenameEnvelop);
+                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, envlopContacts[i]);
+            }
+
+
+            /*
+            if (Path.GetFileName(templateFile).MatchesString(Lookups.Constants.EnvelopTemplate))
+            {
+                var envlopContacts = contact.GetAddressContacts();
+                for (int i = 0; i < envlopContacts.Count; i++)
+                {
+                    filledTemplate = GetFilledTemplate(contact, Lookups.Constants.EnvelopTemplate);
+                    string generatedFilenameEnvelop = $"{Path.GetFileNameWithoutExtension(filledTemplate)}-{i + 1}.docx";
+                    string generatedFilePathEnvelop = Path.Combine(outputFolder, generatedFilenameEnvelop);
+                    DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, envlopContacts[i]);
+                }
+            }
+            else
+            {
+                string generatedFilename = templateFile.Replace(contact.Template, filledTemplate);
+                string generatedFilePath = Path.Combine(outputFolder, Path.GetFileName(generatedFilename));
+                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePath, contact);
+            }
+            */
+        }
+
+        private static string GetFilledTemplate(Contact contact, string template = null)
+        {
+            var filledTemplate = string.IsNullOrEmpty(template) ?contact.Template: template;
+            var reg = new Regex(@"\[.*?\]");
+            var matches = reg.Matches(contact.Template);
+            foreach (var requiredVar in matches)
+            {
+                var mappedVar = contact.GetMappedVar(requiredVar.ToString().Trim(new char[] { '[', ']' }));
+                filledTemplate = filledTemplate.Replace(requiredVar.ToString(), mappedVar);
+            }
+
+            return filledTemplate;
         }
 
         private static List<Contact> ReadRecords(string contactsFilepath)
@@ -254,7 +297,7 @@ namespace CDMailer.BLL
                 if (String.IsNullOrWhiteSpace(contactsFilepath) || !File.Exists(contactsFilepath))
                     throw new ArgumentNullException("contactsFilepath");
 
-                var csvConfig = new Configuration() { Delimiter = ",", HasHeaderRecord = true, IgnoreBlankLines = true };
+                var csvConfig = new Configuration() { Delimiter = ",", HasHeaderRecord = true, IgnoreBlankLines = true, HeaderValidated = null, };
                 csvConfig.RegisterClassMap(new ContactMap());
                 using (var csv = new CsvReader(new StreamReader(contactsFilepath), csvConfig))
                 {

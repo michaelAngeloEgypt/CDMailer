@@ -101,6 +101,46 @@ namespace CDMailer.BLL
             return result;
         }
 
+        public static bool MatchesString(this string examinedValue, string referenceValue)
+        {
+            //use it for huawei PassLHSFilters
+            if (String.IsNullOrWhiteSpace(examinedValue) && !String.IsNullOrWhiteSpace(referenceValue)
+                || !String.IsNullOrWhiteSpace(examinedValue) && String.IsNullOrWhiteSpace(referenceValue))
+                return false;
+
+            if (String.IsNullOrWhiteSpace(examinedValue) && String.IsNullOrWhiteSpace(referenceValue))
+                return true;
+
+            return examinedValue.Trim().Equals(referenceValue.Trim(), StringComparison.InvariantCultureIgnoreCase);
+        }
+        public static bool ContainsString(this string examinedValue, string referenceValue)
+        {
+            if (String.IsNullOrWhiteSpace(examinedValue) && !String.IsNullOrWhiteSpace(referenceValue)
+                || !String.IsNullOrWhiteSpace(examinedValue) && String.IsNullOrWhiteSpace(referenceValue))
+                return false;
+
+            if (String.IsNullOrEmpty(examinedValue) && String.IsNullOrEmpty(referenceValue))
+                return false;
+
+            return examinedValue.Contains(referenceValue, StringComparison.InvariantCultureIgnoreCase);
+        }
+        /// <summary>
+        /// case-insensitive string.contains
+        /// http://stackoverflow.com/questions/444798/case-insensitive-containsstring
+        /// http://ppetrov.wordpress.com/2008/06/27/useful-method-6-of-n-ignore-case-on-stringcontains/
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="toCheck"></param>
+        /// <param name="comp"></param>
+        /// <returns></returns>
+        public static bool Contains(this string source, string toCheck, StringComparison comp)
+        {
+            if (string.IsNullOrEmpty(source))
+                return false;
+
+            return source.IndexOf(toCheck, comp) >= 0;
+        }
+
         /// <summary>
         /// <see cref="http://stackoverflow.com/questions/10485903/regex-extract-value-from-the-string-between-delimiters"/>
         /// <see cref="http://stackoverflow.com/questions/378415/how-do-i-extract-text-that-lies-between-parentheses-round-brackets"/>
@@ -323,6 +363,18 @@ namespace CDMailer.BLL
             {
                 return false;
             }
+        }
+        /// <summary>
+        /// http://stackoverflow.com/questions/7718792/can-i-set-a-property-value-with-reflection
+        /// </summary>
+        /// <param name="srcObj"></param>
+        /// <param name="propName"></param>
+        /// <param name="value"></param>
+        public static void SetPropertyValue(this object srcObj, string propName, Object value)
+        {
+            var property = srcObj.GetType().GetProperty(propName);
+            if (property != null)
+                property.SetValue(srcObj, value, null);
         }
         //
         #endregion reflection

@@ -12,7 +12,7 @@ namespace CDMailer.BLL
     /// </summary>
     class DocxTemplate
     {
-        public static bool InsertTextInPlaceholders(string templatePath, string outputDocumentPath, Contact obj)
+        public static bool InsertTextInPlaceholders(string templatePath, string outputDocumentPath, Object obj)
         {
             try
             {

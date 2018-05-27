@@ -9,12 +9,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CDMailer", "CDMailer\CDMail
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{EA93D5CD-A703-43CA-9F8F-2E482E6839A4}"
 	ProjectSection(SolutionItems) = preProject
-		templates\[OppName] Business follow up.docx = templates\[OppName] Business follow up.docx
-		templates\[OppName] Business.docx = templates\[OppName] Business.docx
-		templates\[OppName] Claimant follow up.docx = templates\[OppName] Claimant follow up.docx
-		templates\[OppName] Claimant.docx = templates\[OppName] Claimant.docx
-		templates\[OppName] Estate follow up.docx = templates\[OppName] Estate follow up.docx
-		templates\[OppName] Estate.docx = templates\[OppName] Estate.docx
+		templates\[FirstName] [LastName] - Business follow up.docx = templates\[FirstName] [LastName] - Business follow up.docx
+		templates\[FirstName] [LastName] - Business.docx = templates\[FirstName] [LastName] - Business.docx
+		templates\[FirstName] [LastName] - Claimant Follow Up.docx = templates\[FirstName] [LastName] - Claimant Follow Up.docx
+		templates\[FirstName] [LastName] - Claimant.docx = templates\[FirstName] [LastName] - Claimant.docx
+		templates\[FirstName] [LastName] - Envelop.docx = templates\[FirstName] [LastName] - Envelop.docx
+		templates\[FirstName] [LastName] - Estate Follow Up.docx = templates\[FirstName] [LastName] - Estate Follow Up.docx
+		templates\[FirstName] [LastName] - Estate.docx = templates\[FirstName] [LastName] - Estate.docx
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sol", "sol", "{5231D845-0244-4E71-9613-54F8791E52EE}"

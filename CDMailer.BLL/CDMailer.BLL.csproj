@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BLL\Contact.cs" />
+    <Compile Include="BLL\EnvelopContact.cs" />
     <Compile Include="BLL\ExecutionVariables.cs" />
     <Compile Include="Reference\Config.cs" />
     <Compile Include="Reference\MSG.cs" />
