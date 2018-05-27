@@ -241,38 +241,16 @@ namespace CDMailer.BLL
             //if (contact.FirstName.Contains("Beth"))
             //    1.ToString();
 
-            string filledTemplate = GetFilledTemplate(contact);
-            if (Path.GetFileName(templateFile).MatchesString(Lookups.Constants.EnvelopTemplate))
-                filledTemplate = GetFilledTemplate(contact, Lookups.Constants.EnvelopTemplate);
+            var isEnvelop = Path.GetFileName(templateFile).MatchesString(Lookups.Constants.EnvelopTemplate);
+            string filledTemplate = !isEnvelop? GetFilledTemplate(contact): GetFilledTemplate(contact, Lookups.Constants.EnvelopTemplate);
 
             var envlopContacts = contact.GetAddressContacts();
             for (int i = 0; i < envlopContacts.Count; i++)
             {
                 string generatedFilenameEnvelop = $"{Path.GetFileNameWithoutExtension(filledTemplate)} - {i + 1}.docx";
                 string generatedFilePathEnvelop = Path.Combine(outputFolder, generatedFilenameEnvelop);
-                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, envlopContacts[i]);
+                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, !isEnvelop? contact as Object: envlopContacts[i] as Object);
             }
-
-
-            /*
-            if (Path.GetFileName(templateFile).MatchesString(Lookups.Constants.EnvelopTemplate))
-            {
-                var envlopContacts = contact.GetAddressContacts();
-                for (int i = 0; i < envlopContacts.Count; i++)
-                {
-                    filledTemplate = GetFilledTemplate(contact, Lookups.Constants.EnvelopTemplate);
-                    string generatedFilenameEnvelop = $"{Path.GetFileNameWithoutExtension(filledTemplate)}-{i + 1}.docx";
-                    string generatedFilePathEnvelop = Path.Combine(outputFolder, generatedFilenameEnvelop);
-                    DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, envlopContacts[i]);
-                }
-            }
-            else
-            {
-                string generatedFilename = templateFile.Replace(contact.Template, filledTemplate);
-                string generatedFilePath = Path.Combine(outputFolder, Path.GetFileName(generatedFilename));
-                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePath, contact);
-            }
-            */
         }
 
         private static string GetFilledTemplate(Contact contact, string template = null)
