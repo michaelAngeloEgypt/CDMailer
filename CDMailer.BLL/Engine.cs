@@ -235,7 +235,7 @@ namespace CDMailer.BLL
 
         private static void GenerateFilled(string outputFolder, Contact contact, string templateFile)
         {
-            if (!contact.Template.Contains("[") && !contact.Template.Contains("]"))
+            if (!contact.Template.Contains("[") && !contact.Template.Contains("]")) 
                 throw new ApplicationException("Invalid template column");
 
             //if (contact.FirstName.Contains("Beth"))
