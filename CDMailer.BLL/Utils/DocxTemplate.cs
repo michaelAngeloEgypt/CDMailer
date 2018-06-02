@@ -7,18 +7,52 @@ using System.Threading.Tasks;
 
 namespace CDMailer.BLL
 {
-    /// <summary>
-    /// https://github.com/swxben/docx-template-engine
-    /// </summary>
     class DocxTemplate
     {
         public static bool InsertTextInPlaceholders(string templatePath, string outputDocumentPath, Object obj)
+        {
+            //return InsertTextInPlaceholders_sautinSoft(templatePath, outputDocumentPath, obj);
+            return InsertTextInPlaceholders_swxben(templatePath, outputDocumentPath, obj);
+        }
+
+        /// <summary>
+        /// <see cref="https://www.nuget.org/packages/sautinsoft.document/"/>
+        /// </summary>
+        /// <param name="templatePath"></param>
+        /// <param name="outputDocumentPath"></param>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public static bool InsertTextInPlaceholders_sautinSoft(string templatePath, string outputDocumentPath, Object obj)
         {
             try
             {
                 if (!File.Exists(templatePath))
                     throw new FileNotFoundException();
 
+                SautinSoft.Document.DocumentCore dc = SautinSoft.Document.DocumentCore.Load(templatePath);
+                dc.MailMerge.Execute(obj);
+                dc.Save(outputDocumentPath);
+
+                return true;
+            }
+            catch (Exception x)
+            {
+                XLogger.Error(x);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// <see cref="https://github.com/swxben/docx-template-engine"/>
+        /// </summary>
+        public static bool InsertTextInPlaceholders_swxben(string templatePath, string outputDocumentPath, Object obj)
+        {
+            try
+            {
+                if (!File.Exists(templatePath))
+                    throw new FileNotFoundException();
+
+                PrepareObject(obj);
                 var templateEngine = new swxben.docxtemplateengine.DocXTemplateEngine();
                 templateEngine.Process(templatePath, outputDocumentPath, obj);
 
@@ -29,6 +63,20 @@ namespace CDMailer.BLL
                 XLogger.Error(x);
                 return false;
             }
+        }
+
+
+        private static void PrepareObject(Object obj)
+        {
+            Func<string, string> func1 = (x) => RemoveUnfreindlyMergeChars(x);
+            obj.DoFunctionOnStringProperties(func1);
+        }
+
+        private static string RemoveUnfreindlyMergeChars(string source)
+        {
+            //var res = source.RemoveSpecialCharacters();       //--> removes space which we don't want
+            var res = source.Replace("&nbsp;", " ").Trim();
+            return res;
         }
 
         /// <summary>

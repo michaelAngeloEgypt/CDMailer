@@ -42,6 +42,9 @@
       <HintPath>..\packages\Microsoft.Office.Interop.Word.15.0.4797.1003\lib\net20\Microsoft.Office.Interop.Word.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="SautinSoft.Document, Version=3.3.3.26, Culture=neutral, PublicKeyToken=e759c76c7515592a, processorArchitecture=MSIL">
+      <HintPath>..\packages\sautinsoft.document.3.3.3.26\lib\net461\SautinSoft.Document.dll</HintPath>
+    </Reference>
     <Reference Include="swxben.docxtemplateengine, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\swxben.docxtemplateengine.0.1.5\lib\net40\swxben.docxtemplateengine.dll</HintPath>
     </Reference>

@@ -14,6 +14,18 @@ namespace CDMailer.BLL
     public static class MyExtensions
     {
         /// <summary>
+        /// https://stackoverflow.com/questions/1120198/most-efficient-way-to-remove-special-characters-from-string
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string RemoveSpecialCharacters(this string str)
+        {
+            if (string.IsNullOrWhiteSpace(str))
+                return string.Empty;
+            return Regex.Replace(str, @"[^a-zA-Z0-9_\^\$\.,=]+", "", RegexOptions.Compiled);
+        }
+
+        /// <summary>
         /// exact letters and symbols, ignoring letter case but still spaces matter
         /// </summary>
         /// <param name="x"></param>
@@ -376,6 +388,36 @@ namespace CDMailer.BLL
             if (property != null)
                 property.SetValue(srcObj, value, null);
         }
+
+
+        /// <summary>
+        /// <see cref="https://stackoverflow.com/questions/1718863/how-to-iterate-all-public-string-properties-in-a-net-class"/>
+        /// </summary>
+        /// <param name="srcObj"></param>
+        /// <returns></returns>
+        public static string[] GetPublicStringPropertiesNames(this object srcObj)
+        {
+            return srcObj.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(pi => pi.PropertyType == typeof(string))
+                .Select(pi => pi.Name)
+                .ToArray();
+        }
+
+
+        public static void DoFunctionOnStringProperties(this Object srcObj, Func<string, string> func)
+        {
+            var myStringProps = srcObj.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(pi => pi.PropertyType == typeof(string))
+                .Select(pi => pi);
+
+            foreach (var prop in myStringProps)
+            {
+                prop.SetValue(srcObj, func(prop.GetValue(srcObj) as string));
+            }
+        }
+
         //
         #endregion reflection
     }
