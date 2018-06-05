@@ -13,6 +13,7 @@ namespace CDMailer.BLL
         public string LastName { get; set; }
         public string OppName { get; set; }
         public string FsAddress { get; set; }
+        public string Template { get; set; }
         public string A1_AddressLine1 { get; set; }
         public string A1_AddressLine2 { get; set; }
         public string A1_City { get; set; }
@@ -53,7 +54,28 @@ namespace CDMailer.BLL
         public string A8_City { get; set; }
         public string A8_State { get; set; }
         public string A8_ZipCode { get; set; }
-        public string Template { get; set; }
+        public string A9_AddressLine1 { get; set; }
+        public string A9_AddressLine2 { get; set; }
+        public string A9_City { get; set; }
+        public string A9_State { get; set; }
+        public string A9_ZipCode { get; set; }
+        //
+        public string CDMailerTemplate
+        {
+            get
+            {
+                if (REF.Mapping.refs.Count > 0)
+                {
+                    var matchingTemplate = REF.Mapping.refs.FirstOrDefault(m => m.Apptivo.MatchesString(Template));
+                    if (matchingTemplate == null)
+                        return "";
+
+                    return matchingTemplate.CDMailer;
+                }
+                else
+                    return "";
+            }
+        }
 
         public Contact() { }
         public Contact(string sourceLine)
@@ -152,8 +174,6 @@ namespace CDMailer.BLL
             }
             return res;
         }
-
-
         internal string GetMappedVar(string varName)
         {
             var propInfo = this.GetType().GetProperty(varName);
@@ -162,54 +182,14 @@ namespace CDMailer.BLL
             else
                 return "";
         }
-
-        internal void TrimFields()
+        internal void AdjustFields()
         {
-            FirstName = !String.IsNullOrWhiteSpace(FirstName) ? FirstName.Trim() : string.Empty;
-            LastName = !String.IsNullOrWhiteSpace(LastName) ? LastName.Trim() : string.Empty;
-            OppName = !String.IsNullOrWhiteSpace(OppName) ? OppName.Trim() : string.Empty;
-            FsAddress = !String.IsNullOrWhiteSpace(FsAddress) ? FsAddress.Trim() : string.Empty;
-            A1_AddressLine1 = !String.IsNullOrWhiteSpace(A1_AddressLine1) ? A1_AddressLine1.Trim() : string.Empty;
-            A1_AddressLine2 = !String.IsNullOrWhiteSpace(A1_AddressLine2) ? A1_AddressLine2.Trim() : string.Empty;
-            A1_City = !String.IsNullOrWhiteSpace(A1_City) ? A1_City.Trim() : string.Empty;
-            A1_State = !String.IsNullOrWhiteSpace(A1_State) ? A1_State.Trim() : string.Empty;
-            A1_ZipCode = !String.IsNullOrWhiteSpace(A1_ZipCode) ? A1_ZipCode.Trim() : string.Empty;
-            A2_AddressLine1 = !String.IsNullOrWhiteSpace(A2_AddressLine1) ? A2_AddressLine1.Trim() : string.Empty;
-            A2_AddressLine2 = !String.IsNullOrWhiteSpace(A2_AddressLine2) ? A2_AddressLine2.Trim() : string.Empty;
-            A2_City = !String.IsNullOrWhiteSpace(A2_City) ? A2_City.Trim() : string.Empty;
-            A2_State = !String.IsNullOrWhiteSpace(A2_State) ? A2_State.Trim() : string.Empty;
-            A2_ZipCode = !String.IsNullOrWhiteSpace(A2_ZipCode) ? A2_ZipCode.Trim() : string.Empty;
-            A3_AddressLine1 = !String.IsNullOrWhiteSpace(A3_AddressLine1) ? A3_AddressLine1.Trim() : string.Empty;
-            A3_AddressLine2 = !String.IsNullOrWhiteSpace(A3_AddressLine2) ? A3_AddressLine2.Trim() : string.Empty;
-            A3_City = !String.IsNullOrWhiteSpace(A3_City) ? A3_City.Trim() : string.Empty;
-            A3_State = !String.IsNullOrWhiteSpace(A3_State) ? A3_State.Trim() : string.Empty;
-            A3_ZipCode = !String.IsNullOrWhiteSpace(A3_ZipCode) ? A3_ZipCode.Trim() : string.Empty;
-            A4_AddressLine1 = !String.IsNullOrWhiteSpace(A4_AddressLine1) ? A4_AddressLine1.Trim() : string.Empty;
-            A4_AddressLine2 = !String.IsNullOrWhiteSpace(A4_AddressLine2) ? A4_AddressLine2.Trim() : string.Empty;
-            A4_City = !String.IsNullOrWhiteSpace(A4_City) ? A4_City.Trim() : string.Empty;
-            A4_State = !String.IsNullOrWhiteSpace(A4_State) ? A4_State.Trim() : string.Empty;
-            A4_ZipCode = !String.IsNullOrWhiteSpace(A4_ZipCode) ? A4_ZipCode.Trim() : string.Empty;
-            A5_AddressLine1 = !String.IsNullOrWhiteSpace(A5_AddressLine1) ? A5_AddressLine1.Trim() : string.Empty;
-            A5_AddressLine2 = !String.IsNullOrWhiteSpace(A5_AddressLine2) ? A5_AddressLine2.Trim() : string.Empty;
-            A5_City = !String.IsNullOrWhiteSpace(A5_City) ? A5_City.Trim() : string.Empty;
-            A5_State = !String.IsNullOrWhiteSpace(A5_State) ? A5_State.Trim() : string.Empty;
-            A5_ZipCode = !String.IsNullOrWhiteSpace(A5_ZipCode) ? A5_ZipCode.Trim() : string.Empty;
-            A6_AddressLine1 = !String.IsNullOrWhiteSpace(A6_AddressLine1) ? A6_AddressLine1.Trim() : string.Empty;
-            A6_AddressLine2 = !String.IsNullOrWhiteSpace(A6_AddressLine2) ? A6_AddressLine2.Trim() : string.Empty;
-            A6_City = !String.IsNullOrWhiteSpace(A6_City) ? A6_City.Trim() : string.Empty;
-            A6_State = !String.IsNullOrWhiteSpace(A6_State) ? A6_State.Trim() : string.Empty;
-            A6_ZipCode = !String.IsNullOrWhiteSpace(A6_ZipCode) ? A6_ZipCode.Trim() : string.Empty;
-            A7_AddressLine1 = !String.IsNullOrWhiteSpace(A7_AddressLine1) ? A7_AddressLine1.Trim() : string.Empty;
-            A7_AddressLine2 = !String.IsNullOrWhiteSpace(A7_AddressLine2) ? A7_AddressLine2.Trim() : string.Empty;
-            A7_City = !String.IsNullOrWhiteSpace(A7_City) ? A7_City.Trim() : string.Empty;
-            A7_State = !String.IsNullOrWhiteSpace(A7_State) ? A7_State.Trim() : string.Empty;
-            A7_ZipCode = !String.IsNullOrWhiteSpace(A7_ZipCode) ? A7_ZipCode.Trim() : string.Empty;
-            A8_AddressLine1 = !String.IsNullOrWhiteSpace(A8_AddressLine1) ? A8_AddressLine1.Trim() : string.Empty;
-            A8_AddressLine2 = !String.IsNullOrWhiteSpace(A8_AddressLine2) ? A8_AddressLine2.Trim() : string.Empty;
-            A8_City = !String.IsNullOrWhiteSpace(A8_City) ? A8_City.Trim() : string.Empty;
-            A8_State = !String.IsNullOrWhiteSpace(A8_State) ? A8_State.Trim() : string.Empty;
-            A8_ZipCode = !String.IsNullOrWhiteSpace(A8_ZipCode) ? A8_ZipCode.Trim() : string.Empty;
-            Template = !String.IsNullOrWhiteSpace(Template) ? Template.Trim() : string.Empty;
+            Func<string, string> func1 = (x) => !String.IsNullOrWhiteSpace(x) ? x.Trim() : string.Empty;
+            this.DoFunctionOnStringProperties(func1);
+
+            Func<string, string> func2 = (x) => !String.IsNullOrWhiteSpace(x) && x.Trim().Length < 5 ? x.Trim().PadLeft(5, '0') : string.Empty;
+            var zipCodes = this.GetPublicStringPropertiesNames().Where(p => p.Contains("ZipCode")).ToList();
+            this.DoFunctionOnSomeStringProperties(zipCodes, func2);
         }
 
         public override string ToString()
@@ -237,6 +217,7 @@ namespace CDMailer.BLL
             Map(x => x.LastName).Index(++i);
             Map(x => x.OppName).Index(++i);
             Map(x => x.FsAddress).Index(++i);
+            Map(x => x.Template).Index(++i);
             Map(x => x.A1_AddressLine1).Index(++i);
             Map(x => x.A1_AddressLine2).Index(++i);
             Map(x => x.A1_City).Index(++i);
@@ -277,7 +258,11 @@ namespace CDMailer.BLL
             Map(x => x.A8_City).Index(++i);
             Map(x => x.A8_State).Index(++i);
             Map(x => x.A8_ZipCode).Index(++i);
-            Map(x => x.Template).Index(++i);
+            Map(x => x.A9_AddressLine1).Index(++i);
+            Map(x => x.A9_AddressLine2).Index(++i);
+            Map(x => x.A9_City).Index(++i);
+            Map(x => x.A9_State).Index(++i);
+            Map(x => x.A9_ZipCode).Index(++i);
         }
     }
 }

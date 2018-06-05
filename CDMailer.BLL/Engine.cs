@@ -55,7 +55,7 @@ namespace CDMailer.BLL
 
         public static void Reset()
         {
-            Lookups.Reset();
+            REF.Reset();
             ExecutionStatus.Reset();
             Variables.Reset();
         }
@@ -64,6 +64,7 @@ namespace CDMailer.BLL
             try
             {
                 var templatesPath = Path.Combine(Environment.CurrentDirectory, "templates");
+                REF.Mapping.GetRefs(Path.Combine(templatesPath, "Mapping.csv"));
                 contactsFolder = Path.GetDirectoryName(config.UI.ContactsFile);
                 Variables.Contacts.AddRange(ReadRecords(config.UI.ContactsFile));
                 Engine.ExecutionStatus.Result = GenerateMessages(templatesPath, config.UI.OutputFolder, config.UI.GeneratePerContact, Variables.Contacts);
@@ -88,6 +89,7 @@ namespace CDMailer.BLL
             {
                 foreach (var filename in documents)
                 {
+                    //wait
                     //Print1(filename, printer);
                     Print2(filename);
                     //Print3(filename);
@@ -122,7 +124,6 @@ namespace CDMailer.BLL
                 }
             }
         }
-
         /// <summary>
         /// shows the dialog of the printer and opens the word document
         /// </summary>
@@ -135,7 +136,6 @@ namespace CDMailer.BLL
             info2.WindowStyle = ProcessWindowStyle.Hidden;
             Process.Start(info2);
         }
-
         private static void Print3(string filename)
         {
             Microsoft.Office.Interop.Word.Application wordInstance = new Microsoft.Office.Interop.Word.Application();
@@ -170,13 +170,13 @@ namespace CDMailer.BLL
                 throw;
             }
         }
-        private static ExecutionResult GenerateMessages(string templatesFolder, string outputFolder, Lookups.GeneratePerContact generatePerContact, List<Contact> contacts)
+        private static ExecutionResult GenerateMessages(string templatesFolder, string outputFolder, REF.GeneratePerContact generatePerContact, List<Contact> contacts)
         {
             var successfulContacts = new List<String>();
             var failedContacts = new List<String>();
 
             Contact contact = new Contact();
-            var envelopFile = Path.Combine(templatesFolder, Lookups.Constants.EnvelopTemplate);
+            var envelopFile = Path.Combine(templatesFolder, REF.Constants.EnvelopTemplate);
             if (!File.Exists(envelopFile))
                 throw new ApplicationException($"Missing envelop template file: {envelopFile}");
 
@@ -186,17 +186,17 @@ namespace CDMailer.BLL
                 {
                     contact = contacts[i];
                     CallUpdateStatus($"Processing contact {i + 1} of {contacts.Count} contacts");
-                    var templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.Template), ".docx");
+                    var templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.CDMailerTemplate), ".docx");
 
                     switch (generatePerContact)
                     {
-                        case Lookups.GeneratePerContact.Letter:
+                        case REF.GeneratePerContact.Letter:
                             GenerateFilled(outputFolder, contact, templateFile);
                             break;
-                        case Lookups.GeneratePerContact.Envelop:
+                        case REF.GeneratePerContact.Envelop:
                             GenerateFilled(outputFolder, contact, envelopFile);
                             break;
-                        case Lookups.GeneratePerContact.LetterAndEnvelop:
+                        case REF.GeneratePerContact.LetterAndEnvelop:
                             GenerateFilled(outputFolder, contact, templateFile);
                             GenerateFilled(outputFolder, contact, envelopFile);
                             break;
@@ -235,29 +235,31 @@ namespace CDMailer.BLL
 
         private static void GenerateFilled(string outputFolder, Contact contact, string templateFile)
         {
-            if (!contact.Template.Contains("[") && !contact.Template.Contains("]")) 
+            if (!contact.CDMailerTemplate.Contains("[") && !contact.CDMailerTemplate.Contains("]"))
                 throw new ApplicationException("Invalid template column");
 
             //if (contact.FirstName.Contains("Beth"))
             //    1.ToString();
 
-            var isEnvelop = Path.GetFileName(templateFile).MatchesString(Lookups.Constants.EnvelopTemplate);
-            string filledTemplate = !isEnvelop? GetFilledTemplate(contact): GetFilledTemplate(contact, Lookups.Constants.EnvelopTemplate);
+            var isEnvelop = Path.GetFileName(templateFile).MatchesString(REF.Constants.EnvelopTemplate);
+            string filledTemplate = !isEnvelop ? GetFilledTemplate(contact) : GetFilledTemplate(contact, REF.Constants.EnvelopTemplate);
 
             var envlopContacts = contact.GetAddressContacts();
             for (int i = 0; i < envlopContacts.Count; i++)
             {
-                string generatedFilenameEnvelop = $"{Path.GetFileNameWithoutExtension(filledTemplate)} - {i + 1}.docx";
+                string generatedFilenameEnvelop = $"{filledTemplate} - {i + 1}.docx";
                 string generatedFilePathEnvelop = Path.Combine(outputFolder, generatedFilenameEnvelop);
-                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, !isEnvelop? contact as Object: envlopContacts[i] as Object);
+                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, !isEnvelop ? contact as Object : envlopContacts[i] as Object);
             }
         }
-
         private static string GetFilledTemplate(Contact contact, string template = null)
         {
-            var filledTemplate = string.IsNullOrEmpty(template) ?contact.Template: template;
+            //if (contact.FirstName.StartsWith("Donna"))
+            //    1.ToString();
+
+            var filledTemplate = string.IsNullOrEmpty(template) ? contact.CDMailerTemplate : template;
             var reg = new Regex(@"\[.*?\]");
-            var matches = reg.Matches(contact.Template);
+            var matches = reg.Matches(contact.CDMailerTemplate);
             foreach (var requiredVar in matches)
             {
                 var mappedVar = contact.GetMappedVar(requiredVar.ToString().Trim(new char[] { '[', ']' }));
@@ -283,7 +285,7 @@ namespace CDMailer.BLL
                     res.AddRange(records);
                 }
 
-                res.ForEach(r => r.TrimFields());
+                res.ForEach(r => r.AdjustFields());
                 return res;
             }
             catch (IOException io)

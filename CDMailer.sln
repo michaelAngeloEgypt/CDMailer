@@ -16,6 +16,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "templates", "templates", "{
 		templates\[FirstName] [LastName] - Envelop.docx = templates\[FirstName] [LastName] - Envelop.docx
 		templates\[FirstName] [LastName] - Estate Follow Up.docx = templates\[FirstName] [LastName] - Estate Follow Up.docx
 		templates\[FirstName] [LastName] - Estate.docx = templates\[FirstName] [LastName] - Estate.docx
+		templates\Mapping.csv = templates\Mapping.csv
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "sol", "sol", "{5231D845-0244-4E71-9613-54F8791E52EE}"

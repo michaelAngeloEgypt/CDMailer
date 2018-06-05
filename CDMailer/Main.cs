@@ -14,8 +14,6 @@ using System.Windows.Forms;
 
 namespace CDMailer
 {
-
-
     public partial class Main : Form
     {
         delegate void SetTextCallback(string text);
@@ -27,12 +25,12 @@ namespace CDMailer
             public Main o;
             public string ContactsFile { get { return o.txtContactsFile.Text; } set { o.txtContactsFile.Text = value; } }
             public string OutputFolder { get { return o.txtOutputFolder.Text; } set { o.txtOutputFolder.Text = value; } }
-            public Lookups.GeneratePerContact GeneratePerContact
+            public REF.GeneratePerContact GeneratePerContact
             {
                 get
                 {
                     var selectedTag = o.gbInputs.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag.ToString();
-                    return (Lookups.GeneratePerContact)Enum.Parse(typeof(Lookups.GeneratePerContact), selectedTag);
+                    return (REF.GeneratePerContact)Enum.Parse(typeof(REF.GeneratePerContact), selectedTag);
                 }
                 set
                 {
@@ -167,7 +165,7 @@ namespace CDMailer
                     missingKeys.Add(ConfigKeys.UI.OutputFolder);
                 //------------------------------------------------------------------------------------------
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.GeneratePerContact))
-                    myUI.GeneratePerContact = (Lookups.GeneratePerContact)Enum.Parse(typeof(Lookups.GeneratePerContact),config.AppSettings.Settings[ConfigKeys.UI.GeneratePerContact].Value);
+                    myUI.GeneratePerContact = (REF.GeneratePerContact)Enum.Parse(typeof(REF.GeneratePerContact), config.AppSettings.Settings[ConfigKeys.UI.GeneratePerContact].Value);
                 else
                     missingKeys.Add(ConfigKeys.UI.GeneratePerContact);
                 //------------------------------------------------------------------------------------------
@@ -225,6 +223,18 @@ namespace CDMailer
             Engine.MarkCompletedEvent += MarkCompleted;
         }
 
+        private void btnContactsFile_Click(object sender, EventArgs e)
+        {
+            var dlgOpenSheet = new Ookii.Dialogs.VistaOpenFileDialog()
+            {
+                DefaultExt = ".csv",
+                Multiselect = false,
+                Title = "Please select the input csv coming from Apptivo",
+            };
+
+            if (dlgOpenSheet.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+                myUI.ContactsFile = dlgOpenSheet.FileName;
+        }
         private void btnOutputFolder_Click(object sender, EventArgs e)
         {
             try
@@ -252,18 +262,6 @@ namespace CDMailer
             {
                 XLogger.Error(x);
             }
-        }
-        private void btnContactsFile_Click(object sender, EventArgs e)
-        {
-            var dlgOpenSheet = new Ookii.Dialogs.VistaOpenFileDialog()
-            {
-                DefaultExt = ".csv",
-                Multiselect = false,
-                Title = "Please select the generated messages output folder",
-            };
-
-            if (dlgOpenSheet.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-                myUI.ContactsFile = dlgOpenSheet.FileName;
         }
         private void btnGO_Click(object sender, EventArgs e)
         {

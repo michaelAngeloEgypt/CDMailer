@@ -409,7 +409,23 @@ namespace CDMailer.BLL
         {
             var myStringProps = srcObj.GetType()
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(pi => pi.PropertyType == typeof(string))
+                .Where(pi => pi.PropertyType == typeof(string) && pi.GetSetMethod() != null)
+                .Select(pi => pi);
+
+            foreach (var prop in myStringProps)
+            {
+                prop.SetValue(srcObj, func(prop.GetValue(srcObj) as string));
+            }
+        }
+
+        public static void DoFunctionOnSomeStringProperties(this Object srcObj, List<string> propNames, Func<string, string> func)
+        {
+            if (propNames == null || propNames.Count == 0)
+                return;
+
+            var myStringProps = srcObj.GetType()
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(pi => pi.PropertyType == typeof(string) && pi.GetSetMethod() != null && propNames.Contains(pi.Name))
                 .Select(pi => pi);
 
             foreach (var prop in myStringProps)

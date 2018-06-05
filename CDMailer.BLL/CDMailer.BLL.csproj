@@ -66,7 +66,7 @@
     <Compile Include="Reference\MSG.cs" />
     <Compile Include="Reference\ConfigKeys.cs" />
     <Compile Include="Engine.cs" />
-    <Compile Include="Reference\Lookups.cs" />
+    <Compile Include="Reference\REF.cs" />
     <Compile Include="Utils\DocxTemplate.cs" />
     <Compile Include="Utils\MyExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
