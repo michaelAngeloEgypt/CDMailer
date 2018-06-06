@@ -278,6 +278,9 @@ namespace CDMailer
             try
             {
                 var config = myUI.BuildConfig();
+                if (!File.Exists(REF.envelopFile))
+                    throw new ApplicationException($"Missing envelop template file: {REF.envelopFile}");
+
                 Engine.DoTask(config);
             }
             catch (Exception x)
@@ -357,6 +360,60 @@ namespace CDMailer
             }
 
             cboPrinters.DataSource = printers;
+        }
+
+        private void btnSingleContact_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                AttachEvents();
+
+                if (string.IsNullOrEmpty(myUI.ContactsFile))
+                {
+                    MessageBox.Show("Please select an input csv file first!");
+                    return;
+                }
+                if (string.IsNullOrEmpty(myUI.OutputFolder))
+                {
+                    MessageBox.Show("Please set the output folder first!");
+                    return;
+                }
+
+                Engine.Config = myUI.BuildConfig();
+                Engine.ReadContacts();
+                if (Engine.Variables.Contacts.Count == 0)
+                {
+                    MessageBox.Show("The selected input csv has no contacts or it is currently open in Excel. Please check.");
+                    return;
+                }
+
+                SingleContact sc = new SingleContact();
+                sc.ShowDialog();
+                if (sc.DialogResult == DialogResult.OK)
+                {
+                    var matchingContact = Engine.Variables.Contacts.FirstOrDefault(c => c.ContactName.MatchesString(sc.SelectedContact));
+                    if (matchingContact == null)
+                    {
+                        MessageBox.Show("Something went wrong.");
+                        return;
+                    }
+
+                    var templateFile = Path.Combine(REF.templatesPath, $"{sc.SelectedTemplate}.docx");
+                    Engine.ExecutionStatus.Result = Engine.GenerateContact(Engine.Config.UI.OutputFolder, matchingContact, sc.GeneratePerContact, templateFile);
+                }
+
+                DetachEvents();
+            }
+            catch (Exception x)
+            {
+                Engine.ExecutionStatus.Result = Engine.ExecutionResult.ErrorOccured;
+                if (x is ApplicationException)
+                    Engine.ExecutionStatus.Message = x.Message;
+                else
+                    Engine.ExecutionStatus.Message = MSG.UnknownError;
+
+                XLogger.Error(x);
+            }
         }
     }
 }

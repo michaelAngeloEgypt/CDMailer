@@ -23,6 +23,9 @@ namespace CDMailer.BLL
         {
         }
 
+        public static string templatesPath = Path.Combine(Environment.CurrentDirectory, "templates");
+        public static string envelopFile = Path.Combine(templatesPath, REF.Constants.EnvelopTemplate);
+
         public static class Constants
         {
             public const string CleanFileExtension = "CLEAN.xlsx";

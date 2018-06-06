@@ -51,6 +51,7 @@ namespace CDMailer.BLL
         {
             Config = new Config();
             Variables = new ExecutionVariables();
+            REF.Mapping.GetRefs(Path.Combine(REF.templatesPath, "Mapping.csv"));
         }
 
         public static void Reset()
@@ -59,15 +60,29 @@ namespace CDMailer.BLL
             ExecutionStatus.Reset();
             Variables.Reset();
         }
+        public static void ReadContacts()
+        {
+            try
+            {
+                Variables.Contacts.AddRange(ReadRecords(Config.UI.ContactsFile));
+            }
+            catch (Exception x)
+            {
+                if (x is ApplicationException)
+                    CallMarkCompleted(x.Message);
+                else
+                    CallMarkCompleted("Something went wrong in the middle of the process. Please check the logs.txt file.");
+
+                XLogger.Error(x);
+            }
+        }
         public static void DoTask(Config config)
         {
             try
             {
-                var templatesPath = Path.Combine(Environment.CurrentDirectory, "templates");
-                REF.Mapping.GetRefs(Path.Combine(templatesPath, "Mapping.csv"));
                 contactsFolder = Path.GetDirectoryName(config.UI.ContactsFile);
                 Variables.Contacts.AddRange(ReadRecords(config.UI.ContactsFile));
-                Engine.ExecutionStatus.Result = GenerateMessages(templatesPath, config.UI.OutputFolder, config.UI.GeneratePerContact, Variables.Contacts);
+                Engine.ExecutionStatus.Result = GenerateMessages(REF.templatesPath, config.UI.OutputFolder, config.UI.GeneratePerContact, Variables.Contacts);
             }
             catch (Exception x)
             {
@@ -176,9 +191,6 @@ namespace CDMailer.BLL
             var failedContacts = new List<String>();
 
             Contact contact = new Contact();
-            var envelopFile = Path.Combine(templatesFolder, REF.Constants.EnvelopTemplate);
-            if (!File.Exists(envelopFile))
-                throw new ApplicationException($"Missing envelop template file: {envelopFile}");
 
             for (int i = 0; i < contacts.Count; i++)
             {
@@ -188,21 +200,7 @@ namespace CDMailer.BLL
                     CallUpdateStatus($"Processing contact {i + 1} of {contacts.Count} contacts");
                     var templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.CDMailerTemplate), ".docx");
 
-                    switch (generatePerContact)
-                    {
-                        case REF.GeneratePerContact.Letter:
-                            GenerateFilled(outputFolder, contact, templateFile);
-                            break;
-                        case REF.GeneratePerContact.Envelop:
-                            GenerateFilled(outputFolder, contact, envelopFile);
-                            break;
-                        case REF.GeneratePerContact.LetterAndEnvelop:
-                            GenerateFilled(outputFolder, contact, templateFile);
-                            GenerateFilled(outputFolder, contact, envelopFile);
-                            break;
-                        default:
-                            break;
-                    }
+                    GenerateContactCore(outputFolder, generatePerContact, contact, templateFile);
 
                     if (!File.Exists(templateFile))
                         throw new ApplicationException($"Missing template file: {templateFile}");
@@ -233,6 +231,40 @@ namespace CDMailer.BLL
             }
         }
 
+        private static void GenerateContactCore(string outputFolder, REF.GeneratePerContact generatePerContact, Contact contact, string templateFile)
+        {
+            switch (generatePerContact)
+            {
+                case REF.GeneratePerContact.Letter:
+                    GenerateFilled(outputFolder, contact, templateFile);
+                    break;
+                case REF.GeneratePerContact.Envelop:
+                    GenerateFilled(outputFolder, contact, REF.envelopFile);
+                    break;
+                case REF.GeneratePerContact.LetterAndEnvelop:
+                    GenerateFilled(outputFolder, contact, templateFile);
+                    GenerateFilled(outputFolder, contact, REF.envelopFile);
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public static ExecutionResult GenerateContact(string outputFolder, Contact contact, REF.GeneratePerContact generatePerContact, string templateFile)
+        {
+            try
+            {
+                GenerateContactCore(outputFolder, generatePerContact, contact, templateFile);
+                CallUpdateStatus("Operation passed and filled templates are generated in the Output folder");
+                return ExecutionResult.Successful;
+            }
+            catch (Exception x)
+            {
+                XLogger.Error(x);
+                CallUpdateStatus("There was a problem in generating all the contacts files");
+                return ExecutionResult.ErrorOccured;
+            }
+        }
         private static void GenerateFilled(string outputFolder, Contact contact, string templateFile)
         {
             if (!contact.CDMailerTemplate.Contains("[") && !contact.CDMailerTemplate.Contains("]"))

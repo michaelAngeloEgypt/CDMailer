@@ -60,6 +60,7 @@ namespace CDMailer.BLL
         public string A9_State { get; set; }
         public string A9_ZipCode { get; set; }
         //
+        public string ContactName { get { return $"{FirstName?.Trim()} {LastName?.Trim()}"; } }
         public string CDMailerTemplate
         {
             get
@@ -140,7 +141,7 @@ namespace CDMailer.BLL
             }
         }
 
-        internal List<EnvelopContact> GetAddressContacts()
+        public List<EnvelopContact> GetAddressContacts()
         {
 
             var res = new List<EnvelopContact>();
