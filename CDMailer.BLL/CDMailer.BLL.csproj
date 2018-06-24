@@ -31,11 +31,35 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Aspose.Words, Version=18.6.0.0, Culture=neutral, PublicKeyToken=716fcc553a201e56, processorArchitecture=MSIL">
+      <HintPath>..\packages\Aspose.Words.18.6.0\lib\net40\Aspose.Words.dll</HintPath>
+    </Reference>
     <Reference Include="CsvHelper, Version=7.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
       <HintPath>..\packages\CsvHelper.7.1.0\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
+    <Reference Include="Gnostice.Core, Version=18.1.0.0, Culture=neutral, PublicKeyToken=fc8cb3ab6a24df63, processorArchitecture=MSIL">
+      <HintPath>..\packages\XtremeDocumentStudio.NETWinForms.18.1.1\lib\net40\Gnostice.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Gnostice.Documents, Version=18.1.0.0, Culture=neutral, PublicKeyToken=fc8cb3ab6a24df63, processorArchitecture=MSIL">
+      <HintPath>..\packages\XtremeDocumentStudio.NETWinForms.18.1.1\lib\net40\Gnostice.Documents.dll</HintPath>
+    </Reference>
+    <Reference Include="Gnostice.Documents.Controls.WinForms, Version=18.1.0.0, Culture=neutral, PublicKeyToken=fc8cb3ab6a24df63, processorArchitecture=MSIL">
+      <HintPath>..\packages\XtremeDocumentStudio.NETWinForms.18.1.1\lib\net40\Gnostice.Documents.Controls.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Gnostice.XtremeFontEngine.4.0, Version=1.0.2025.425, Culture=neutral, PublicKeyToken=461de9da64be3a84, processorArchitecture=MSIL">
+      <HintPath>..\packages\XtremeDocumentStudio.NETWinForms.18.1.1\lib\net40\Gnostice.XtremeFontEngine.4.0.dll</HintPath>
+    </Reference>
+    <Reference Include="Gnostice.XtremeImageEngine, Version=12.0.1700.132, Culture=neutral, PublicKeyToken=67e9a3a7c22f1690, processorArchitecture=MSIL">
+      <HintPath>..\packages\XtremeDocumentStudio.NETWinForms.18.1.1\lib\net40\Gnostice.XtremeImageEngine.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLib, Version=0.86.0.518, Culture=neutral, PublicKeyToken=1b03e6acf1164f73, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip.Reduced, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <HintPath>..\packages\XtremeDocumentStudio.NETWinForms.18.1.1\lib\net40\Ionic.Zip.Reduced.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.13.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\XtremeDocumentStudio.NETWinForms.18.1.1\lib\net40\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
@@ -44,6 +68,15 @@
     </Reference>
     <Reference Include="SautinSoft.Document, Version=3.3.3.26, Culture=neutral, PublicKeyToken=e759c76c7515592a, processorArchitecture=MSIL">
       <HintPath>..\packages\sautinsoft.document.3.3.3.26\lib\net461\SautinSoft.Document.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Doc, Version=6.5.10.4040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Doc.6.5.10\lib\net40\Spire.Doc.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.License, Version=1.3.6.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Doc.6.5.10\lib\net40\Spire.License.dll</HintPath>
+    </Reference>
+    <Reference Include="Spire.Pdf, Version=4.5.3.2040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Doc.6.5.10\lib\net40\Spire.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="swxben.docxtemplateengine, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\swxben.docxtemplateengine.0.1.5\lib\net40\swxben.docxtemplateengine.dll</HintPath>
@@ -70,6 +103,7 @@
     <Compile Include="Utils\DocxTemplate.cs" />
     <Compile Include="Utils\MyExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\PrinterUtils.cs" />
     <Compile Include="Utils\SortableBindingList.cs" />
     <Compile Include="XLogger.cs" />
   </ItemGroup>
@@ -86,6 +120,9 @@
       <Isolated>False</Isolated>
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </COMReference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Gnostice.Documents.Framework.licx" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

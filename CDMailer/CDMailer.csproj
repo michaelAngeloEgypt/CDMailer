@@ -38,7 +38,6 @@
   <ItemGroup>
     <Reference Include="Ookii.Dialogs, Version=1.0.0.0, Culture=neutral, PublicKeyToken=0c15020868fd6249, processorArchitecture=MSIL">
       <HintPath>..\packages\Ookii.Dialogs.WindowsForms.1.0\lib\net35\Ookii.Dialogs.dll</HintPath>
-      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -68,11 +67,11 @@
     <Compile Include="LoadingCircle.Designer.cs">
       <DependentUpon>LoadingCircle.cs</DependentUpon>
     </Compile>
-    <Compile Include="SingleContact.cs">
+    <Compile Include="Custom.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SingleContact.Designer.cs">
-      <DependentUpon>SingleContact.cs</DependentUpon>
+    <Compile Include="Custom.Designer.cs">
+      <DependentUpon>Custom.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -87,8 +86,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SingleContact.resx">
-      <DependentUpon>SingleContact.cs</DependentUpon>
+    <EmbeddedResource Include="Custom.resx">
+      <DependentUpon>Custom.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\DataSources\CDMailer.BLL.InputFile.datasource" />

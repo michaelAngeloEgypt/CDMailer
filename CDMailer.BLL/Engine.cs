@@ -7,6 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -64,6 +65,7 @@ namespace CDMailer.BLL
         {
             try
             {
+                Variables.Contacts.Clear();
                 Variables.Contacts.AddRange(ReadRecords(Config.UI.ContactsFile));
             }
             catch (Exception x)
@@ -94,6 +96,50 @@ namespace CDMailer.BLL
                 XLogger.Error(x);
             }
         }
+        public static ExecutionResult DoCustom(string outputFolder, List<Contact> contacts, REF.Scope generatePerContact, string templateFile)
+        {
+            var successfulContacts = new List<String>();
+            var failedContacts = new List<String>();
+
+            Contact contact = new Contact();
+
+            for (int i = 0; i < contacts.Count; i++)
+            {
+                try
+                {
+                    contact = contacts[i];
+                    CallUpdateStatus($"Processing contact {i + 1} of {contacts.Count} contacts");
+
+                    GenerateContactCore(outputFolder, generatePerContact, contact, templateFile);
+
+                    if (!File.Exists(templateFile))
+                        throw new ApplicationException($"Missing template file: {templateFile}");
+                    successfulContacts.Add(contact.OppName);
+                }
+                catch (Exception x)
+                {
+                    if (!x.Data.Contains("contact.OppName")) x.Data.Add("contact.OppName", contact.OppName);
+                    XLogger.Error(x);
+                    failedContacts.Add(contact.OppName);
+                }
+            }
+
+            if (successfulContacts.Count == contacts.Count())
+            {
+                CallUpdateStatus("Operation passed and filled templates are generated in the Output folder");
+                return ExecutionResult.Successful;
+            }
+            else if (failedContacts.Count == contacts.Count())
+            {
+                CallUpdateStatus("There was a problem in generating all the contacts files");
+                return ExecutionResult.ErrorOccured;
+            }
+            else
+            {
+                CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nThese are the failed contacts:\n\n{String.Join("\n", failedContacts)}");
+                return ExecutionResult.PartialPass;
+            }
+        }
         /// <summary>
         /// <see cref="https://wurstkoffer.wordpress.com/2013/05/18/c-printing-to-word-programmatically-in-3-way/"/>
         /// </summary>
@@ -104,10 +150,24 @@ namespace CDMailer.BLL
             {
                 foreach (var filename in documents)
                 {
-                    //wait
-                    //Print1(filename, printer);
-                    Print2(filename);
-                    //Print3(filename);
+                    Thread.Sleep(Config.UI.PrintBuffer * 1000);
+                    switch (Config.UI.PrintMethod)
+                    {
+                        case REF.PrintMethod.PrintWithNoDialog:
+                            PrinterUtils.PrintWithNoDialog(filename, printer);
+                            break;
+                        case REF.PrintMethod.PrintWithInterop:
+                            PrinterUtils.PrintWithInterop2(filename, printer);
+                            break;
+                        case REF.PrintMethod.PrintWithAspose:
+                            PrinterUtils.PrintWithAspose(filename, printer);
+                            break;
+                        case REF.PrintMethod.PrintWithGnostice:
+                            PrinterUtils.PrintWithGnostice(filename, printer);
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             catch (Exception x)
@@ -119,48 +179,6 @@ namespace CDMailer.BLL
 
                 XLogger.Error(x);
             }
-        }
-
-        private static void Print1(string filename, string printer)
-        {
-            using (PrintDialog printDialog1 = new PrintDialog())
-            {
-                printDialog1.PrinterSettings.PrinterName = printer;
-                if (printDialog1.ShowDialog() == DialogResult.OK)
-                {
-                    System.Diagnostics.ProcessStartInfo info = new System.Diagnostics.ProcessStartInfo(filename);
-                    //info.Arguments = “\”” + printDialog1.PrinterSettings.PrinterName + “\””;
-                    info.Arguments = "\"" + printer + "\"";
-                    info.CreateNoWindow = true;
-                    info.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
-                    info.UseShellExecute = true;
-                    info.Verb = "PrintTo";
-                    System.Diagnostics.Process.Start(info);
-                }
-            }
-        }
-        /// <summary>
-        /// shows the dialog of the printer and opens the word document
-        /// </summary>
-        /// <param name="filename"></param>
-        private static void Print2(string filename)
-        {
-            ProcessStartInfo info2 = new ProcessStartInfo(filename);
-            info2.Verb = "Print";
-            info2.CreateNoWindow = true;
-            info2.WindowStyle = ProcessWindowStyle.Hidden;
-            Process.Start(info2);
-        }
-        private static void Print3(string filename)
-        {
-            Microsoft.Office.Interop.Word.Application wordInstance = new Microsoft.Office.Interop.Word.Application();
-            //MemoryStream documentStream = getDocStream();
-            FileInfo wordFile = new FileInfo(filename);
-            object fileObject = wordFile.FullName;
-            object oMissing = System.Reflection.Missing.Value;
-            Microsoft.Office.Interop.Word.Document doc = wordInstance.Documents.Open(ref fileObject, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing, ref oMissing);
-            doc.Activate();
-            doc.PrintOut(oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing, oMissing);
         }
 
         private static List<Contact> ReadRecords_Manual(string contactsFilepath)
@@ -185,7 +203,7 @@ namespace CDMailer.BLL
                 throw;
             }
         }
-        private static ExecutionResult GenerateMessages(string templatesFolder, string outputFolder, REF.GeneratePerContact generatePerContact, List<Contact> contacts)
+        private static ExecutionResult GenerateMessages(string templatesFolder, string outputFolder, REF.Scope generatePerContact, List<Contact> contacts)
         {
             var successfulContacts = new List<String>();
             var failedContacts = new List<String>();
@@ -231,17 +249,17 @@ namespace CDMailer.BLL
             }
         }
 
-        private static void GenerateContactCore(string outputFolder, REF.GeneratePerContact generatePerContact, Contact contact, string templateFile)
+        private static void GenerateContactCore(string outputFolder, REF.Scope generatePerContact, Contact contact, string templateFile)
         {
             switch (generatePerContact)
             {
-                case REF.GeneratePerContact.Letter:
+                case REF.Scope.Letter:
                     GenerateFilled(outputFolder, contact, templateFile);
                     break;
-                case REF.GeneratePerContact.Envelop:
+                case REF.Scope.Envelop:
                     GenerateFilled(outputFolder, contact, REF.envelopFile);
                     break;
-                case REF.GeneratePerContact.LetterAndEnvelop:
+                case REF.Scope.LetterAndEnvelop:
                     GenerateFilled(outputFolder, contact, templateFile);
                     GenerateFilled(outputFolder, contact, REF.envelopFile);
                     break;
@@ -250,7 +268,7 @@ namespace CDMailer.BLL
             }
         }
 
-        public static ExecutionResult GenerateContact(string outputFolder, Contact contact, REF.GeneratePerContact generatePerContact, string templateFile)
+        public static ExecutionResult GenerateContact(string outputFolder, Contact contact, REF.Scope generatePerContact, string templateFile)
         {
             try
             {
@@ -273,18 +291,20 @@ namespace CDMailer.BLL
             //if (contact.FirstName.Contains("Beth"))
             //    1.ToString();
 
-            var isEnvelop = Path.GetFileName(templateFile).MatchesString(REF.Constants.EnvelopTemplate);
-            string filledTemplate = !isEnvelop ? GetFilledTemplate(contact) : GetFilledTemplate(contact, REF.Constants.EnvelopTemplate);
+            var filename = Path.GetFileName(templateFile);
+            var isEnvelop = REF.Constants.envelopFiles.Any(t => t.MatchesString(filename));
+            //string filledTemplateName = !isEnvelop ? GetFilledTemplateName(contact) : GetFilledTemplateName(contact, filename);
+            string filledTemplateName = GetFilledTemplateName(contact, filename);
 
-            var envlopContacts = contact.GetAddressContacts();
-            for (int i = 0; i < envlopContacts.Count; i++)
+            var envelopContacts = contact.GetAddressContacts();
+            for (int i = 0; i < envelopContacts.Count; i++)
             {
-                string generatedFilenameEnvelop = $"{filledTemplate} - {i + 1}.docx";
+                string generatedFilenameEnvelop = $"{filledTemplateName} - {i + 1}.docx";
                 string generatedFilePathEnvelop = Path.Combine(outputFolder, generatedFilenameEnvelop);
-                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, !isEnvelop ? contact as Object : envlopContacts[i] as Object);
+                DocxTemplate.InsertTextInPlaceholders(templateFile, generatedFilePathEnvelop, !isEnvelop ? contact as Object : envelopContacts[i] as Object);
             }
         }
-        private static string GetFilledTemplate(Contact contact, string template = null)
+        private static string GetFilledTemplateName(Contact contact, string template = null)
         {
             //if (contact.FirstName.StartsWith("Donna"))
             //    1.ToString();
@@ -323,7 +343,7 @@ namespace CDMailer.BLL
             catch (IOException io)
             {
                 io.Data.Add("contactsFilepath", contactsFilepath);
-                var x = new ApplicationException("An error occured while reading the csv file. Please make sure it is not open in Excel.", io);
+                var x = new ApplicationException("An error occured while reading the csv file. Please make sure it is not open in Excel and that it follows the standard Apptivo format.", io);
                 throw x;
             }
             catch (Exception x)

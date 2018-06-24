@@ -25,12 +25,12 @@ namespace CDMailer
             public Main o;
             public string ContactsFile { get { return o.txtContactsFile.Text; } set { o.txtContactsFile.Text = value; } }
             public string OutputFolder { get { return o.txtOutputFolder.Text; } set { o.txtOutputFolder.Text = value; } }
-            public REF.GeneratePerContact GeneratePerContact
+            public REF.Scope GeneratePerContact
             {
                 get
                 {
                     var selectedTag = o.gbInputs.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag.ToString();
-                    return (REF.GeneratePerContact)Enum.Parse(typeof(REF.GeneratePerContact), selectedTag);
+                    return (REF.Scope)Enum.Parse(typeof(REF.Scope), selectedTag);
                 }
                 set
                 {
@@ -38,6 +38,35 @@ namespace CDMailer
                     selectedCheckbox.Checked = true;
                 }
             }
+            public REF.Scope PrintPerContact
+            {
+                get
+                {
+                    var selectedTag = o.gpPrintScope.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag.ToString();
+                    return (REF.Scope)Enum.Parse(typeof(REF.Scope), selectedTag);
+                }
+                set
+                {
+                    var selectedCheckbox = o.gpPrintScope.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Tag.Equals(value.ToString()));
+                    selectedCheckbox.Checked = true;
+                }
+            }
+            public REF.PrintMethod PrintMethod
+            {
+                get
+                {
+                    var selectedTag = o.gpPrintMethod.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag.ToString();
+                    return (REF.PrintMethod)Enum.Parse(typeof(REF.PrintMethod), selectedTag);
+                }
+                set
+                {
+                    var selectedCheckbox = o.gpPrintMethod.Controls.OfType<RadioButton>().FirstOrDefault(r => r.Tag.Equals(value.ToString()));
+                    selectedCheckbox.Checked = true;
+                }
+            }
+            public int PrintBuffer { get { return int.Parse(o.numPrintBuffer.Value.ToString()); } set { o.numPrintBuffer.Value = value; } }
+
+
             public string Result { get { return o.txtResult.Text; } set { o.txtResult.Text = value; } }
 
             public void SignalError(string msg)
@@ -165,7 +194,7 @@ namespace CDMailer
                     missingKeys.Add(ConfigKeys.UI.OutputFolder);
                 //------------------------------------------------------------------------------------------
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.GeneratePerContact))
-                    myUI.GeneratePerContact = (REF.GeneratePerContact)Enum.Parse(typeof(REF.GeneratePerContact), config.AppSettings.Settings[ConfigKeys.UI.GeneratePerContact].Value);
+                    myUI.GeneratePerContact = (REF.Scope)Enum.Parse(typeof(REF.Scope), config.AppSettings.Settings[ConfigKeys.UI.GeneratePerContact].Value);
                 else
                     missingKeys.Add(ConfigKeys.UI.GeneratePerContact);
                 //------------------------------------------------------------------------------------------
@@ -333,15 +362,32 @@ namespace CDMailer
             //UpdateProgress();
         }
 
-        private void btnPrintAll_Click(object sender, EventArgs e)
+        private void btnPrint_Click(object sender, EventArgs e)
         {
+            Engine.Config.UI.PrintBuffer = myUI.PrintBuffer;
+            Engine.Config.UI.PrintMethod = myUI.PrintMethod;
+            var finalDocuments = new List<string>();
             var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx");
-            if (documentsToPrint.Count() == 0)
-                MessageBox.Show("No Word documents were found in the output folder");
+            switch (myUI.PrintPerContact)
+            {
+                case REF.Scope.Letter:
+                    finalDocuments.AddRange(documentsToPrint.Except(documentsToPrint.Where(d => d.ContainsString(REF.Constants.EnvelopID))));
+                    break;
+                case REF.Scope.Envelop:
+                    finalDocuments.AddRange(documentsToPrint.Where(d => d.ContainsString(REF.Constants.EnvelopID)));
+                    break;
+                case REF.Scope.LetterAndEnvelop:
+                    finalDocuments.AddRange(documentsToPrint);
+                    break;
+                default:
+                    break;
+            }
+            if (finalDocuments.Count() == 0)
+                MessageBox.Show("No suitable Word documents were found in the output folder");
 
-            Engine.PrintAll(documentsToPrint.ToList(), "");
+            var printer = !cboPrinters.SelectedValue.ToString().Equals("DEFAULT") ? cboPrinters.SelectedValue.ToString() : string.Empty;
+            Engine.PrintAll(finalDocuments, printer);
         }
-
         private void listPrinters()
         {
             var printers = new List<string>();
@@ -358,16 +404,41 @@ namespace CDMailer
 
                 printers.Add(name.ToString());
             }
-
+            printers.Insert(0, "DEFAULT");
             cboPrinters.DataSource = printers;
+            cboPrinters.SelectedIndex = 0;
+        }
+        private void btnCustom_Click(object sender, EventArgs e)
+        {
+            if (bgwProcess2.IsBusy != true)
+            {
+                loadingCircle1.Active = true;
+                Reset();
+                bgwProcess2.RunWorkerAsync();
+            }
         }
 
-        private void btnSingleContact_Click(object sender, EventArgs e)
+        private void bgwProcess2_DoWork(object sender, DoWorkEventArgs e)
         {
             try
             {
-                AttachEvents();
+                BackgroundWorker worker = sender as BackgroundWorker;
 
+                if ((worker.CancellationPending == true))
+                    e.Cancel = true;
+                else
+                {
+                    AttachEvents();
+                    DoCustom();
+                }
+            }
+            catch (Exception x) { XLogger.Error(x); }
+        }
+
+        private void DoCustom()
+        {
+            try
+            {
                 if (string.IsNullOrEmpty(myUI.ContactsFile))
                 {
                     MessageBox.Show("Please select an input csv file first!");
@@ -383,26 +454,36 @@ namespace CDMailer
                 Engine.ReadContacts();
                 if (Engine.Variables.Contacts.Count == 0)
                 {
-                    MessageBox.Show("The selected input csv has no contacts or it is currently open in Excel. Please check.");
+                    MessageBox.Show("The selected input csv has no contacts, or it is currently open in Excel, or it doesn't follow the correct format. Please check.");
                     return;
                 }
 
-                SingleContact sc = new SingleContact();
+                Custom sc = new Custom();
                 sc.ShowDialog();
                 if (sc.DialogResult == DialogResult.OK)
                 {
-                    var matchingContact = Engine.Variables.Contacts.FirstOrDefault(c => c.ContactName.MatchesString(sc.SelectedContact));
-                    if (matchingContact == null)
+                    var contacts = new List<Contact>();
+                    if (sc.SelectedContact == REF.Constants.AllContacts)
+                        contacts.AddRange(Engine.Variables.Contacts);
+                    else
                     {
-                        MessageBox.Show("Something went wrong.");
-                        return;
+                        var matchingContact = Engine.Variables.Contacts.FirstOrDefault(c => c.ContactName.MatchesString(sc.SelectedContact));
+                        if (matchingContact == null)
+                        {
+                            MessageBox.Show("Something went wrong.");
+                            return;
+                        }
+                        else
+                            contacts.Add(matchingContact);
                     }
 
                     var templateFile = Path.Combine(REF.templatesPath, $"{sc.SelectedTemplate}.docx");
-                    Engine.ExecutionStatus.Result = Engine.GenerateContact(Engine.Config.UI.OutputFolder, matchingContact, sc.GeneratePerContact, templateFile);
-                }
+                    Engine.DoCustom(Engine.Config.UI.OutputFolder, contacts, sc.GeneratePerContact, templateFile);
 
-                DetachEvents();
+                    ////--> use DoCustom here
+                    //foreach (var contact in contacts)
+                    //    Engine.ExecutionStatus.Result = Engine.GenerateContact(Engine.Config.UI.OutputFolder, contact, sc.GeneratePerContact, templateFile);
+                }
             }
             catch (Exception x)
             {
@@ -414,6 +495,13 @@ namespace CDMailer
 
                 XLogger.Error(x);
             }
+        }
+
+        private void bgwProcess2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            loadingCircle1.Active = false;
+            DetachEvents();
+            //UpdateProgress();
         }
     }
 }

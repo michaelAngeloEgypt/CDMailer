@@ -12,21 +12,21 @@ using System.Windows.Forms;
 
 namespace CDMailer
 {
-    public partial class SingleContact : Form
+    public partial class Custom : Form
     {
         public String SelectedContact { get { if (cboContactNames.SelectedIndex == -1) return ""; else return cboContactNames.SelectedValue.ToString(); } }
         public String SelectedTemplate { get { if (cboTemplateNames.SelectedIndex == -1) return ""; else return cboTemplateNames.SelectedValue.ToString(); } }
         public string OutputFolder { get { return txtOutputFolder.Text; } set { txtOutputFolder.Text = value; } }
-        public REF.GeneratePerContact GeneratePerContact
+        public REF.Scope GeneratePerContact
         {
             get
             {
                 var selectedTag = Controls.OfType<RadioButton>().FirstOrDefault(r => r.Checked).Tag.ToString();
-                return (REF.GeneratePerContact)Enum.Parse(typeof(REF.GeneratePerContact), selectedTag);
+                return (REF.Scope)Enum.Parse(typeof(REF.Scope), selectedTag);
             }
         }
 
-        public SingleContact()
+        public Custom()
         {
             InitializeComponent();
             FillControls();
@@ -45,6 +45,7 @@ namespace CDMailer
         {
             var validContacts = Engine.Variables.Contacts.Where(c=>c.GetAddressContacts().Count > 0);
             var contactNames = validContacts.Select(c=> c.ContactName).Distinct().OrderBy(c=>c).ToList();
+            contactNames.Insert(0,REF.Constants.AllContacts);
             cboContactNames.DataSource = contactNames;
 
             var templateNames = Directory.GetFiles(REF.templatesPath)

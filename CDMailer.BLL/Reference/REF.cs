@@ -9,11 +9,18 @@ namespace CDMailer.BLL
 {
     public static class REF
     {
-        public enum GeneratePerContact
+        public enum Scope
         {
             Letter,
             Envelop,
             LetterAndEnvelop
+        }
+        public enum PrintMethod
+        {
+            PrintWithNoDialog,
+            PrintWithInterop,
+            PrintWithAspose,
+            PrintWithGnostice
         }
 
         static REF()
@@ -28,8 +35,19 @@ namespace CDMailer.BLL
 
         public static class Constants
         {
+            public const string EnvelopID = "Envelop";
+            public const string PostCard1ID = "Post Card 1";
+            public const string PostCard2ID = "Post Card 2";
             public const string CleanFileExtension = "CLEAN.xlsx";
-            public const string EnvelopTemplate = "[FirstName] [LastName] - Envelop.docx";
+            public static string EnvelopTemplate = $"[FirstName] [LastName] - {EnvelopID}.docx";
+            public static string PostCard1Template = $"[FirstName] [LastName] - {PostCard1ID}.docx";
+            public static string PostCard2Template = $"[FirstName] [LastName] - {PostCard2ID}.docx";
+            public static string AllContacts = "-------ALL-------";
+
+            public static List<String> envelopFiles = new List<string>()
+            {
+                EnvelopTemplate, PostCard1Template, PostCard2Template
+            };
         }
 
         public class Mapping

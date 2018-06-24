@@ -32,25 +32,46 @@
             this.btnOutputFolder = new System.Windows.Forms.Button();
             this.txtOutputFolder = new System.Windows.Forms.TextBox();
             this.gbInputs = new System.Windows.Forms.GroupBox();
-            this.btnSingleContact = new System.Windows.Forms.Button();
-            this.cboPrinters = new System.Windows.Forms.ComboBox();
-            this.btnPrintAll = new System.Windows.Forms.Button();
+            this.btnCustom = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.radioButton3 = new System.Windows.Forms.RadioButton();
-            this.rbEnvelop = new System.Windows.Forms.RadioButton();
-            this.rbLetter = new System.Windows.Forms.RadioButton();
+            this.rbGenLetterAndEnvelop = new System.Windows.Forms.RadioButton();
+            this.rbGenEnvelop = new System.Windows.Forms.RadioButton();
+            this.rbGenLetter = new System.Windows.Forms.RadioButton();
             this.label3 = new System.Windows.Forms.Label();
             this.txtContactsFile = new System.Windows.Forms.TextBox();
             this.btnContactsFile = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.cboPrinters = new System.Windows.Forms.ComboBox();
+            this.btnPrint = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txtResult = new System.Windows.Forms.RichTextBox();
             this.btnGO = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.bgwProcess = new System.ComponentModel.BackgroundWorker();
+            this.gbPrinting = new System.Windows.Forms.GroupBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.gpPrintScope = new System.Windows.Forms.Panel();
+            this.radioButton6 = new System.Windows.Forms.RadioButton();
+            this.label8 = new System.Windows.Forms.Label();
+            this.radioButton4 = new System.Windows.Forms.RadioButton();
+            this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.gpPrintMethod = new System.Windows.Forms.Panel();
+            this.rbGnostice = new System.Windows.Forms.RadioButton();
+            this.rbAspose = new System.Windows.Forms.RadioButton();
+            this.radioButton1 = new System.Windows.Forms.RadioButton();
+            this.radioButton2 = new System.Windows.Forms.RadioButton();
+            this.label4 = new System.Windows.Forms.Label();
+            this.numPrintBuffer = new System.Windows.Forms.NumericUpDown();
+            this.label6 = new System.Windows.Forms.Label();
+            this.bgwProcess2 = new System.ComponentModel.BackgroundWorker();
             this.loadingCircle1 = new CDMailer.LoadingCircle();
             this.gbInputs.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.gbPrinting.SuspendLayout();
+            this.gpPrintScope.SuspendLayout();
+            this.gpPrintMethod.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPrintBuffer)).BeginInit();
             this.SuspendLayout();
             // 
             // btnOutputFolder
@@ -73,13 +94,11 @@
             // 
             // gbInputs
             // 
-            this.gbInputs.Controls.Add(this.btnSingleContact);
-            this.gbInputs.Controls.Add(this.cboPrinters);
-            this.gbInputs.Controls.Add(this.btnPrintAll);
+            this.gbInputs.Controls.Add(this.btnCustom);
             this.gbInputs.Controls.Add(this.label2);
-            this.gbInputs.Controls.Add(this.radioButton3);
-            this.gbInputs.Controls.Add(this.rbEnvelop);
-            this.gbInputs.Controls.Add(this.rbLetter);
+            this.gbInputs.Controls.Add(this.rbGenLetterAndEnvelop);
+            this.gbInputs.Controls.Add(this.rbGenEnvelop);
+            this.gbInputs.Controls.Add(this.rbGenLetter);
             this.gbInputs.Controls.Add(this.label3);
             this.gbInputs.Controls.Add(this.txtContactsFile);
             this.gbInputs.Controls.Add(this.btnContactsFile);
@@ -88,39 +107,20 @@
             this.gbInputs.Controls.Add(this.btnOutputFolder);
             this.gbInputs.Location = new System.Drawing.Point(32, 25);
             this.gbInputs.Name = "gbInputs";
-            this.gbInputs.Size = new System.Drawing.Size(909, 154);
+            this.gbInputs.Size = new System.Drawing.Size(909, 150);
             this.gbInputs.TabIndex = 10;
             this.gbInputs.TabStop = false;
             this.gbInputs.Text = "Inputs";
             // 
-            // btnSingleContact
+            // btnCustom
             // 
-            this.btnSingleContact.Location = new System.Drawing.Point(758, 31);
-            this.btnSingleContact.Name = "btnSingleContact";
-            this.btnSingleContact.Size = new System.Drawing.Size(109, 23);
-            this.btnSingleContact.TabIndex = 26;
-            this.btnSingleContact.Text = "Single Contact";
-            this.btnSingleContact.UseVisualStyleBackColor = true;
-            this.btnSingleContact.Click += new System.EventHandler(this.btnSingleContact_Click);
-            // 
-            // cboPrinters
-            // 
-            this.cboPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboPrinters.FormattingEnabled = true;
-            this.cboPrinters.Location = new System.Drawing.Point(524, 110);
-            this.cboPrinters.Name = "cboPrinters";
-            this.cboPrinters.Size = new System.Drawing.Size(343, 21);
-            this.cboPrinters.TabIndex = 25;
-            // 
-            // btnPrintAll
-            // 
-            this.btnPrintAll.Location = new System.Drawing.Point(443, 109);
-            this.btnPrintAll.Name = "btnPrintAll";
-            this.btnPrintAll.Size = new System.Drawing.Size(75, 23);
-            this.btnPrintAll.TabIndex = 24;
-            this.btnPrintAll.Text = "Print All";
-            this.btnPrintAll.UseVisualStyleBackColor = true;
-            this.btnPrintAll.Click += new System.EventHandler(this.btnPrintAll_Click);
+            this.btnCustom.Location = new System.Drawing.Point(758, 106);
+            this.btnCustom.Name = "btnCustom";
+            this.btnCustom.Size = new System.Drawing.Size(109, 23);
+            this.btnCustom.TabIndex = 28;
+            this.btnCustom.Text = "Custom";
+            this.btnCustom.UseVisualStyleBackColor = true;
+            this.btnCustom.Click += new System.EventHandler(this.btnCustom_Click);
             // 
             // label2
             // 
@@ -131,40 +131,40 @@
             this.label2.TabIndex = 20;
             this.label2.Text = "Generate";
             // 
-            // radioButton3
+            // rbGenLetterAndEnvelop
             // 
-            this.radioButton3.AutoSize = true;
-            this.radioButton3.Location = new System.Drawing.Point(310, 112);
-            this.radioButton3.Name = "radioButton3";
-            this.radioButton3.Size = new System.Drawing.Size(103, 17);
-            this.radioButton3.TabIndex = 19;
-            this.radioButton3.Tag = "LetterAndEnvelop";
-            this.radioButton3.Text = "Letter + Envelop";
-            this.radioButton3.UseVisualStyleBackColor = true;
+            this.rbGenLetterAndEnvelop.AutoSize = true;
+            this.rbGenLetterAndEnvelop.Location = new System.Drawing.Point(310, 112);
+            this.rbGenLetterAndEnvelop.Name = "rbGenLetterAndEnvelop";
+            this.rbGenLetterAndEnvelop.Size = new System.Drawing.Size(103, 17);
+            this.rbGenLetterAndEnvelop.TabIndex = 19;
+            this.rbGenLetterAndEnvelop.Tag = "LetterAndEnvelop";
+            this.rbGenLetterAndEnvelop.Text = "Letter + Envelop";
+            this.rbGenLetterAndEnvelop.UseVisualStyleBackColor = true;
             // 
-            // rbEnvelop
+            // rbGenEnvelop
             // 
-            this.rbEnvelop.AutoSize = true;
-            this.rbEnvelop.Location = new System.Drawing.Point(213, 112);
-            this.rbEnvelop.Name = "rbEnvelop";
-            this.rbEnvelop.Size = new System.Drawing.Size(86, 17);
-            this.rbEnvelop.TabIndex = 18;
-            this.rbEnvelop.Tag = "Envelop";
-            this.rbEnvelop.Text = "Envelop only";
-            this.rbEnvelop.UseVisualStyleBackColor = true;
+            this.rbGenEnvelop.AutoSize = true;
+            this.rbGenEnvelop.Location = new System.Drawing.Point(213, 112);
+            this.rbGenEnvelop.Name = "rbGenEnvelop";
+            this.rbGenEnvelop.Size = new System.Drawing.Size(86, 17);
+            this.rbGenEnvelop.TabIndex = 18;
+            this.rbGenEnvelop.Tag = "Envelop";
+            this.rbGenEnvelop.Text = "Envelop only";
+            this.rbGenEnvelop.UseVisualStyleBackColor = true;
             // 
-            // rbLetter
+            // rbGenLetter
             // 
-            this.rbLetter.AutoSize = true;
-            this.rbLetter.Checked = true;
-            this.rbLetter.Location = new System.Drawing.Point(128, 112);
-            this.rbLetter.Name = "rbLetter";
-            this.rbLetter.Size = new System.Drawing.Size(74, 17);
-            this.rbLetter.TabIndex = 17;
-            this.rbLetter.TabStop = true;
-            this.rbLetter.Tag = "Letter";
-            this.rbLetter.Text = "Letter only";
-            this.rbLetter.UseVisualStyleBackColor = true;
+            this.rbGenLetter.AutoSize = true;
+            this.rbGenLetter.Checked = true;
+            this.rbGenLetter.Location = new System.Drawing.Point(128, 112);
+            this.rbGenLetter.Name = "rbGenLetter";
+            this.rbGenLetter.Size = new System.Drawing.Size(74, 17);
+            this.rbGenLetter.TabIndex = 17;
+            this.rbGenLetter.TabStop = true;
+            this.rbGenLetter.Tag = "Letter";
+            this.rbGenLetter.Text = "Letter only";
+            this.rbGenLetter.UseVisualStyleBackColor = true;
             // 
             // label3
             // 
@@ -180,12 +180,12 @@
             this.txtContactsFile.Location = new System.Drawing.Point(128, 32);
             this.txtContactsFile.Name = "txtContactsFile";
             this.txtContactsFile.ReadOnly = true;
-            this.txtContactsFile.Size = new System.Drawing.Size(543, 20);
+            this.txtContactsFile.Size = new System.Drawing.Size(647, 20);
             this.txtContactsFile.TabIndex = 14;
             // 
             // btnContactsFile
             // 
-            this.btnContactsFile.Location = new System.Drawing.Point(677, 31);
+            this.btnContactsFile.Location = new System.Drawing.Point(792, 32);
             this.btnContactsFile.Name = "btnContactsFile";
             this.btnContactsFile.Size = new System.Drawing.Size(75, 23);
             this.btnContactsFile.TabIndex = 15;
@@ -202,10 +202,29 @@
             this.label1.TabIndex = 10;
             this.label1.Text = "Output Folder";
             // 
+            // cboPrinters
+            // 
+            this.cboPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboPrinters.FormattingEnabled = true;
+            this.cboPrinters.Location = new System.Drawing.Point(122, 34);
+            this.cboPrinters.Name = "cboPrinters";
+            this.cboPrinters.Size = new System.Drawing.Size(343, 21);
+            this.cboPrinters.TabIndex = 25;
+            // 
+            // btnPrint
+            // 
+            this.btnPrint.Location = new System.Drawing.Point(677, 147);
+            this.btnPrint.Name = "btnPrint";
+            this.btnPrint.Size = new System.Drawing.Size(89, 36);
+            this.btnPrint.TabIndex = 24;
+            this.btnPrint.Text = "PRINT";
+            this.btnPrint.UseVisualStyleBackColor = true;
+            this.btnPrint.Click += new System.EventHandler(this.btnPrint_Click);
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.txtResult);
-            this.groupBox3.Location = new System.Drawing.Point(33, 238);
+            this.groupBox3.Location = new System.Drawing.Point(33, 391);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(906, 100);
             this.groupBox3.TabIndex = 19;
@@ -225,7 +244,7 @@
             // 
             // btnGO
             // 
-            this.btnGO.Location = new System.Drawing.Point(866, 209);
+            this.btnGO.Location = new System.Drawing.Point(866, 362);
             this.btnGO.Name = "btnGO";
             this.btnGO.Size = new System.Drawing.Size(75, 23);
             this.btnGO.TabIndex = 20;
@@ -235,7 +254,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(38, 344);
+            this.btnReset.Location = new System.Drawing.Point(38, 497);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 22;
@@ -250,12 +269,195 @@
             this.bgwProcess.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcess_DoWork);
             this.bgwProcess.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcess_RunWorkerCompleted);
             // 
+            // gbPrinting
+            // 
+            this.gbPrinting.Controls.Add(this.label7);
+            this.gbPrinting.Controls.Add(this.label5);
+            this.gbPrinting.Controls.Add(this.gpPrintScope);
+            this.gbPrinting.Controls.Add(this.gpPrintMethod);
+            this.gbPrinting.Controls.Add(this.label4);
+            this.gbPrinting.Controls.Add(this.numPrintBuffer);
+            this.gbPrinting.Controls.Add(this.btnPrint);
+            this.gbPrinting.Controls.Add(this.cboPrinters);
+            this.gbPrinting.Location = new System.Drawing.Point(32, 192);
+            this.gbPrinting.Name = "gbPrinting";
+            this.gbPrinting.Size = new System.Drawing.Size(784, 193);
+            this.gbPrinting.TabIndex = 24;
+            this.gbPrinting.TabStop = false;
+            this.gbPrinting.Text = "Printing";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(471, 37);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(26, 13);
+            this.label7.TabIndex = 33;
+            this.label7.Text = "wait";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(74, 39);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(40, 13);
+            this.label5.TabIndex = 32;
+            this.label5.Text = "Printer:";
+            // 
+            // gpPrintScope
+            // 
+            this.gpPrintScope.Controls.Add(this.radioButton6);
+            this.gpPrintScope.Controls.Add(this.label8);
+            this.gpPrintScope.Controls.Add(this.radioButton4);
+            this.gpPrintScope.Controls.Add(this.radioButton5);
+            this.gpPrintScope.Location = new System.Drawing.Point(402, 83);
+            this.gpPrintScope.Name = "gpPrintScope";
+            this.gpPrintScope.Size = new System.Drawing.Size(200, 100);
+            this.gpPrintScope.TabIndex = 31;
+            // 
+            // radioButton6
+            // 
+            this.radioButton6.AutoSize = true;
+            this.radioButton6.Location = new System.Drawing.Point(15, 77);
+            this.radioButton6.Name = "radioButton6";
+            this.radioButton6.Size = new System.Drawing.Size(113, 17);
+            this.radioButton6.TabIndex = 35;
+            this.radioButton6.Tag = "LetterAndEnvelop";
+            this.radioButton6.Text = "Letters + Envelops";
+            this.radioButton6.UseVisualStyleBackColor = true;
+            // 
+            // label8
+            // 
+            this.label8.AutoSize = true;
+            this.label8.Location = new System.Drawing.Point(3, 7);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(79, 13);
+            this.label8.TabIndex = 34;
+            this.label8.Text = "Printing Target:";
+            // 
+            // radioButton4
+            // 
+            this.radioButton4.AutoSize = true;
+            this.radioButton4.Checked = true;
+            this.radioButton4.Location = new System.Drawing.Point(15, 30);
+            this.radioButton4.Name = "radioButton4";
+            this.radioButton4.Size = new System.Drawing.Size(79, 17);
+            this.radioButton4.TabIndex = 26;
+            this.radioButton4.TabStop = true;
+            this.radioButton4.Tag = "Letter";
+            this.radioButton4.Text = "Letters only";
+            this.radioButton4.UseVisualStyleBackColor = true;
+            // 
+            // radioButton5
+            // 
+            this.radioButton5.AutoSize = true;
+            this.radioButton5.Location = new System.Drawing.Point(15, 53);
+            this.radioButton5.Name = "radioButton5";
+            this.radioButton5.Size = new System.Drawing.Size(91, 17);
+            this.radioButton5.TabIndex = 27;
+            this.radioButton5.Tag = "Envelop";
+            this.radioButton5.Text = "Envelops only";
+            this.radioButton5.UseVisualStyleBackColor = true;
+            // 
+            // gpPrintMethod
+            // 
+            this.gpPrintMethod.Controls.Add(this.rbGnostice);
+            this.gpPrintMethod.Controls.Add(this.rbAspose);
+            this.gpPrintMethod.Controls.Add(this.radioButton1);
+            this.gpPrintMethod.Controls.Add(this.radioButton2);
+            this.gpPrintMethod.Location = new System.Drawing.Point(20, 83);
+            this.gpPrintMethod.Name = "gpPrintMethod";
+            this.gpPrintMethod.Size = new System.Drawing.Size(304, 100);
+            this.gpPrintMethod.TabIndex = 30;
+            // 
+            // rbGnostice
+            // 
+            this.rbGnostice.AutoSize = true;
+            this.rbGnostice.Location = new System.Drawing.Point(108, 53);
+            this.rbGnostice.Name = "rbGnostice";
+            this.rbGnostice.Size = new System.Drawing.Size(67, 17);
+            this.rbGnostice.TabIndex = 29;
+            this.rbGnostice.Tag = "PrintWithGnostice";
+            this.rbGnostice.Text = "Gnostice";
+            this.rbGnostice.UseVisualStyleBackColor = true;
+            // 
+            // rbAspose
+            // 
+            this.rbAspose.AutoSize = true;
+            this.rbAspose.Checked = true;
+            this.rbAspose.Location = new System.Drawing.Point(108, 30);
+            this.rbAspose.Name = "rbAspose";
+            this.rbAspose.Size = new System.Drawing.Size(60, 17);
+            this.rbAspose.TabIndex = 28;
+            this.rbAspose.TabStop = true;
+            this.rbAspose.Tag = "PrintWithAspose";
+            this.rbAspose.Text = "Aspose";
+            this.rbAspose.UseVisualStyleBackColor = true;
+            // 
+            // radioButton1
+            // 
+            this.radioButton1.AutoSize = true;
+            this.radioButton1.Location = new System.Drawing.Point(15, 30);
+            this.radioButton1.Name = "radioButton1";
+            this.radioButton1.Size = new System.Drawing.Size(72, 17);
+            this.radioButton1.TabIndex = 26;
+            this.radioButton1.Tag = "PrintWithNoDialog";
+            this.radioButton1.Text = "No Dialog";
+            this.radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // radioButton2
+            // 
+            this.radioButton2.AutoSize = true;
+            this.radioButton2.Location = new System.Drawing.Point(15, 53);
+            this.radioButton2.Name = "radioButton2";
+            this.radioButton2.Size = new System.Drawing.Size(58, 17);
+            this.radioButton2.TabIndex = 27;
+            this.radioButton2.Tag = "PrintWithInterop";
+            this.radioButton2.Text = "Interop";
+            this.radioButton2.UseVisualStyleBackColor = true;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(548, 38);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(189, 13);
+            this.label4.TabIndex = 29;
+            this.label4.Text = "seconds between documents (max 20)";
+            // 
+            // numPrintBuffer
+            // 
+            this.numPrintBuffer.Location = new System.Drawing.Point(503, 34);
+            this.numPrintBuffer.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numPrintBuffer.Name = "numPrintBuffer";
+            this.numPrintBuffer.Size = new System.Drawing.Size(38, 20);
+            this.numPrintBuffer.TabIndex = 28;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(55, 282);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(84, 13);
+            this.label6.TabIndex = 33;
+            this.label6.Text = "Printing Method:";
+            // 
+            // bgwProcess2
+            // 
+            this.bgwProcess2.WorkerReportsProgress = true;
+            this.bgwProcess2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcess2_DoWork);
+            this.bgwProcess2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcess2_RunWorkerCompleted);
+            // 
             // loadingCircle1
             // 
             this.loadingCircle1.Active = false;
             this.loadingCircle1.Color = System.Drawing.Color.DarkGray;
             this.loadingCircle1.InnerCircleRadius = 6;
-            this.loadingCircle1.Location = new System.Drawing.Point(833, 209);
+            this.loadingCircle1.Location = new System.Drawing.Point(833, 362);
             this.loadingCircle1.Name = "loadingCircle1";
             this.loadingCircle1.OuterCircleRadius = 7;
             this.loadingCircle1.RotationSpeed = 100;
@@ -269,7 +471,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(998, 399);
+            this.ClientSize = new System.Drawing.Size(983, 534);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.gbPrinting);
             this.Controls.Add(this.loadingCircle1);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnGO);
@@ -283,7 +487,15 @@
             this.gbInputs.ResumeLayout(false);
             this.gbInputs.PerformLayout();
             this.groupBox3.ResumeLayout(false);
+            this.gbPrinting.ResumeLayout(false);
+            this.gbPrinting.PerformLayout();
+            this.gpPrintScope.ResumeLayout(false);
+            this.gpPrintScope.PerformLayout();
+            this.gpPrintMethod.ResumeLayout(false);
+            this.gpPrintMethod.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPrintBuffer)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -303,12 +515,29 @@
         private LoadingCircle loadingCircle1;
         private System.ComponentModel.BackgroundWorker bgwProcess;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton rbEnvelop;
-        private System.Windows.Forms.RadioButton rbLetter;
-        private System.Windows.Forms.Button btnPrintAll;
+        private System.Windows.Forms.RadioButton rbGenLetterAndEnvelop;
+        private System.Windows.Forms.RadioButton rbGenEnvelop;
+        private System.Windows.Forms.RadioButton rbGenLetter;
+        private System.Windows.Forms.Button btnPrint;
         private System.Windows.Forms.ComboBox cboPrinters;
-        private System.Windows.Forms.Button btnSingleContact;
+        private System.Windows.Forms.GroupBox gbPrinting;
+        private System.Windows.Forms.RadioButton radioButton2;
+        private System.Windows.Forms.RadioButton radioButton1;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.NumericUpDown numPrintBuffer;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Panel gpPrintScope;
+        private System.Windows.Forms.RadioButton radioButton4;
+        private System.Windows.Forms.RadioButton radioButton5;
+        private System.Windows.Forms.Panel gpPrintMethod;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.RadioButton radioButton6;
+        private System.Windows.Forms.RadioButton rbGnostice;
+        private System.Windows.Forms.RadioButton rbAspose;
+        private System.Windows.Forms.Button btnCustom;
+        private System.ComponentModel.BackgroundWorker bgwProcess2;
     }
 }
 

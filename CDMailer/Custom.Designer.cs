@@ -1,6 +1,6 @@
 ﻿namespace CDMailer
 {
-    partial class SingleContact
+    partial class Custom
     {
         /// <summary>
         /// Required designer variable.
@@ -138,7 +138,7 @@
             this.rbLetter.Text = "Letter only";
             this.rbLetter.UseVisualStyleBackColor = true;
             // 
-            // SingleContact
+            // Custom
             // 
             this.AcceptButton = this.btnGenerate;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,8 +154,8 @@
             this.Controls.Add(this.cboContactNames);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnGenerate);
-            this.Name = "SingleContact";
-            this.Text = "Single Contact";
+            this.Name = "Custom";
+            this.Text = "Custom Generation";
             this.ResumeLayout(false);
             this.PerformLayout();
 
