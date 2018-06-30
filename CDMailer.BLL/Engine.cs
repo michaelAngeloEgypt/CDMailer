@@ -144,13 +144,19 @@ namespace CDMailer.BLL
         /// <see cref="https://wurstkoffer.wordpress.com/2013/05/18/c-printing-to-word-programmatically-in-3-way/"/>
         /// </summary>
         /// <param name="documents"></param>
-        public static void PrintAll(List<string> documents, string printer)
+        public static void PrintAll(List<string> documents, string printer, string envelopSize = "A5")
         {
             try
             {
+                var paperSize = "A4";
                 foreach (var filename in documents)
                 {
                     Thread.Sleep(Config.UI.PrintBuffer * 1000);
+
+                    //Enevelop case
+                    if (filename.Contains(REF.Constants.EnvelopID))
+                        paperSize = envelopSize;
+
                     switch (Config.UI.PrintMethod)
                     {
                         case REF.PrintMethod.PrintWithNoDialog:
@@ -164,6 +170,9 @@ namespace CDMailer.BLL
                             break;
                         case REF.PrintMethod.PrintWithGnostice:
                             PrinterUtils.PrintWithGnostice(filename, printer);
+                            break;
+                        case REF.PrintMethod.PrintWithSpire:
+                            PrinterUtils.PrintWithSpire(filename, printer, paperSize);
                             break;
                         default:
                             break;
@@ -291,7 +300,7 @@ namespace CDMailer.BLL
             //if (contact.FirstName.Contains("Beth"))
             //    1.ToString();
 
-            var filename = Path.GetFileName(templateFile);
+            var filename = Path.GetFileNameWithoutExtension(templateFile);
             var isEnvelop = REF.Constants.envelopFiles.Any(t => t.MatchesString(filename));
             //string filledTemplateName = !isEnvelop ? GetFilledTemplateName(contact) : GetFilledTemplateName(contact, filename);
             string filledTemplateName = GetFilledTemplateName(contact, filename);

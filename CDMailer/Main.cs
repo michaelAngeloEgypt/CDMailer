@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -16,6 +17,8 @@ namespace CDMailer
 {
     public partial class Main : Form
     {
+        private string defaultPrinter = string.Empty;
+
         delegate void SetTextCallback(string text);
         delegate void SetCompletedCallback(string finalMessage);
 
@@ -168,6 +171,7 @@ namespace CDMailer
             this.Text = "Cash Discoveries Mailer||" + Engine.Config.ExeVersion;
 
             listPrinters();
+            listPaperSizes();
         }
         private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -294,6 +298,13 @@ namespace CDMailer
         }
         private void btnGO_Click(object sender, EventArgs e)
         {
+            string err = "";
+            if (!ValidateInputs(out err))
+            {
+                myUI.SignalError(err);
+                return;
+            }
+
             if (bgwProcess.IsBusy != true)
             {
                 loadingCircle1.Active = true;
@@ -310,7 +321,14 @@ namespace CDMailer
                 if (!File.Exists(REF.envelopFile))
                     throw new ApplicationException($"Missing envelop template file: {REF.envelopFile}");
 
+                Engine.Variables.ExecutionTime.Start();
+                Stopwatch timer = Stopwatch.StartNew();
+                XLogger.Info("BEGIN:\t Task Execution");
+
                 Engine.DoTask(config);
+
+                var elapsed = timer.Elapsed.ToStandardElapsedFormat();
+                XLogger.Info($"END:{elapsed}\t Task Execution");
             }
             catch (Exception x)
             {
@@ -364,6 +382,13 @@ namespace CDMailer
 
         private void btnPrint_Click(object sender, EventArgs e)
         {
+            string err = "";
+            if (!ValidateInputs(out err))
+            {
+                myUI.SignalError(err);
+                return;
+            }
+
             Engine.Config.UI.PrintBuffer = myUI.PrintBuffer;
             Engine.Config.UI.PrintMethod = myUI.PrintMethod;
             var finalDocuments = new List<string>();
@@ -385,8 +410,9 @@ namespace CDMailer
             if (finalDocuments.Count() == 0)
                 MessageBox.Show("No suitable Word documents were found in the output folder");
 
-            var printer = !cboPrinters.SelectedValue.ToString().Equals("DEFAULT") ? cboPrinters.SelectedValue.ToString() : string.Empty;
-            Engine.PrintAll(finalDocuments, printer);
+            var printer = !cboPrinters.SelectedValue.ToString().Equals("DEFAULT") ? cboPrinters.SelectedValue.ToString() : defaultPrinter;
+            var envelopSize = cboEnvelopSizes.SelectedValue.ToString();
+            Engine.PrintAll(finalDocuments, printer, envelopSize);
         }
         private void listPrinters()
         {
@@ -403,10 +429,18 @@ namespace CDMailer
                             name, status, isDefault, isNetworkPrinter);
 
                 printers.Add(name.ToString());
+
+                if (bool.Parse(isDefault.ToString()))
+                    defaultPrinter = name.ToString();
             }
             printers.Insert(0, "DEFAULT");
             cboPrinters.DataSource = printers;
             cboPrinters.SelectedIndex = 0;
+        }
+        private void listPaperSizes()
+        {
+            cboEnvelopSizes.DataSource = PrinterUtils.PaperSizes.Keys.ToList();
+            cboEnvelopSizes.SelectedIndex = cboEnvelopSizes.Items.IndexOf("A5");
         }
         private void btnCustom_Click(object sender, EventArgs e)
         {
@@ -495,6 +529,19 @@ namespace CDMailer
 
                 XLogger.Error(x);
             }
+        }
+        private bool ValidateInputs(out string err)
+        {
+            err = "";
+
+            if (String.IsNullOrEmpty(err) &&
+                    (String.IsNullOrWhiteSpace(myUI.ContactsFile) || String.IsNullOrWhiteSpace(myUI.OutputFolder)))
+                err = "Please fill all the inputs";
+
+            if (String.IsNullOrEmpty(err) && !Directory.Exists(myUI.OutputFolder))
+                err = "The output folder is invalid. Please rechek it";
+
+            return String.IsNullOrEmpty(err);
         }
 
         private void bgwProcess2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

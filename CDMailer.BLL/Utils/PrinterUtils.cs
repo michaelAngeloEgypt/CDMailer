@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,67 @@ namespace CDMailer.BLL
 {
     public static class PrinterUtils
     {
+        #region REF
+        /// <summary>
+        /// <see cref="https://stackoverflow.com/questions/23751578/printing-envelopes-from-c-sharp"/>
+        /// </summary>
+        public static Dictionary<String, PaperSize> PaperSizes = new Dictionary<string, PaperSize>()
+            {
+                //default is A5 for envelops
+
+                    { "A3",
+                    new PaperSize("A3", 1170, 1650)},
+                    {"A4",
+                    new PaperSize("A4", 830, 1170)},
+                    {"A5",
+                    new PaperSize("A5", 580, 830)},
+                    {"A6",
+                    new PaperSize("A6", 410, 580)},
+                    {"A7",
+                    new PaperSize("A7", 290, 410)},
+                    {"A8",
+                    new PaperSize("A8", 200, 290)},
+                    {"A9",
+                    new PaperSize("A9", 150, 200)},
+                    {"A10",
+                    new PaperSize("A10", 100, 150)},
+                    {"B3",
+                    new PaperSize("B3", 1390, 1970)},
+                    {"B4",
+                    new PaperSize("B4", 980, 1390)},
+                    {"B5",
+                    new PaperSize("B5", 690, 980)},
+                    {"B6",
+                    new PaperSize("B6", 490, 690)},
+                    {"B7",
+                    new PaperSize("B7", 350, 490)},
+                    {"B8",
+                    new PaperSize("B8", 240, 350)},
+                    {"B9",
+                    new PaperSize("B9", 170, 240)},
+                    {"B10",
+                    new PaperSize("B10", 120, 170)},
+                    {"C3",
+                    new PaperSize("C3", 1280, 1800)},
+                    {"C4",
+                    new PaperSize("C4", 900, 1280)},
+                    {"C5",
+                    new PaperSize("C5", 640, 900)},
+                    {"C6",
+                    new PaperSize("C6", 450, 640)},
+                    {"C7",
+                    new PaperSize("C7", 320, 450)},
+                    {"C8",
+                    new PaperSize("C8", 220, 320)},
+                    {"C9",
+                    new PaperSize("C9", 160, 220)},
+                    {"C10",
+                    new PaperSize("C10", 110, 160)},
+                    {"DL",
+                    new PaperSize("C10", 430, 860)},
+            };
+        #endregion REF
+
         #region FREE
         //
         /// <summary>
@@ -103,33 +165,6 @@ namespace CDMailer.BLL
             // Original: wordApp.Quit(SaveChanges: false);
             wordApp = null;
         }
-
-        /// <summary>
-        /// <see cref="https://www.e-iceblue.com/Tutorials/Spire.Doc/Spire.Doc-Program-Guide/Print-a-Word-Document-Programmatically-in-5-Steps.html"/>
-        /// <see cref="https://www.e-iceblue.com/Tutorials/Spire.Doc/Spire.Doc-Program-Guide/Document-Operation/Print-word-document-without-showing-print-processing-dialog.html"/>
-        /// </summary>
-        /// <param name="filename"></param>
-        /// <param name="printer"></param>
-        public static void PrintWithSpire(string filename, string printer)
-        {
-            Spire.Doc.Document doc = new Spire.Doc.Document();
-            //Load word document 
-            doc.LoadFromFile(filename);
-            // Instantiated System.Windows.Forms.PrintDialog object .
-            //PrintDialog dialog = new PrintDialog();
-            //dialog.AllowPrintToFile = true;
-            //dialog.AllowCurrentPage = true;
-            //dialog.AllowSomePages = true;
-            //dialog.UseEXDialog = true;
-            //// associate System.Windows.Forms.PrintDialog object with Spire.Doc.Document  
-            //doc.PrintDialog = dialog;
-            System.Drawing.Printing.PrintDocument printDoc = doc.PrintDocument;
-            doc.PrintDocument.PrinterSettings.PrinterName = printer;
-            System.Drawing.Printing.PrintController printController = new System.Drawing.Printing.StandardPrintController();
-            printDoc.PrintController = printController;
-            //Background printing  
-            printDoc.Print();
-        }
         //
         #endregion FREE
 
@@ -158,6 +193,34 @@ namespace CDMailer.BLL
             dp.LoadDocument(filename);
             dp.Print();
             dp.CloseDocument();
+        }
+        /// <summary>
+        /// <see cref="https://www.e-iceblue.com/Tutorials/Spire.Doc/Spire.Doc-Program-Guide/Print-a-Word-Document-Programmatically-in-5-Steps.html"/>
+        /// <see cref="https://www.e-iceblue.com/Tutorials/Spire.Doc/Spire.Doc-Program-Guide/Document-Operation/Print-word-document-without-showing-print-processing-dialog.html"/>
+        /// </summary>
+        /// <param name="filename"></param>
+        /// <param name="printer"></param>
+        public static void PrintWithSpire(string filename, string printer, string paperSize = "A4")
+        {
+            Spire.Doc.Document doc = new Spire.Doc.Document();
+            //Load word document 
+            doc.LoadFromFile(filename);
+            // Instantiated System.Windows.Forms.PrintDialog object .
+            //PrintDialog dialog = new PrintDialog();
+            //dialog.AllowPrintToFile = true;
+            //dialog.AllowCurrentPage = true;
+            //dialog.AllowSomePages = true;
+            //dialog.UseEXDialog = true;
+            //// associate System.Windows.Forms.PrintDialog object with Spire.Doc.Document  
+            //doc.PrintDialog = dialog;
+            System.Drawing.Printing.PrintDocument printDoc = doc.PrintDocument;
+            doc.PrintDocument.PrinterSettings.PrinterName = printer;
+            System.Drawing.Printing.PrintController printController = new System.Drawing.Printing.StandardPrintController();
+            printDoc.PrintController = printController;
+            printDoc.PrinterSettings.DefaultPageSettings.PaperSize = PaperSizes[paperSize];
+
+            //Background printing  
+            printDoc.Print();
         }
         //
         #endregion PAID

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -20,8 +21,11 @@ namespace CDMailer.BLL
             PrintWithNoDialog,
             PrintWithInterop,
             PrintWithAspose,
-            PrintWithGnostice
+            PrintWithGnostice,
+            PrintWithSpire
         }
+
+
 
         static REF()
         {
@@ -48,38 +52,39 @@ namespace CDMailer.BLL
             {
                 EnvelopTemplate, PostCard1Template, PostCard2Template
             };
-        }
-
-        public class Mapping
-        {
-            public string Apptivo { get; set; }
-            public string CDMailer { get; set; }
-
-            public static List<Mapping> refs { get; private set; }
-            public static void GetRefs(string refPath)
-            {
-                try
-                {
-                    refs.Clear();
-                    using (var sr = new StreamReader(refPath))
-                    {
-                        var csv = new CsvHelper.CsvReader(sr);
-                        var res = csv.GetRecords<Mapping>().ToList();
-                        if (res != null && res.Count() > 0)
-                            res.ForEach(r => refs.Add(r));
-                    }
-                }
-                catch (Exception x)
-                {
-                    XLogger.Error(x);
-                }
-            }
-
-            static Mapping()
-            {
-                refs = new List<Mapping>();
-            }
-        }
 
     }
+
+    public class Mapping
+    {
+        public string Apptivo { get; set; }
+        public string CDMailer { get; set; }
+
+        public static List<Mapping> refs { get; private set; }
+        public static void GetRefs(string refPath)
+        {
+            try
+            {
+                refs.Clear();
+                using (var sr = new StreamReader(refPath))
+                {
+                    var csv = new CsvHelper.CsvReader(sr);
+                    var res = csv.GetRecords<Mapping>().ToList();
+                    if (res != null && res.Count() > 0)
+                        res.ForEach(r => refs.Add(r));
+                }
+            }
+            catch (Exception x)
+            {
+                XLogger.Error(x);
+            }
+        }
+
+        static Mapping()
+        {
+            refs = new List<Mapping>();
+        }
+    }
+
+}
 }

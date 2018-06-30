@@ -113,6 +113,11 @@ namespace CDMailer.BLL
             return result;
         }
 
+        public static string ToStandardElapsedFormat(this TimeSpan ts)
+        {
+            return String.Format("{0:00}:{1:00}:{2:00}.{3:000}", ts.Hours, ts.Minutes, ts.Seconds, ts.Milliseconds);
+        }
+
         public static bool MatchesString(this string examinedValue, string referenceValue)
         {
             //use it for huawei PassLHSFilters

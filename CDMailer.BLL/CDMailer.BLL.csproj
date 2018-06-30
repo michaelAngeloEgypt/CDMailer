@@ -35,7 +35,7 @@
       <HintPath>..\packages\Aspose.Words.18.6.0\lib\net40\Aspose.Words.dll</HintPath>
     </Reference>
     <Reference Include="CsvHelper, Version=7.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
-      <HintPath>..\packages\CsvHelper.7.1.0\lib\net45\CsvHelper.dll</HintPath>
+      <HintPath>..\packages\CsvHelper.7.1.1\lib\net45\CsvHelper.dll</HintPath>
     </Reference>
     <Reference Include="Gnostice.Core, Version=18.1.0.0, Culture=neutral, PublicKeyToken=fc8cb3ab6a24df63, processorArchitecture=MSIL">
       <HintPath>..\packages\XtremeDocumentStudio.NETWinForms.18.1.1\lib\net40\Gnostice.Core.dll</HintPath>
@@ -69,14 +69,14 @@
     <Reference Include="SautinSoft.Document, Version=3.3.3.26, Culture=neutral, PublicKeyToken=e759c76c7515592a, processorArchitecture=MSIL">
       <HintPath>..\packages\sautinsoft.document.3.3.3.26\lib\net461\SautinSoft.Document.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.Doc, Version=6.5.10.4040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Spire.Doc.6.5.10\lib\net40\Spire.Doc.dll</HintPath>
+    <Reference Include="Spire.Doc, Version=6.6.13.4040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Doc.6.6.13\lib\net40\Spire.Doc.dll</HintPath>
     </Reference>
     <Reference Include="Spire.License, Version=1.3.6.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
-      <HintPath>..\packages\Spire.Doc.6.5.10\lib\net40\Spire.License.dll</HintPath>
+      <HintPath>..\packages\Spire.Doc.6.6.13\lib\net40\Spire.License.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.Pdf, Version=4.5.3.2040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
-      <HintPath>..\packages\Spire.Doc.6.5.10\lib\net40\Spire.Pdf.dll</HintPath>
+    <Reference Include="Spire.Pdf, Version=4.6.10.2040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+      <HintPath>..\packages\Spire.Doc.6.6.13\lib\net40\Spire.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="swxben.docxtemplateengine, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\swxben.docxtemplateengine.0.1.5\lib\net40\swxben.docxtemplateengine.dll</HintPath>

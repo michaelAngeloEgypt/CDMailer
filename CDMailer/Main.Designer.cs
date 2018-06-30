@@ -57,6 +57,7 @@
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
             this.gpPrintMethod = new System.Windows.Forms.Panel();
+            this.rbSpire = new System.Windows.Forms.RadioButton();
             this.rbGnostice = new System.Windows.Forms.RadioButton();
             this.rbAspose = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
@@ -66,6 +67,8 @@
             this.label6 = new System.Windows.Forms.Label();
             this.bgwProcess2 = new System.ComponentModel.BackgroundWorker();
             this.loadingCircle1 = new CDMailer.LoadingCircle();
+            this.label9 = new System.Windows.Forms.Label();
+            this.cboEnvelopSizes = new System.Windows.Forms.ComboBox();
             this.gbInputs.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.gbPrinting.SuspendLayout();
@@ -271,6 +274,8 @@
             // 
             // gbPrinting
             // 
+            this.gbPrinting.Controls.Add(this.label9);
+            this.gbPrinting.Controls.Add(this.cboEnvelopSizes);
             this.gbPrinting.Controls.Add(this.label7);
             this.gbPrinting.Controls.Add(this.label5);
             this.gbPrinting.Controls.Add(this.gpPrintScope);
@@ -361,6 +366,7 @@
             // 
             // gpPrintMethod
             // 
+            this.gpPrintMethod.Controls.Add(this.rbSpire);
             this.gpPrintMethod.Controls.Add(this.rbGnostice);
             this.gpPrintMethod.Controls.Add(this.rbAspose);
             this.gpPrintMethod.Controls.Add(this.radioButton1);
@@ -369,6 +375,18 @@
             this.gpPrintMethod.Name = "gpPrintMethod";
             this.gpPrintMethod.Size = new System.Drawing.Size(304, 100);
             this.gpPrintMethod.TabIndex = 30;
+            // 
+            // rbSpire
+            // 
+            this.rbSpire.AutoSize = true;
+            this.rbSpire.Checked = true;
+            this.rbSpire.Location = new System.Drawing.Point(193, 30);
+            this.rbSpire.Name = "rbSpire";
+            this.rbSpire.Size = new System.Drawing.Size(49, 17);
+            this.rbSpire.TabIndex = 30;
+            this.rbSpire.Tag = "PrintWithSpire";
+            this.rbSpire.Text = "Spire";
+            this.rbSpire.UseVisualStyleBackColor = true;
             // 
             // rbGnostice
             // 
@@ -384,12 +402,10 @@
             // rbAspose
             // 
             this.rbAspose.AutoSize = true;
-            this.rbAspose.Checked = true;
             this.rbAspose.Location = new System.Drawing.Point(108, 30);
             this.rbAspose.Name = "rbAspose";
             this.rbAspose.Size = new System.Drawing.Size(60, 17);
             this.rbAspose.TabIndex = 28;
-            this.rbAspose.TabStop = true;
             this.rbAspose.Tag = "PrintWithAspose";
             this.rbAspose.Text = "Aspose";
             this.rbAspose.UseVisualStyleBackColor = true;
@@ -467,6 +483,24 @@
             this.loadingCircle1.TabIndex = 23;
             this.loadingCircle1.Text = "Working";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(654, 97);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(72, 13);
+            this.label9.TabIndex = 35;
+            this.label9.Text = "Envelop Size:";
+            // 
+            // cboEnvelopSizes
+            // 
+            this.cboEnvelopSizes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboEnvelopSizes.FormattingEnabled = true;
+            this.cboEnvelopSizes.Location = new System.Drawing.Point(657, 113);
+            this.cboEnvelopSizes.Name = "cboEnvelopSizes";
+            this.cboEnvelopSizes.Size = new System.Drawing.Size(109, 21);
+            this.cboEnvelopSizes.TabIndex = 34;
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -538,6 +572,9 @@
         private System.Windows.Forms.RadioButton rbAspose;
         private System.Windows.Forms.Button btnCustom;
         private System.ComponentModel.BackgroundWorker bgwProcess2;
+        private System.Windows.Forms.RadioButton rbSpire;
+        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.ComboBox cboEnvelopSizes;
     }
 }
 
