@@ -68,6 +68,30 @@ namespace CDMailer
                 }
             }
             public int PrintBuffer { get { return int.Parse(o.numPrintBuffer.Value.ToString()); } set { o.numPrintBuffer.Value = value; } }
+            public string Printer
+            {
+                get
+                {
+                    var res = "";
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = !o.cboPrinters.SelectedValue.ToString().Equals("DEFAULT") ? o.cboPrinters.SelectedValue.ToString() : o.defaultPrinter;
+                    });
+                    return res;
+                }
+            }
+            public string EnvelopSize
+            {
+                get
+                {
+                    var res = "";
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = o.cboEnvelopSizes.SelectedValue.ToString();
+                    });
+                    return res;
+                }
+            }
 
 
             public string Result { get { return o.txtResult.Text; } set { o.txtResult.Text = value; } }
@@ -149,7 +173,6 @@ namespace CDMailer
             //btnStartStop.Text = "START";
             //btnStartStop.Enabled = true;
         }
-
 
         public Main()
         {
@@ -255,6 +278,34 @@ namespace CDMailer
             Engine.UpdateStatusEvent += UpdateProgress;
             Engine.MarkCompletedEvent += MarkCompleted;
         }
+        private void listPrinters()
+        {
+            var printers = new List<string>();
+            var printerQuery = new ManagementObjectSearcher("SELECT * from Win32_Printer");
+            foreach (var printer in printerQuery.Get())
+            {
+                var name = printer.GetPropertyValue("Name");
+                var status = printer.GetPropertyValue("Status");
+                var isDefault = printer.GetPropertyValue("Default");
+                var isNetworkPrinter = printer.GetPropertyValue("Network");
+
+                Console.WriteLine("{0} (Status: {1}, Default: {2}, Network: {3}",
+                            name, status, isDefault, isNetworkPrinter);
+
+                printers.Add(name.ToString());
+
+                if (bool.Parse(isDefault.ToString()))
+                    defaultPrinter = name.ToString();
+            }
+            printers.Insert(0, "DEFAULT");
+            cboPrinters.DataSource = printers;
+            cboPrinters.SelectedIndex = 0;
+        }
+        private void listPaperSizes()
+        {
+            cboEnvelopSizes.DataSource = PrinterUtils.PaperSizes.Keys.ToList();
+            cboEnvelopSizes.SelectedIndex = cboEnvelopSizes.Items.IndexOf("A5");
+        }
 
         private void btnContactsFile_Click(object sender, EventArgs e)
         {
@@ -296,6 +347,102 @@ namespace CDMailer
                 XLogger.Error(x);
             }
         }
+
+        private void btnReset_Click(object sender, EventArgs e)
+        {
+            Reset();
+        }
+        private void Reset()
+        {
+            if (!String.IsNullOrEmpty(txtResult.Text))
+            {
+                Engine.Reset();
+                myUI.ClearSignals();
+                DetachEvents();
+            }
+        }
+        private bool ValidateInputs(out string err)
+        {
+            err = "";
+
+            if (String.IsNullOrEmpty(err) &&
+                    (String.IsNullOrWhiteSpace(myUI.ContactsFile) || String.IsNullOrWhiteSpace(myUI.OutputFolder)))
+                err = "Please fill all the inputs";
+
+            if (String.IsNullOrEmpty(err) && !Directory.Exists(myUI.OutputFolder))
+                err = "The output folder is invalid. Please rechek it";
+
+            return String.IsNullOrEmpty(err);
+        }
+
+        private void bgwProcess_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                BackgroundWorker worker = sender as BackgroundWorker;
+
+                if ((worker.CancellationPending == true))
+                    e.Cancel = true;
+                else
+                {
+                    AttachEvents();
+                    DoProcess();
+                }
+            }
+            catch (Exception x) { XLogger.Error(x); }
+
+        }
+        private void bgwProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            loadingCircle1.Active = false;
+            DetachEvents();
+            //UpdateProgress();
+        }
+        private void bgwProcess2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                BackgroundWorker worker = sender as BackgroundWorker;
+
+                if ((worker.CancellationPending == true))
+                    e.Cancel = true;
+                else
+                {
+                    AttachEvents();
+                    DoCustom();
+                }
+            }
+            catch (Exception x) { XLogger.Error(x); }
+        }
+        private void bgwProcess2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            loadingCircle1.Active = false;
+            DetachEvents();
+            //UpdateProgress();
+        }
+        private void bgwProcess3_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                BackgroundWorker worker = sender as BackgroundWorker;
+
+                if ((worker.CancellationPending == true))
+                    e.Cancel = true;
+                else
+                {
+                    AttachEvents();
+                    DoPrint();
+                }
+            }
+            catch (Exception x) { XLogger.Error(x); }
+        }
+        private void bgwProcess3_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            loadingCircle1.Active = false;
+            DetachEvents();
+            //UpdateProgress();
+        }
+
         private void btnGO_Click(object sender, EventArgs e)
         {
             string err = "";
@@ -310,6 +457,31 @@ namespace CDMailer
                 loadingCircle1.Active = true;
                 Reset();
                 bgwProcess.RunWorkerAsync();
+            }
+        }
+        private void btnCustom_Click(object sender, EventArgs e)
+        {
+            if (bgwProcess2.IsBusy != true)
+            {
+                loadingCircle1.Active = true;
+                Reset();
+                bgwProcess2.RunWorkerAsync();
+            }
+        }
+        private void btnPrint_Click(object sender, EventArgs e)
+        {
+            string err = "";
+            if (!ValidateInputs(out err))
+            {
+                myUI.SignalError(err);
+                return;
+            }
+
+            if (bgwProcess3.IsBusy != true)
+            {
+                loadingCircle1.Active = true;
+                Reset();
+                bgwProcess3.RunWorkerAsync();
             }
         }
 
@@ -341,134 +513,6 @@ namespace CDMailer
                 XLogger.Error(x);
             }
         }
-        private void btnReset_Click(object sender, EventArgs e)
-        {
-            Reset();
-        }
-
-        private void Reset()
-        {
-            if (!String.IsNullOrEmpty(txtResult.Text))
-            {
-                Engine.Reset();
-                myUI.ClearSignals();
-                DetachEvents();
-            }
-        }
-
-        private void bgwProcess_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                BackgroundWorker worker = sender as BackgroundWorker;
-
-                if ((worker.CancellationPending == true))
-                    e.Cancel = true;
-                else
-                {
-                    AttachEvents();
-                    DoProcess();
-                }
-            }
-            catch (Exception x) { XLogger.Error(x); }
-
-        }
-        private void bgwProcess_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            loadingCircle1.Active = false;
-            DetachEvents();
-            //UpdateProgress();
-        }
-
-        private void btnPrint_Click(object sender, EventArgs e)
-        {
-            string err = "";
-            if (!ValidateInputs(out err))
-            {
-                myUI.SignalError(err);
-                return;
-            }
-
-            Engine.Config.UI.PrintBuffer = myUI.PrintBuffer;
-            Engine.Config.UI.PrintMethod = myUI.PrintMethod;
-            var finalDocuments = new List<string>();
-            var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx");
-            switch (myUI.PrintPerContact)
-            {
-                case REF.Scope.Letter:
-                    finalDocuments.AddRange(documentsToPrint.Except(documentsToPrint.Where(d => d.ContainsString(REF.Constants.EnvelopID))));
-                    break;
-                case REF.Scope.Envelop:
-                    finalDocuments.AddRange(documentsToPrint.Where(d => d.ContainsString(REF.Constants.EnvelopID)));
-                    break;
-                case REF.Scope.LetterAndEnvelop:
-                    finalDocuments.AddRange(documentsToPrint);
-                    break;
-                default:
-                    break;
-            }
-            if (finalDocuments.Count() == 0)
-                MessageBox.Show("No suitable Word documents were found in the output folder");
-
-            var printer = !cboPrinters.SelectedValue.ToString().Equals("DEFAULT") ? cboPrinters.SelectedValue.ToString() : defaultPrinter;
-            var envelopSize = cboEnvelopSizes.SelectedValue.ToString();
-            Engine.PrintAll(finalDocuments, printer, envelopSize);
-        }
-        private void listPrinters()
-        {
-            var printers = new List<string>();
-            var printerQuery = new ManagementObjectSearcher("SELECT * from Win32_Printer");
-            foreach (var printer in printerQuery.Get())
-            {
-                var name = printer.GetPropertyValue("Name");
-                var status = printer.GetPropertyValue("Status");
-                var isDefault = printer.GetPropertyValue("Default");
-                var isNetworkPrinter = printer.GetPropertyValue("Network");
-
-                Console.WriteLine("{0} (Status: {1}, Default: {2}, Network: {3}",
-                            name, status, isDefault, isNetworkPrinter);
-
-                printers.Add(name.ToString());
-
-                if (bool.Parse(isDefault.ToString()))
-                    defaultPrinter = name.ToString();
-            }
-            printers.Insert(0, "DEFAULT");
-            cboPrinters.DataSource = printers;
-            cboPrinters.SelectedIndex = 0;
-        }
-        private void listPaperSizes()
-        {
-            cboEnvelopSizes.DataSource = PrinterUtils.PaperSizes.Keys.ToList();
-            cboEnvelopSizes.SelectedIndex = cboEnvelopSizes.Items.IndexOf("A5");
-        }
-        private void btnCustom_Click(object sender, EventArgs e)
-        {
-            if (bgwProcess2.IsBusy != true)
-            {
-                loadingCircle1.Active = true;
-                Reset();
-                bgwProcess2.RunWorkerAsync();
-            }
-        }
-
-        private void bgwProcess2_DoWork(object sender, DoWorkEventArgs e)
-        {
-            try
-            {
-                BackgroundWorker worker = sender as BackgroundWorker;
-
-                if ((worker.CancellationPending == true))
-                    e.Cancel = true;
-                else
-                {
-                    AttachEvents();
-                    DoCustom();
-                }
-            }
-            catch (Exception x) { XLogger.Error(x); }
-        }
-
         private void DoCustom()
         {
             try
@@ -530,25 +574,33 @@ namespace CDMailer
                 XLogger.Error(x);
             }
         }
-        private bool ValidateInputs(out string err)
+        private void DoPrint()
         {
-            err = "";
+            Engine.Config.UI.PrintBuffer = myUI.PrintBuffer;
+            Engine.Config.UI.PrintMethod = myUI.PrintMethod;
+            Engine.Config.UI.Printer = myUI.Printer;
+            Engine.Config.UI.EnvelopSize = myUI.EnvelopSize;
 
-            if (String.IsNullOrEmpty(err) &&
-                    (String.IsNullOrWhiteSpace(myUI.ContactsFile) || String.IsNullOrWhiteSpace(myUI.OutputFolder)))
-                err = "Please fill all the inputs";
+            var finalDocuments = new List<string>();
+            var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx");
+            switch (myUI.PrintPerContact)
+            {
+                case REF.Scope.Letter:
+                    finalDocuments.AddRange(documentsToPrint.Except(documentsToPrint.Where(d => d.ContainsString(REF.Constants.EnvelopID))));
+                    break;
+                case REF.Scope.Envelop:
+                    finalDocuments.AddRange(documentsToPrint.Where(d => d.ContainsString(REF.Constants.EnvelopID)));
+                    break;
+                case REF.Scope.LetterAndEnvelop:
+                    finalDocuments.AddRange(documentsToPrint);
+                    break;
+                default:
+                    break;
+            }
+            if (finalDocuments.Count() == 0)
+                MessageBox.Show("No suitable Word documents were found in the output folder");
 
-            if (String.IsNullOrEmpty(err) && !Directory.Exists(myUI.OutputFolder))
-                err = "The output folder is invalid. Please rechek it";
-
-            return String.IsNullOrEmpty(err);
-        }
-
-        private void bgwProcess2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
-        {
-            loadingCircle1.Active = false;
-            DetachEvents();
-            //UpdateProgress();
+            Engine.PrintAll(finalDocuments);
         }
     }
 }

@@ -49,6 +49,8 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.bgwProcess = new System.ComponentModel.BackgroundWorker();
             this.gbPrinting = new System.Windows.Forms.GroupBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.cboEnvelopSizes = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.gpPrintScope = new System.Windows.Forms.Panel();
@@ -66,9 +68,8 @@
             this.numPrintBuffer = new System.Windows.Forms.NumericUpDown();
             this.label6 = new System.Windows.Forms.Label();
             this.bgwProcess2 = new System.ComponentModel.BackgroundWorker();
+            this.bgwProcess3 = new System.ComponentModel.BackgroundWorker();
             this.loadingCircle1 = new CDMailer.LoadingCircle();
-            this.label9 = new System.Windows.Forms.Label();
-            this.cboEnvelopSizes = new System.Windows.Forms.ComboBox();
             this.gbInputs.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.gbPrinting.SuspendLayout();
@@ -291,6 +292,24 @@
             this.gbPrinting.TabStop = false;
             this.gbPrinting.Text = "Printing";
             // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(646, 97);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(126, 13);
+            this.label9.TabIndex = 35;
+            this.label9.Text = "Envelop && Postcard Size:";
+            // 
+            // cboEnvelopSizes
+            // 
+            this.cboEnvelopSizes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboEnvelopSizes.FormattingEnabled = true;
+            this.cboEnvelopSizes.Location = new System.Drawing.Point(657, 113);
+            this.cboEnvelopSizes.Name = "cboEnvelopSizes";
+            this.cboEnvelopSizes.Size = new System.Drawing.Size(109, 21);
+            this.cboEnvelopSizes.TabIndex = 34;
+            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -384,6 +403,7 @@
             this.rbSpire.Name = "rbSpire";
             this.rbSpire.Size = new System.Drawing.Size(49, 17);
             this.rbSpire.TabIndex = 30;
+            this.rbSpire.TabStop = true;
             this.rbSpire.Tag = "PrintWithSpire";
             this.rbSpire.Text = "Spire";
             this.rbSpire.UseVisualStyleBackColor = true;
@@ -468,6 +488,12 @@
             this.bgwProcess2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcess2_DoWork);
             this.bgwProcess2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcess2_RunWorkerCompleted);
             // 
+            // bgwProcess3
+            // 
+            this.bgwProcess3.WorkerReportsProgress = true;
+            this.bgwProcess3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcess3_DoWork);
+            this.bgwProcess3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcess3_RunWorkerCompleted);
+            // 
             // loadingCircle1
             // 
             this.loadingCircle1.Active = false;
@@ -482,24 +508,6 @@
             this.loadingCircle1.SpokeThickness = 4;
             this.loadingCircle1.TabIndex = 23;
             this.loadingCircle1.Text = "Working";
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(654, 97);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(72, 13);
-            this.label9.TabIndex = 35;
-            this.label9.Text = "Envelop Size:";
-            // 
-            // cboEnvelopSizes
-            // 
-            this.cboEnvelopSizes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboEnvelopSizes.FormattingEnabled = true;
-            this.cboEnvelopSizes.Location = new System.Drawing.Point(657, 113);
-            this.cboEnvelopSizes.Name = "cboEnvelopSizes";
-            this.cboEnvelopSizes.Size = new System.Drawing.Size(109, 21);
-            this.cboEnvelopSizes.TabIndex = 34;
             // 
             // Main
             // 
@@ -575,6 +583,7 @@
         private System.Windows.Forms.RadioButton rbSpire;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox cboEnvelopSizes;
+        private System.ComponentModel.BackgroundWorker bgwProcess3;
     }
 }
 

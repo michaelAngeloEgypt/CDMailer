@@ -144,40 +144,47 @@ namespace CDMailer.BLL
         /// <see cref="https://wurstkoffer.wordpress.com/2013/05/18/c-printing-to-word-programmatically-in-3-way/"/>
         /// </summary>
         /// <param name="documents"></param>
-        public static void PrintAll(List<string> documents, string printer, string envelopSize = "A5")
+        public static void PrintAll(List<string> documents)
         {
             try
             {
                 var paperSize = "A4";
-                foreach (var filename in documents)
+                var filename = string.Empty;
+                for (int i = 0; i < documents.Count; i++)
                 {
-                    Thread.Sleep(Config.UI.PrintBuffer * 1000);
+                    filename = documents[i];
+                    CallUpdateStatus($"Sending document {i + 1} of {documents.Count} to the printer");
 
                     //Enevelop case
-                    if (filename.Contains(REF.Constants.EnvelopID))
-                        paperSize = envelopSize;
+                    var isEnvelop = REF.Constants.envelopIDs.Any(t => filename.ContainsString(t));
+                    if (isEnvelop)
+                        paperSize = Config.UI.EnvelopSize;
 
                     switch (Config.UI.PrintMethod)
                     {
                         case REF.PrintMethod.PrintWithNoDialog:
-                            PrinterUtils.PrintWithNoDialog(filename, printer);
+                            PrinterUtils.PrintWithNoDialog(filename, Config.UI.Printer);
                             break;
                         case REF.PrintMethod.PrintWithInterop:
-                            PrinterUtils.PrintWithInterop2(filename, printer);
+                            PrinterUtils.PrintWithInterop2(filename, Config.UI.Printer);
                             break;
                         case REF.PrintMethod.PrintWithAspose:
-                            PrinterUtils.PrintWithAspose(filename, printer);
+                            PrinterUtils.PrintWithAspose(filename, Config.UI.Printer);
                             break;
                         case REF.PrintMethod.PrintWithGnostice:
-                            PrinterUtils.PrintWithGnostice(filename, printer);
+                            PrinterUtils.PrintWithGnostice(filename, Config.UI.Printer);
                             break;
                         case REF.PrintMethod.PrintWithSpire:
-                            PrinterUtils.PrintWithSpire(filename, printer, paperSize);
+                            PrinterUtils.PrintWithSpire(filename, Config.UI.Printer, paperSize);
                             break;
                         default:
                             break;
                     }
+
+                    Thread.Sleep(Config.UI.PrintBuffer * 1000);
                 }
+
+                CallUpdateStatus("Operation passed and all documents have been sent to the printer");
             }
             catch (Exception x)
             {
@@ -301,7 +308,7 @@ namespace CDMailer.BLL
             //    1.ToString();
 
             var filename = Path.GetFileNameWithoutExtension(templateFile);
-            var isEnvelop = REF.Constants.envelopFiles.Any(t => t.MatchesString(filename));
+            var isEnvelop = REF.Constants.envelopFiles.Any(t => Path.GetFileNameWithoutExtension(t).MatchesString(filename));
             //string filledTemplateName = !isEnvelop ? GetFilledTemplateName(contact) : GetFilledTemplateName(contact, filename);
             string filledTemplateName = GetFilledTemplateName(contact, filename);
 

@@ -53,6 +53,11 @@ namespace CDMailer.BLL
                 EnvelopTemplate, PostCard1Template, PostCard2Template
             };
 
+            public static List<string> envelopIDs = new List<string>()
+            {
+                EnvelopID, PostCard1ID, PostCard2ID
+            };
+
     }
 
     public class Mapping

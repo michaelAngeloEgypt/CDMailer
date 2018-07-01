@@ -19,6 +19,8 @@ namespace CDMailer.BLL
             public REF.Scope GeneratePerContact { get; set; }
             public int PrintBuffer { get; set; }
             public REF.PrintMethod PrintMethod { get; set; }
+            public string Printer { get; set; }
+            public string EnvelopSize { get; set; }
         }
     }
 }
