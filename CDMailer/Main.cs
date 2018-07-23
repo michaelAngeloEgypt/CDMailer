@@ -92,6 +92,44 @@ namespace CDMailer
                     return res;
                 }
             }
+            public int EnvelopWidth
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtWidth.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtWidth.Text = value.ToString();
+                    });
+                }
+            }
+            public int EnvelopHeight
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtHeight.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtHeight.Text = value.ToString();
+                    });
+                }
+            }
 
 
             public string Result { get { return o.txtResult.Text; } set { o.txtResult.Text = value; } }
@@ -580,6 +618,8 @@ namespace CDMailer
             Engine.Config.UI.PrintMethod = myUI.PrintMethod;
             Engine.Config.UI.Printer = myUI.Printer;
             Engine.Config.UI.EnvelopSize = myUI.EnvelopSize;
+            Engine.Config.UI.EnvelopWidth = myUI.EnvelopWidth;
+            Engine.Config.UI.EnvelopHeight = myUI.EnvelopHeight;
 
             var finalDocuments = new List<string>();
             var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx");
@@ -601,6 +641,42 @@ namespace CDMailer
                 MessageBox.Show("No suitable Word documents were found in the output folder");
 
             Engine.PrintAll(finalDocuments);
+        }
+
+        private void cboEnvelopSizes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedSize = PrinterUtils.PaperSizes[myUI.EnvelopSize];
+            if (selectedSize.PaperName == "CUSTOM")
+            {
+                txtWidth.ReadOnly = false;
+                txtHeight.ReadOnly = false;
+            }
+            else
+            {
+                myUI.EnvelopWidth = selectedSize.Width;
+                myUI.EnvelopHeight = selectedSize.Height;
+
+                this.Invoke((MethodInvoker)delegate ()
+                {
+                    txtWidth.ReadOnly = true;
+                    txtHeight.ReadOnly = true;
+                });
+            }
+        }
+
+        private void txtNumbersOnly(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
+        (e.KeyChar != '.'))
+            {
+                e.Handled = true;
+            }
+
+            // only allow one decimal point
+            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

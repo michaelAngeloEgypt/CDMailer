@@ -70,6 +70,8 @@ namespace CDMailer.BLL
                     new PaperSize("C10", 110, 160)},
                     {"DL",
                     new PaperSize("C10", 430, 860)},
+                    {"CUSTOM",
+                    new PaperSize("CUSTOM", 0, 0)},
             };
         #endregion REF
 
@@ -200,8 +202,11 @@ namespace CDMailer.BLL
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="printer"></param>
-        public static void PrintWithSpire(string filename, string printer, string paperSize = "A4")
+        public static void PrintWithSpire(string filename, string printer, PaperSize paperSize = null)
         {
+            if (paperSize == null)
+                paperSize = PaperSizes["A4"];
+
             Spire.Doc.Document doc = new Spire.Doc.Document();
             //Load word document 
             doc.LoadFromFile(filename);
@@ -217,7 +222,7 @@ namespace CDMailer.BLL
             doc.PrintDocument.PrinterSettings.PrinterName = printer;
             System.Drawing.Printing.PrintController printController = new System.Drawing.Printing.StandardPrintController();
             printDoc.PrintController = printController;
-            printDoc.PrinterSettings.DefaultPageSettings.PaperSize = PaperSizes[paperSize];
+            printDoc.PrinterSettings.DefaultPageSettings.PaperSize = paperSize;
 
             //Background printing  
             printDoc.Print();

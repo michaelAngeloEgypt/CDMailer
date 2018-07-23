@@ -21,6 +21,8 @@ namespace CDMailer.BLL
             public REF.PrintMethod PrintMethod { get; set; }
             public string Printer { get; set; }
             public string EnvelopSize { get; set; }
+            public int EnvelopWidth { get; set; }
+            public int EnvelopHeight { get; set; }
         }
     }
 }

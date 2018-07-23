@@ -148,7 +148,7 @@ namespace CDMailer.BLL
         {
             try
             {
-                var paperSize = "A4";
+                var paperSize = PrinterUtils.PaperSizes["A4"];
                 var filename = string.Empty;
                 for (int i = 0; i < documents.Count; i++)
                 {
@@ -158,7 +158,8 @@ namespace CDMailer.BLL
                     //Enevelop case
                     var isEnvelop = REF.Constants.envelopIDs.Any(t => filename.ContainsString(t));
                     if (isEnvelop)
-                        paperSize = Config.UI.EnvelopSize;
+                        paperSize = !Config.UI.EnvelopSize.Equals("CUSTOM") ? PrinterUtils.PaperSizes[Config.UI.EnvelopSize] :
+                           new System.Drawing.Printing.PaperSize("CUSTOM", Config.UI.EnvelopWidth, Config.UI.EnvelopHeight);
 
                     switch (Config.UI.PrintMethod)
                     {

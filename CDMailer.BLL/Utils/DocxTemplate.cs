@@ -12,7 +12,8 @@ namespace CDMailer.BLL
         public static bool InsertTextInPlaceholders(string templatePath, string outputDocumentPath, Object obj)
         {
             //return InsertTextInPlaceholders_sautinSoft(templatePath, outputDocumentPath, obj);
-            return InsertTextInPlaceholders_swxben(templatePath, outputDocumentPath, obj);
+            //return InsertTextInPlaceholders_swxben(templatePath, outputDocumentPath, obj);
+            return InsertTextInPlaceholders_spire(templatePath, outputDocumentPath, obj);
         }
 
         /// <summary>
@@ -41,6 +42,40 @@ namespace CDMailer.BLL
                 return false;
             }
         }
+
+        public static bool InsertTextInPlaceholders_spire(string templatePath, string outputDocumentPath, Object obj)
+        {
+            try
+            {
+                if (!File.Exists(templatePath))
+                    throw new FileNotFoundException();
+
+                //Creates Document instance
+                Spire.Doc.Document document = new Spire.Doc.Document();
+
+                //Loads the word document
+                document.LoadFromFile(templatePath);
+
+                // Gets the collection of all the merge field names
+                string[] MergeFieldNames = document.MailMerge.GetMergeFieldNames();
+                var myMergeFieldValues = new List<string>();
+                foreach (var reqField in MergeFieldNames)
+                    myMergeFieldValues.Add(obj.GetPropertyStringValue(reqField));
+
+                //var myMergeFieldNames = obj.GetPublicStringPropertiesNames();
+                document.MailMerge.Execute(MergeFieldNames, myMergeFieldValues.ToArray());
+
+                document.SaveToFile(outputDocumentPath);
+
+                return true;
+            }
+            catch (Exception x)
+            {
+                XLogger.Error(x);
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// <see cref="https://github.com/swxben/docx-template-engine"/>

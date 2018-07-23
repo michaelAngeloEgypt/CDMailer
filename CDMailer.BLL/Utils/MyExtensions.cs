@@ -409,7 +409,6 @@ namespace CDMailer.BLL
                 .ToArray();
         }
 
-
         public static void DoFunctionOnStringProperties(this Object srcObj, Func<string, string> func)
         {
             var myStringProps = srcObj.GetType()

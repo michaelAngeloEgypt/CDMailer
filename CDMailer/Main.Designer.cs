@@ -66,10 +66,13 @@
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
             this.numPrintBuffer = new System.Windows.Forms.NumericUpDown();
-            this.label6 = new System.Windows.Forms.Label();
             this.bgwProcess2 = new System.ComponentModel.BackgroundWorker();
             this.bgwProcess3 = new System.ComponentModel.BackgroundWorker();
+            this.txtWidth = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtHeight = new System.Windows.Forms.TextBox();
             this.loadingCircle1 = new CDMailer.LoadingCircle();
+            this.label10 = new System.Windows.Forms.Label();
             this.gbInputs.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.gbPrinting.SuspendLayout();
@@ -210,16 +213,16 @@
             // 
             this.cboPrinters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboPrinters.FormattingEnabled = true;
-            this.cboPrinters.Location = new System.Drawing.Point(122, 34);
+            this.cboPrinters.Location = new System.Drawing.Point(74, 23);
             this.cboPrinters.Name = "cboPrinters";
             this.cboPrinters.Size = new System.Drawing.Size(343, 21);
             this.cboPrinters.TabIndex = 25;
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(677, 147);
+            this.btnPrint.Location = new System.Drawing.Point(566, 103);
             this.btnPrint.Name = "btnPrint";
-            this.btnPrint.Size = new System.Drawing.Size(89, 36);
+            this.btnPrint.Size = new System.Drawing.Size(302, 36);
             this.btnPrint.TabIndex = 24;
             this.btnPrint.Text = "PRINT";
             this.btnPrint.UseVisualStyleBackColor = true;
@@ -228,7 +231,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.txtResult);
-            this.groupBox3.Location = new System.Drawing.Point(33, 391);
+            this.groupBox3.Location = new System.Drawing.Point(33, 384);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(906, 100);
             this.groupBox3.TabIndex = 19;
@@ -248,7 +251,7 @@
             // 
             // btnGO
             // 
-            this.btnGO.Location = new System.Drawing.Point(866, 362);
+            this.btnGO.Location = new System.Drawing.Point(866, 183);
             this.btnGO.Name = "btnGO";
             this.btnGO.Size = new System.Drawing.Size(75, 23);
             this.btnGO.TabIndex = 20;
@@ -258,7 +261,7 @@
             // 
             // btnReset
             // 
-            this.btnReset.Location = new System.Drawing.Point(38, 497);
+            this.btnReset.Location = new System.Drawing.Point(961, 161);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(75, 23);
             this.btnReset.TabIndex = 22;
@@ -275,19 +278,22 @@
             // 
             // gbPrinting
             // 
+            this.gbPrinting.Controls.Add(this.label10);
+            this.gbPrinting.Controls.Add(this.txtHeight);
+            this.gbPrinting.Controls.Add(this.label6);
+            this.gbPrinting.Controls.Add(this.txtWidth);
             this.gbPrinting.Controls.Add(this.label9);
             this.gbPrinting.Controls.Add(this.cboEnvelopSizes);
             this.gbPrinting.Controls.Add(this.label7);
             this.gbPrinting.Controls.Add(this.label5);
             this.gbPrinting.Controls.Add(this.gpPrintScope);
-            this.gbPrinting.Controls.Add(this.gpPrintMethod);
             this.gbPrinting.Controls.Add(this.label4);
             this.gbPrinting.Controls.Add(this.numPrintBuffer);
             this.gbPrinting.Controls.Add(this.btnPrint);
             this.gbPrinting.Controls.Add(this.cboPrinters);
-            this.gbPrinting.Location = new System.Drawing.Point(32, 192);
+            this.gbPrinting.Location = new System.Drawing.Point(36, 213);
             this.gbPrinting.Name = "gbPrinting";
-            this.gbPrinting.Size = new System.Drawing.Size(784, 193);
+            this.gbPrinting.Size = new System.Drawing.Size(905, 165);
             this.gbPrinting.TabIndex = 24;
             this.gbPrinting.TabStop = false;
             this.gbPrinting.Text = "Printing";
@@ -295,25 +301,26 @@
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(646, 97);
+            this.label9.Location = new System.Drawing.Point(563, 60);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(126, 13);
+            this.label9.Size = new System.Drawing.Size(130, 13);
             this.label9.TabIndex = 35;
-            this.label9.Text = "Envelop && Postcard Size:";
+            this.label9.Text = "*Envelop && Postcard Size:";
             // 
             // cboEnvelopSizes
             // 
             this.cboEnvelopSizes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboEnvelopSizes.FormattingEnabled = true;
-            this.cboEnvelopSizes.Location = new System.Drawing.Point(657, 113);
+            this.cboEnvelopSizes.Location = new System.Drawing.Point(566, 76);
             this.cboEnvelopSizes.Name = "cboEnvelopSizes";
             this.cboEnvelopSizes.Size = new System.Drawing.Size(109, 21);
             this.cboEnvelopSizes.TabIndex = 34;
+            this.cboEnvelopSizes.SelectedIndexChanged += new System.EventHandler(this.cboEnvelopSizes_SelectedIndexChanged);
             // 
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(471, 37);
+            this.label7.Location = new System.Drawing.Point(423, 26);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(26, 13);
             this.label7.TabIndex = 33;
@@ -322,7 +329,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(74, 39);
+            this.label5.Location = new System.Drawing.Point(26, 28);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(40, 13);
             this.label5.TabIndex = 32;
@@ -334,15 +341,15 @@
             this.gpPrintScope.Controls.Add(this.label8);
             this.gpPrintScope.Controls.Add(this.radioButton4);
             this.gpPrintScope.Controls.Add(this.radioButton5);
-            this.gpPrintScope.Location = new System.Drawing.Point(402, 83);
+            this.gpPrintScope.Location = new System.Drawing.Point(29, 74);
             this.gpPrintScope.Name = "gpPrintScope";
-            this.gpPrintScope.Size = new System.Drawing.Size(200, 100);
+            this.gpPrintScope.Size = new System.Drawing.Size(322, 60);
             this.gpPrintScope.TabIndex = 31;
             // 
             // radioButton6
             // 
             this.radioButton6.AutoSize = true;
-            this.radioButton6.Location = new System.Drawing.Point(15, 77);
+            this.radioButton6.Location = new System.Drawing.Point(197, 31);
             this.radioButton6.Name = "radioButton6";
             this.radioButton6.Size = new System.Drawing.Size(113, 17);
             this.radioButton6.TabIndex = 35;
@@ -375,7 +382,7 @@
             // radioButton5
             // 
             this.radioButton5.AutoSize = true;
-            this.radioButton5.Location = new System.Drawing.Point(15, 53);
+            this.radioButton5.Location = new System.Drawing.Point(100, 31);
             this.radioButton5.Name = "radioButton5";
             this.radioButton5.Size = new System.Drawing.Size(91, 17);
             this.radioButton5.TabIndex = 27;
@@ -390,10 +397,11 @@
             this.gpPrintMethod.Controls.Add(this.rbAspose);
             this.gpPrintMethod.Controls.Add(this.radioButton1);
             this.gpPrintMethod.Controls.Add(this.radioButton2);
-            this.gpPrintMethod.Location = new System.Drawing.Point(20, 83);
+            this.gpPrintMethod.Location = new System.Drawing.Point(963, 202);
             this.gpPrintMethod.Name = "gpPrintMethod";
             this.gpPrintMethod.Size = new System.Drawing.Size(304, 100);
             this.gpPrintMethod.TabIndex = 30;
+            this.gpPrintMethod.Visible = false;
             // 
             // rbSpire
             // 
@@ -455,7 +463,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(548, 38);
+            this.label4.Location = new System.Drawing.Point(500, 27);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(189, 13);
             this.label4.TabIndex = 29;
@@ -463,7 +471,7 @@
             // 
             // numPrintBuffer
             // 
-            this.numPrintBuffer.Location = new System.Drawing.Point(503, 34);
+            this.numPrintBuffer.Location = new System.Drawing.Point(455, 23);
             this.numPrintBuffer.Maximum = new decimal(new int[] {
             20,
             0,
@@ -472,15 +480,6 @@
             this.numPrintBuffer.Name = "numPrintBuffer";
             this.numPrintBuffer.Size = new System.Drawing.Size(38, 20);
             this.numPrintBuffer.TabIndex = 28;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(55, 282);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(84, 13);
-            this.label6.TabIndex = 33;
-            this.label6.Text = "Printing Method:";
             // 
             // bgwProcess2
             // 
@@ -494,12 +493,39 @@
             this.bgwProcess3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcess3_DoWork);
             this.bgwProcess3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcess3_RunWorkerCompleted);
             // 
+            // txtWidth
+            // 
+            this.txtWidth.Location = new System.Drawing.Point(682, 77);
+            this.txtWidth.Name = "txtWidth";
+            this.txtWidth.ReadOnly = true;
+            this.txtWidth.Size = new System.Drawing.Size(64, 20);
+            this.txtWidth.TabIndex = 36;
+            this.txtWidth.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(750, 81);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(12, 13);
+            this.label6.TabIndex = 37;
+            this.label6.Text = "x";
+            // 
+            // txtHeight
+            // 
+            this.txtHeight.Location = new System.Drawing.Point(763, 77);
+            this.txtHeight.Name = "txtHeight";
+            this.txtHeight.ReadOnly = true;
+            this.txtHeight.Size = new System.Drawing.Size(64, 20);
+            this.txtHeight.TabIndex = 38;
+            this.txtHeight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
+            // 
             // loadingCircle1
             // 
             this.loadingCircle1.Active = false;
             this.loadingCircle1.Color = System.Drawing.Color.DarkGray;
             this.loadingCircle1.InnerCircleRadius = 6;
-            this.loadingCircle1.Location = new System.Drawing.Point(833, 362);
+            this.loadingCircle1.Location = new System.Drawing.Point(833, 183);
             this.loadingCircle1.Name = "loadingCircle1";
             this.loadingCircle1.OuterCircleRadius = 7;
             this.loadingCircle1.RotationSpeed = 100;
@@ -509,17 +535,26 @@
             this.loadingCircle1.TabIndex = 23;
             this.loadingCircle1.Text = "Working";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(563, 142);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(312, 13);
+            this.label10.TabIndex = 39;
+            this.label10.Text = "*Used only for Envelops and Postcards. Other documents are A4";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(983, 534);
-            this.Controls.Add(this.label6);
+            this.ClientSize = new System.Drawing.Size(983, 520);
             this.Controls.Add(this.gbPrinting);
             this.Controls.Add(this.loadingCircle1);
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.btnGO);
             this.Controls.Add(this.groupBox3);
+            this.Controls.Add(this.gpPrintMethod);
             this.Controls.Add(this.gbInputs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Main";
@@ -537,7 +572,6 @@
             this.gpPrintMethod.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPrintBuffer)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -572,7 +606,6 @@
         private System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.RadioButton radioButton5;
         private System.Windows.Forms.Panel gpPrintMethod;
-        private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.RadioButton radioButton6;
@@ -584,6 +617,10 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.ComboBox cboEnvelopSizes;
         private System.ComponentModel.BackgroundWorker bgwProcess3;
+        private System.Windows.Forms.TextBox txtHeight;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtWidth;
+        private System.Windows.Forms.Label label10;
     }
 }
 
