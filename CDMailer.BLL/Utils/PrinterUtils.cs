@@ -202,7 +202,7 @@ namespace CDMailer.BLL
         /// </summary>
         /// <param name="filename"></param>
         /// <param name="printer"></param>
-        public static void PrintWithSpire(string filename, string printer, PaperSize paperSize = null)
+        public static void PrintWithSpire(string filename, string printer, bool isEnvelop = false, PaperSize paperSize = null, Margins margins = null)
         {
             if (paperSize == null)
                 paperSize = PaperSizes["A4"];
@@ -220,9 +220,16 @@ namespace CDMailer.BLL
             //doc.PrintDialog = dialog;
             System.Drawing.Printing.PrintDocument printDoc = doc.PrintDocument;
             doc.PrintDocument.PrinterSettings.PrinterName = printer;
+            doc.PrintDocument.PrinterSettings.Duplex = Duplex.Vertical;
             System.Drawing.Printing.PrintController printController = new System.Drawing.Printing.StandardPrintController();
             printDoc.PrintController = printController;
             printDoc.PrinterSettings.DefaultPageSettings.PaperSize = paperSize;
+            if (isEnvelop)
+            {
+                //printDoc.PrinterSettings.DefaultPageSettings.Landscape = true;
+                if (margins != null)
+                    printDoc.PrinterSettings.DefaultPageSettings.Margins = margins;
+            }
 
             //Background printing  
             printDoc.Print();

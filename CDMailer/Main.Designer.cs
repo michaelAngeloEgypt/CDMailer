@@ -49,6 +49,10 @@
             this.btnReset = new System.Windows.Forms.Button();
             this.bgwProcess = new System.ComponentModel.BackgroundWorker();
             this.gbPrinting = new System.Windows.Forms.GroupBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtHeight = new System.Windows.Forms.TextBox();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtWidth = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
             this.cboEnvelopSizes = new System.Windows.Forms.ComboBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -58,27 +62,28 @@
             this.label8 = new System.Windows.Forms.Label();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.radioButton5 = new System.Windows.Forms.RadioButton();
+            this.label4 = new System.Windows.Forms.Label();
+            this.numPrintBuffer = new System.Windows.Forms.NumericUpDown();
             this.gpPrintMethod = new System.Windows.Forms.Panel();
             this.rbSpire = new System.Windows.Forms.RadioButton();
             this.rbGnostice = new System.Windows.Forms.RadioButton();
             this.rbAspose = new System.Windows.Forms.RadioButton();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
-            this.label4 = new System.Windows.Forms.Label();
-            this.numPrintBuffer = new System.Windows.Forms.NumericUpDown();
             this.bgwProcess2 = new System.ComponentModel.BackgroundWorker();
             this.bgwProcess3 = new System.ComponentModel.BackgroundWorker();
-            this.txtWidth = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtHeight = new System.Windows.Forms.TextBox();
             this.loadingCircle1 = new CDMailer.LoadingCircle();
-            this.label10 = new System.Windows.Forms.Label();
+            this.label11 = new System.Windows.Forms.Label();
+            this.txtLeft = new System.Windows.Forms.TextBox();
+            this.txtRight = new System.Windows.Forms.TextBox();
+            this.txtTop = new System.Windows.Forms.TextBox();
+            this.txtBottom = new System.Windows.Forms.TextBox();
             this.gbInputs.SuspendLayout();
             this.groupBox3.SuspendLayout();
             this.gbPrinting.SuspendLayout();
             this.gpPrintScope.SuspendLayout();
-            this.gpPrintMethod.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numPrintBuffer)).BeginInit();
+            this.gpPrintMethod.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnOutputFolder
@@ -220,7 +225,7 @@
             // 
             // btnPrint
             // 
-            this.btnPrint.Location = new System.Drawing.Point(566, 103);
+            this.btnPrint.Location = new System.Drawing.Point(375, 108);
             this.btnPrint.Name = "btnPrint";
             this.btnPrint.Size = new System.Drawing.Size(302, 36);
             this.btnPrint.TabIndex = 24;
@@ -278,6 +283,11 @@
             // 
             // gbPrinting
             // 
+            this.gbPrinting.Controls.Add(this.txtBottom);
+            this.gbPrinting.Controls.Add(this.txtTop);
+            this.gbPrinting.Controls.Add(this.txtRight);
+            this.gbPrinting.Controls.Add(this.txtLeft);
+            this.gbPrinting.Controls.Add(this.label11);
             this.gbPrinting.Controls.Add(this.label10);
             this.gbPrinting.Controls.Add(this.txtHeight);
             this.gbPrinting.Controls.Add(this.label6);
@@ -298,10 +308,46 @@
             this.gbPrinting.TabStop = false;
             this.gbPrinting.Text = "Printing";
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(372, 147);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(312, 13);
+            this.label10.TabIndex = 39;
+            this.label10.Text = "*Used only for Envelops and Postcards. Other documents are A4";
+            // 
+            // txtHeight
+            // 
+            this.txtHeight.Location = new System.Drawing.Point(572, 82);
+            this.txtHeight.Name = "txtHeight";
+            this.txtHeight.ReadOnly = true;
+            this.txtHeight.Size = new System.Drawing.Size(64, 20);
+            this.txtHeight.TabIndex = 38;
+            this.txtHeight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(559, 86);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(12, 13);
+            this.label6.TabIndex = 37;
+            this.label6.Text = "x";
+            // 
+            // txtWidth
+            // 
+            this.txtWidth.Location = new System.Drawing.Point(491, 82);
+            this.txtWidth.Name = "txtWidth";
+            this.txtWidth.ReadOnly = true;
+            this.txtWidth.Size = new System.Drawing.Size(64, 20);
+            this.txtWidth.TabIndex = 36;
+            this.txtWidth.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
+            // 
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(563, 60);
+            this.label9.Location = new System.Drawing.Point(372, 65);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(130, 13);
             this.label9.TabIndex = 35;
@@ -311,7 +357,7 @@
             // 
             this.cboEnvelopSizes.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboEnvelopSizes.FormattingEnabled = true;
-            this.cboEnvelopSizes.Location = new System.Drawing.Point(566, 76);
+            this.cboEnvelopSizes.Location = new System.Drawing.Point(375, 81);
             this.cboEnvelopSizes.Name = "cboEnvelopSizes";
             this.cboEnvelopSizes.Size = new System.Drawing.Size(109, 21);
             this.cboEnvelopSizes.TabIndex = 34;
@@ -390,6 +436,27 @@
             this.radioButton5.Text = "Envelops only";
             this.radioButton5.UseVisualStyleBackColor = true;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(500, 27);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(189, 13);
+            this.label4.TabIndex = 29;
+            this.label4.Text = "seconds between documents (max 20)";
+            // 
+            // numPrintBuffer
+            // 
+            this.numPrintBuffer.Location = new System.Drawing.Point(455, 23);
+            this.numPrintBuffer.Maximum = new decimal(new int[] {
+            20,
+            0,
+            0,
+            0});
+            this.numPrintBuffer.Name = "numPrintBuffer";
+            this.numPrintBuffer.Size = new System.Drawing.Size(38, 20);
+            this.numPrintBuffer.TabIndex = 28;
+            // 
             // gpPrintMethod
             // 
             this.gpPrintMethod.Controls.Add(this.rbSpire);
@@ -460,27 +527,6 @@
             this.radioButton2.Text = "Interop";
             this.radioButton2.UseVisualStyleBackColor = true;
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(500, 27);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(189, 13);
-            this.label4.TabIndex = 29;
-            this.label4.Text = "seconds between documents (max 20)";
-            // 
-            // numPrintBuffer
-            // 
-            this.numPrintBuffer.Location = new System.Drawing.Point(455, 23);
-            this.numPrintBuffer.Maximum = new decimal(new int[] {
-            20,
-            0,
-            0,
-            0});
-            this.numPrintBuffer.Name = "numPrintBuffer";
-            this.numPrintBuffer.Size = new System.Drawing.Size(38, 20);
-            this.numPrintBuffer.TabIndex = 28;
-            // 
             // bgwProcess2
             // 
             this.bgwProcess2.WorkerReportsProgress = true;
@@ -492,33 +538,6 @@
             this.bgwProcess3.WorkerReportsProgress = true;
             this.bgwProcess3.DoWork += new System.ComponentModel.DoWorkEventHandler(this.bgwProcess3_DoWork);
             this.bgwProcess3.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.bgwProcess3_RunWorkerCompleted);
-            // 
-            // txtWidth
-            // 
-            this.txtWidth.Location = new System.Drawing.Point(682, 77);
-            this.txtWidth.Name = "txtWidth";
-            this.txtWidth.ReadOnly = true;
-            this.txtWidth.Size = new System.Drawing.Size(64, 20);
-            this.txtWidth.TabIndex = 36;
-            this.txtWidth.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(750, 81);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(12, 13);
-            this.label6.TabIndex = 37;
-            this.label6.Text = "x";
-            // 
-            // txtHeight
-            // 
-            this.txtHeight.Location = new System.Drawing.Point(763, 77);
-            this.txtHeight.Name = "txtHeight";
-            this.txtHeight.ReadOnly = true;
-            this.txtHeight.Size = new System.Drawing.Size(64, 20);
-            this.txtHeight.TabIndex = 38;
-            this.txtHeight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
             // 
             // loadingCircle1
             // 
@@ -535,14 +554,50 @@
             this.loadingCircle1.TabIndex = 23;
             this.loadingCircle1.Text = "Working";
             // 
-            // label10
+            // label11
             // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(563, 142);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(312, 13);
-            this.label10.TabIndex = 39;
-            this.label10.Text = "*Used only for Envelops and Postcards. Other documents are A4";
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(708, 65);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(93, 13);
+            this.label11.TabIndex = 40;
+            this.label11.Text = "PostCard Margins:";
+            // 
+            // txtLeft
+            // 
+            this.txtLeft.Location = new System.Drawing.Point(707, 111);
+            this.txtLeft.Name = "txtLeft";
+            this.txtLeft.Size = new System.Drawing.Size(64, 20);
+            this.txtLeft.TabIndex = 41;
+            this.txtLeft.Text = "125";
+            this.txtLeft.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
+            // 
+            // txtRight
+            // 
+            this.txtRight.Location = new System.Drawing.Point(820, 111);
+            this.txtRight.Name = "txtRight";
+            this.txtRight.Size = new System.Drawing.Size(64, 20);
+            this.txtRight.TabIndex = 42;
+            this.txtRight.Text = "125";
+            this.txtRight.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
+            // 
+            // txtTop
+            // 
+            this.txtTop.Location = new System.Drawing.Point(760, 84);
+            this.txtTop.Name = "txtTop";
+            this.txtTop.Size = new System.Drawing.Size(64, 20);
+            this.txtTop.TabIndex = 43;
+            this.txtTop.Text = "150";
+            this.txtTop.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
+            // 
+            // txtBottom
+            // 
+            this.txtBottom.Location = new System.Drawing.Point(760, 137);
+            this.txtBottom.Name = "txtBottom";
+            this.txtBottom.Size = new System.Drawing.Size(64, 20);
+            this.txtBottom.TabIndex = 44;
+            this.txtBottom.Text = "150";
+            this.txtBottom.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.txtNumbersOnly);
             // 
             // Main
             // 
@@ -568,9 +623,9 @@
             this.gbPrinting.PerformLayout();
             this.gpPrintScope.ResumeLayout(false);
             this.gpPrintScope.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numPrintBuffer)).EndInit();
             this.gpPrintMethod.ResumeLayout(false);
             this.gpPrintMethod.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numPrintBuffer)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -621,6 +676,11 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtWidth;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtBottom;
+        private System.Windows.Forms.TextBox txtTop;
+        private System.Windows.Forms.TextBox txtRight;
+        private System.Windows.Forms.TextBox txtLeft;
+        private System.Windows.Forms.Label label11;
     }
 }
 

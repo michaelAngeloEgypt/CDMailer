@@ -23,6 +23,10 @@ namespace CDMailer.BLL
             public string EnvelopSize { get; set; }
             public int EnvelopWidth { get; set; }
             public int EnvelopHeight { get; set; }
+            public int MarginLeft { get; set; }
+            public int MarginRight { get; set; }
+            public int MarginTop { get; set; }
+            public int MarginBottom { get; set; }
         }
     }
 }

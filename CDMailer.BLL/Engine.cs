@@ -3,6 +3,7 @@ using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -176,7 +177,8 @@ namespace CDMailer.BLL
                             PrinterUtils.PrintWithGnostice(filename, Config.UI.Printer);
                             break;
                         case REF.PrintMethod.PrintWithSpire:
-                            PrinterUtils.PrintWithSpire(filename, Config.UI.Printer, paperSize);
+                            Margins margins = new Margins(Config.UI.MarginLeft, Config.UI.MarginRight, Config.UI.MarginTop, Config.UI.MarginBottom);
+                            PrinterUtils.PrintWithSpire(filename, Config.UI.Printer, isEnvelop, paperSize, margins);
                             break;
                         default:
                             break;

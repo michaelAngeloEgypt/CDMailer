@@ -130,6 +130,82 @@ namespace CDMailer
                     });
                 }
             }
+            public int MarginLeft
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtLeft.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtLeft.Text = value.ToString();
+                    });
+                }
+            }
+            public int MarginRight
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtRight.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtRight.Text = value.ToString();
+                    });
+                }
+            }
+            public int MarginTop
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtTop.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtTop.Text = value.ToString();
+                    });
+                }
+            }
+            public int MarginBottom
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtBottom.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtBottom.Text = value.ToString();
+                    });
+                }
+            }
 
 
             public string Result { get { return o.txtResult.Text; } set { o.txtResult.Text = value; } }
@@ -620,6 +696,10 @@ namespace CDMailer
             Engine.Config.UI.EnvelopSize = myUI.EnvelopSize;
             Engine.Config.UI.EnvelopWidth = myUI.EnvelopWidth;
             Engine.Config.UI.EnvelopHeight = myUI.EnvelopHeight;
+            Engine.Config.UI.MarginLeft = myUI.MarginLeft;
+            Engine.Config.UI.MarginRight = myUI.MarginRight;
+            Engine.Config.UI.MarginTop = myUI.MarginTop;
+            Engine.Config.UI.MarginBottom = myUI.MarginBottom;
 
             var finalDocuments = new List<string>();
             var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx");
