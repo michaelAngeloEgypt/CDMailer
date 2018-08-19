@@ -702,7 +702,8 @@ namespace CDMailer
             Engine.Config.UI.MarginBottom = myUI.MarginBottom;
 
             var finalDocuments = new List<string>();
-            var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx");
+            var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx").ToList();
+            documentsToPrint.RemoveAll(d=>d.Contains("~$"));
             switch (myUI.PrintPerContact)
             {
                 case REF.Scope.Letter:
