@@ -220,13 +220,14 @@ namespace CDMailer.BLL
             //doc.PrintDialog = dialog;
             System.Drawing.Printing.PrintDocument printDoc = doc.PrintDocument;
             doc.PrintDocument.PrinterSettings.PrinterName = printer;
-            doc.PrintDocument.PrinterSettings.Duplex = Duplex.Vertical;
+            if (doc.PrintDocument.PrinterSettings.CanDuplex)
+                doc.PrintDocument.PrinterSettings.Duplex = Duplex.Vertical;
             System.Drawing.Printing.PrintController printController = new System.Drawing.Printing.StandardPrintController();
             printDoc.PrintController = printController;
             printDoc.PrinterSettings.DefaultPageSettings.PaperSize = paperSize;
             if (isEnvelop)
             {
-                //printDoc.PrinterSettings.DefaultPageSettings.Landscape = true;
+                printDoc.PrinterSettings.DefaultPageSettings.Landscape = true;
                 if (margins != null)
                     printDoc.PrinterSettings.DefaultPageSettings.Margins = margins;
             }

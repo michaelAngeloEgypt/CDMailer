@@ -119,6 +119,9 @@ namespace CDMailer.BLL
                 }
                 catch (Exception x)
                 {
+                    if (!x.Data.Contains("outputFolder")) x.Data.Add("outputFolder", outputFolder);
+                    if (!x.Data.Contains("generatePerContact")) x.Data.Add("generatePerContact", generatePerContact);
+                    if (!x.Data.Contains("templateFile")) x.Data.Add("templateFile", templateFile);
                     if (!x.Data.Contains("contact.OppName")) x.Data.Add("contact.OppName", contact.OppName);
                     XLogger.Error(x);
                     failedContacts.Add(contact.OppName);
@@ -229,13 +232,14 @@ namespace CDMailer.BLL
 
             Contact contact = new Contact();
 
+            var templateFile = "";
             for (int i = 0; i < contacts.Count; i++)
             {
                 try
                 {
                     contact = contacts[i];
                     CallUpdateStatus($"Processing contact {i + 1} of {contacts.Count} contacts");
-                    var templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.CDMailerTemplate), ".docx");
+                    templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.CDMailerTemplate), ".docx");
 
                     GenerateContactCore(outputFolder, generatePerContact, contact, templateFile);
 
@@ -245,6 +249,9 @@ namespace CDMailer.BLL
                 }
                 catch (Exception x)
                 {
+                    if (!x.Data.Contains("outputFolder")) x.Data.Add("outputFolder", outputFolder);
+                    if (!x.Data.Contains("generatePerContact")) x.Data.Add("generatePerContact", generatePerContact);
+                    if (!x.Data.Contains("templateFile")) x.Data.Add("templateFile", templateFile);
                     if (!x.Data.Contains("contact.OppName")) x.Data.Add("contact.OppName", contact.OppName);
                     XLogger.Error(x);
                     failedContacts.Add(contact.OppName);
@@ -297,6 +304,10 @@ namespace CDMailer.BLL
             }
             catch (Exception x)
             {
+                if (!x.Data.Contains("outputFolder")) x.Data.Add("outputFolder", outputFolder);
+                if (!x.Data.Contains("generatePerContact")) x.Data.Add("generatePerContact", generatePerContact);
+                if (!x.Data.Contains("templateFile")) x.Data.Add("templateFile", templateFile);
+                if (!x.Data.Contains("contact.OppName")) x.Data.Add("contact.OppName", contact.OppName);
                 XLogger.Error(x);
                 CallUpdateStatus("There was a problem in generating all the contacts files");
                 return ExecutionResult.ErrorOccured;
