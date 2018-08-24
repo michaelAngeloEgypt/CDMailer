@@ -20,13 +20,22 @@ namespace CDMailer.BLL
             public int PrintBuffer { get; set; }
             public REF.PrintMethod PrintMethod { get; set; }
             public string Printer { get; set; }
+            //
             public string EnvelopSize { get; set; }
             public int EnvelopWidth { get; set; }
             public int EnvelopHeight { get; set; }
-            public int MarginLeft { get; set; }
-            public int MarginRight { get; set; }
-            public int MarginTop { get; set; }
-            public int MarginBottom { get; set; }
+            public int EnvelopMarginLeft { get; set; }
+            public int EnvelopMarginRight { get; set; }
+            public int EnvelopMarginTop { get; set; }
+            public int EnvelopMarginBottom { get; set; }
+            //
+            public string PostcardSize { get; set; }
+            public int PostcardWidth { get; set; }
+            public int PostcardHeight { get; set; }
+            public int PostcardMarginLeft { get; set; }
+            public int PostcardMarginRight { get; set; }
+            public int PostcardMarginTop { get; set; }
+            public int PostcardMarginBottom { get; set; }
         }
     }
 }

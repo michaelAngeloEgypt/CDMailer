@@ -159,11 +159,25 @@ namespace CDMailer.BLL
                     filename = documents[i];
                     CallUpdateStatus($"Sending document {i + 1} of {documents.Count} to the printer");
 
-                    //Enevelop case
+                    bool isLandscape = false;
+                    Margins margins = null;
                     var isEnvelop = REF.Constants.envelopIDs.Any(t => filename.ContainsString(t));
+                    var isPostcard = REF.Constants.postcardIDs.Any(t => filename.ContainsString(t));
+
                     if (isEnvelop)
+                    {
                         paperSize = !Config.UI.EnvelopSize.Equals("CUSTOM") ? PrinterUtils.PaperSizes[Config.UI.EnvelopSize] :
+                          new System.Drawing.Printing.PaperSize("CUSTOM", Config.UI.EnvelopWidth, Config.UI.EnvelopHeight);
+                        margins = new Margins(Config.UI.EnvelopMarginLeft, Config.UI.EnvelopMarginRight, Config.UI.EnvelopMarginTop, Config.UI.EnvelopMarginBottom);
+                    }
+                    else if (isPostcard)
+                    {
+                        paperSize = !Config.UI.PostcardSize.Equals("CUSTOM") ? PrinterUtils.PaperSizes[Config.UI.EnvelopSize] :
                            new System.Drawing.Printing.PaperSize("CUSTOM", Config.UI.EnvelopWidth, Config.UI.EnvelopHeight);
+                        margins = new Margins(Config.UI.PostcardMarginLeft, Config.UI.PostcardMarginRight, Config.UI.PostcardMarginTop, Config.UI.PostcardMarginBottom);
+                        isLandscape = true;
+                    }
+
 
                     switch (Config.UI.PrintMethod)
                     {
@@ -180,8 +194,7 @@ namespace CDMailer.BLL
                             PrinterUtils.PrintWithGnostice(filename, Config.UI.Printer);
                             break;
                         case REF.PrintMethod.PrintWithSpire:
-                            Margins margins = new Margins(Config.UI.MarginLeft, Config.UI.MarginRight, Config.UI.MarginTop, Config.UI.MarginBottom);
-                            PrinterUtils.PrintWithSpire(filename, Config.UI.Printer, isEnvelop, paperSize, margins);
+                            PrinterUtils.PrintWithSpire(filename, Config.UI.Printer, isLandscape, paperSize, margins);
                             break;
                         default:
                             break;

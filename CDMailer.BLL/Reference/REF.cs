@@ -55,41 +55,46 @@ namespace CDMailer.BLL
 
             public static List<string> envelopIDs = new List<string>()
             {
-                EnvelopID, PostCard1ID, PostCard2ID
+                EnvelopID
             };
 
-    }
-
-    public class Mapping
-    {
-        public string Apptivo { get; set; }
-        public string CDMailer { get; set; }
-
-        public static List<Mapping> refs { get; private set; }
-        public static void GetRefs(string refPath)
-        {
-            try
+            public static List<string> postcardIDs = new List<string>()
             {
-                refs.Clear();
-                using (var sr = new StreamReader(refPath))
+                PostCard1ID, PostCard2ID
+            };
+
+        }
+
+        public class Mapping
+        {
+            public string Apptivo { get; set; }
+            public string CDMailer { get; set; }
+
+            public static List<Mapping> refs { get; private set; }
+            public static void GetRefs(string refPath)
+            {
+                try
                 {
-                    var csv = new CsvHelper.CsvReader(sr);
-                    var res = csv.GetRecords<Mapping>().ToList();
-                    if (res != null && res.Count() > 0)
-                        res.ForEach(r => refs.Add(r));
+                    refs.Clear();
+                    using (var sr = new StreamReader(refPath))
+                    {
+                        var csv = new CsvHelper.CsvReader(sr);
+                        var res = csv.GetRecords<Mapping>().ToList();
+                        if (res != null && res.Count() > 0)
+                            res.ForEach(r => refs.Add(r));
+                    }
+                }
+                catch (Exception x)
+                {
+                    XLogger.Error(x);
                 }
             }
-            catch (Exception x)
+
+            static Mapping()
             {
-                XLogger.Error(x);
+                refs = new List<Mapping>();
             }
         }
 
-        static Mapping()
-        {
-            refs = new List<Mapping>();
-        }
     }
-
-}
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -8,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace CDMailer.BLL
 {
@@ -181,7 +183,37 @@ namespace CDMailer.BLL
             return victim;
         }
 
+        /// <summary>
+        /// <see cref="https://stackoverflow.com/a/35213018/193974"/>
+        /// <code>
+        ///  private void TextBox1_KeyPress(object sender, KeyPressEventArgs e
+        ///  {
+        ///      if(!isNumber(e.KeyChar, TextBox1.Text))
+        ///          e.Handled=true;
+        ///  }
+        /// </code>
+        /// </summary>
+        /// <param name="ch"></param>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public static bool isNumber(char ch, string text)
+        {
+            bool res = true;
+            char decimalChar = Convert.ToChar(CultureInfo.CurrentCulture.NumberFormat.NumberDecimalSeparator);
 
+            //check if it´s a decimal separator and if doesn´t already have one in the text string
+            if (ch == decimalChar && text.IndexOf(decimalChar) != -1)
+            {
+                res = false;
+                return res;
+            }
+
+            //check if it´s a digit, decimal separator and backspace
+            if (!Char.IsDigit(ch) && ch != decimalChar && ch != (char)Keys.Back)
+                res = false;
+
+            return res;
+        }
         /// <summary>
         /// http://stackoverflow.com/questions/876473/is-there-a-way-to-check-if-a-file-is-in-use
         /// </summary>

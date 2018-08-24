@@ -9,8 +9,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Management;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CDMailer
@@ -80,6 +78,7 @@ namespace CDMailer
                     return res;
                 }
             }
+
             public string EnvelopSize
             {
                 get
@@ -91,6 +90,13 @@ namespace CDMailer
                     });
                     return res;
                 }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.cboEnvelopSizes.SelectedIndex = o.cboEnvelopSizes.Items.IndexOf(value);
+                    });
+                }
             }
             public int EnvelopWidth
             {
@@ -99,7 +105,7 @@ namespace CDMailer
                     var res = 0;
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        res = int.Parse(o.txtWidth.Text);
+                        int.TryParse(o.txtEnvelopWidth.Text, out res);
                     });
                     return res;
                 }
@@ -107,7 +113,7 @@ namespace CDMailer
                 {
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        o.txtWidth.Text = value.ToString();
+                        o.txtEnvelopWidth.Text = value.ToString();
                     });
                 }
             }
@@ -118,7 +124,7 @@ namespace CDMailer
                     var res = 0;
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        res = int.Parse(o.txtHeight.Text);
+                        int.TryParse(o.txtEnvelopHeight.Text, out res);
                     });
                     return res;
                 }
@@ -126,18 +132,18 @@ namespace CDMailer
                 {
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        o.txtHeight.Text = value.ToString();
+                        o.txtEnvelopHeight.Text = value.ToString();
                     });
                 }
             }
-            public int MarginLeft
+            public int EnvelopMarginLeft
             {
                 get
                 {
                     var res = 0;
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        res = int.Parse(o.txtLeft.Text);
+                        res = int.Parse(o.txtEnvelopMarginLeft.Text);
                     });
                     return res;
                 }
@@ -145,18 +151,18 @@ namespace CDMailer
                 {
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        o.txtLeft.Text = value.ToString();
+                        o.txtEnvelopMarginLeft.Text = value.ToString();
                     });
                 }
             }
-            public int MarginRight
+            public int EnvelopMarginRight
             {
                 get
                 {
                     var res = 0;
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        res = int.Parse(o.txtRight.Text);
+                        res = int.Parse(o.txtEnvelopMarginRight.Text);
                     });
                     return res;
                 }
@@ -164,18 +170,18 @@ namespace CDMailer
                 {
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        o.txtRight.Text = value.ToString();
+                        o.txtEnvelopMarginRight.Text = value.ToString();
                     });
                 }
             }
-            public int MarginTop
+            public int EnvelopMarginTop
             {
                 get
                 {
                     var res = 0;
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        res = int.Parse(o.txtTop.Text);
+                        res = int.Parse(o.txtEnvelopMarginTop.Text);
                     });
                     return res;
                 }
@@ -183,18 +189,18 @@ namespace CDMailer
                 {
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        o.txtTop.Text = value.ToString();
+                        o.txtEnvelopMarginTop.Text = value.ToString();
                     });
                 }
             }
-            public int MarginBottom
+            public int EnvelopMarginBottom
             {
                 get
                 {
                     var res = 0;
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        res = int.Parse(o.txtBottom.Text);
+                        res = int.Parse(o.txtEnvelopMarginBottom.Text);
                     });
                     return res;
                 }
@@ -202,11 +208,144 @@ namespace CDMailer
                 {
                     o.Invoke((MethodInvoker)delegate ()
                     {
-                        o.txtBottom.Text = value.ToString();
+                        o.txtEnvelopMarginBottom.Text = value.ToString();
                     });
                 }
             }
 
+            public string PostcardSize
+            {
+                get
+                {
+                    var res = "";
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = o.cboPostcardSizes.SelectedValue.ToString();
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.cboPostcardSizes.SelectedIndex = o.cboPostcardSizes.Items.IndexOf(value);
+                    });
+                }
+            }
+            public int PostcardWidth
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        int.TryParse(o.txtPostcardWidth.Text, out res);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtPostcardWidth.Text = value.ToString();
+                    });
+                }
+            }
+            public int PostcardHeight
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        int.TryParse(o.txtPostcardHeight.Text, out res);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtPostcardHeight.Text = value.ToString();
+                    });
+                }
+            }
+            public int PostcardMarginLeft
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtPostcardMarginLeft.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtPostcardMarginLeft.Text = value.ToString();
+                    });
+                }
+            }
+            public int PostcardMarginRight
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtPostcardMarginRight.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtPostcardMarginRight.Text = value.ToString();
+                    });
+                }
+            }
+            public int PostcardMarginTop
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtPostcardMarginTop.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtPostcardMarginTop.Text = value.ToString();
+                    });
+                }
+            }
+            public int PostcardMarginBottom
+            {
+                get
+                {
+                    var res = 0;
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        res = int.Parse(o.txtPostcardMarginBottom.Text);
+                    });
+                    return res;
+                }
+                set
+                {
+                    o.Invoke((MethodInvoker)delegate ()
+                    {
+                        o.txtPostcardMarginBottom.Text = value.ToString();
+                    });
+                }
+            }
 
             public string Result { get { return o.txtResult.Text; } set { o.txtResult.Text = value; } }
 
@@ -339,6 +478,78 @@ namespace CDMailer
                 else
                     missingKeys.Add(ConfigKeys.UI.GeneratePerContact);
                 //------------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardSize))
+                    myUI.PostcardSize = config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardSize].Value;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardSize);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardWidth))
+                    myUI.PostcardWidth = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardWidth].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardWidth);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardHeight))
+                    myUI.PostcardHeight = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardHeight].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardHeight);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginLeft))
+                    myUI.PostcardMarginLeft = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginLeft].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginLeft);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginRight))
+                    myUI.PostcardMarginRight = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginRight].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginRight);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginTop))
+                    myUI.PostcardMarginTop = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginTop].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginTop);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginBottom))
+                    myUI.PostcardMarginBottom = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginBottom);
+                //------------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardSize))
+                    myUI.PostcardSize = config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardSize].Value;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardSize);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardWidth))
+                    myUI.PostcardWidth = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardWidth].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardWidth);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardHeight))
+                    myUI.PostcardHeight = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardHeight].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardHeight);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginLeft))
+                    myUI.PostcardMarginLeft = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginLeft].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginLeft);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginRight))
+                    myUI.PostcardMarginRight = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginRight].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginRight);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginTop))
+                    myUI.PostcardMarginTop = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginTop].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginTop);
+                //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginBottom))
+                    myUI.PostcardMarginBottom = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value);
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginBottom);
+                //------------------------------------------------------------------------------------------
 
 
                 if (missingKeys.Count > 0)
@@ -371,6 +582,79 @@ namespace CDMailer
                     config.AppSettings.Settings.Add(ConfigKeys.UI.GeneratePerContact, myUI.GeneratePerContact.ToString());
                 else
                     config.AppSettings.Settings[ConfigKeys.UI.GeneratePerContact].Value = myUI.GeneratePerContact.ToString();
+                //------------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopSize))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.EnvelopSize, myUI.EnvelopSize.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopSize].Value = myUI.EnvelopSize.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopWidth))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.EnvelopWidth, myUI.EnvelopWidth.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopWidth].Value = myUI.EnvelopWidth.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopHeight))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.EnvelopHeight, myUI.EnvelopHeight.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopHeight].Value = myUI.EnvelopHeight.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopMarginLeft))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.EnvelopMarginLeft, myUI.EnvelopMarginLeft.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginLeft].Value = myUI.EnvelopMarginLeft.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopMarginRight))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.EnvelopMarginRight, myUI.EnvelopMarginRight.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginRight].Value = myUI.EnvelopMarginRight.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopMarginTop))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.EnvelopMarginTop, myUI.EnvelopMarginTop.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginTop].Value = myUI.EnvelopMarginTop.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopMarginBottom))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.EnvelopMarginBottom, myUI.EnvelopMarginBottom.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginBottom].Value = myUI.EnvelopMarginBottom.ToString();
+                //------------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardSize))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.PostcardSize, myUI.PostcardSize.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardSize].Value = myUI.PostcardSize.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardWidth))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.PostcardWidth, myUI.PostcardWidth.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardWidth].Value = myUI.PostcardWidth.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardHeight))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.PostcardHeight, myUI.PostcardHeight.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardHeight].Value = myUI.PostcardHeight.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginLeft))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.PostcardMarginLeft, myUI.PostcardMarginLeft.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginLeft].Value = myUI.PostcardMarginLeft.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginRight))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.PostcardMarginRight, myUI.PostcardMarginRight.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginRight].Value = myUI.PostcardMarginRight.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginTop))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.PostcardMarginTop, myUI.PostcardMarginTop.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginTop].Value = myUI.PostcardMarginTop.ToString();
+                //------------------------------------------------------------------------------------------
+                if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginBottom))
+                    config.AppSettings.Settings.Add(ConfigKeys.UI.Print.PostcardMarginBottom, myUI.PostcardMarginBottom.ToString());
+                else
+                    config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value = myUI.PostcardMarginBottom.ToString();
+                //------------------------------------------------------------------------------------------
                 //------------------------------------------------------------------------------------------
 
                 config.Save(ConfigurationSaveMode.Modified);
@@ -418,7 +702,10 @@ namespace CDMailer
         private void listPaperSizes()
         {
             cboEnvelopSizes.DataSource = PrinterUtils.PaperSizes.Keys.ToList();
-            cboEnvelopSizes.SelectedIndex = cboEnvelopSizes.Items.IndexOf("A5");
+            cboEnvelopSizes.SelectedIndex = cboEnvelopSizes.Items.IndexOf("A4");
+
+            cboPostcardSizes.DataSource = PrinterUtils.PaperSizes.Keys.ToList();
+            cboPostcardSizes.SelectedIndex = cboPostcardSizes.Items.IndexOf("A5");
         }
 
         private void btnContactsFile_Click(object sender, EventArgs e)
@@ -693,17 +980,27 @@ namespace CDMailer
             Engine.Config.UI.PrintBuffer = myUI.PrintBuffer;
             Engine.Config.UI.PrintMethod = myUI.PrintMethod;
             Engine.Config.UI.Printer = myUI.Printer;
+            //
             Engine.Config.UI.EnvelopSize = myUI.EnvelopSize;
             Engine.Config.UI.EnvelopWidth = myUI.EnvelopWidth;
             Engine.Config.UI.EnvelopHeight = myUI.EnvelopHeight;
-            Engine.Config.UI.MarginLeft = myUI.MarginLeft;
-            Engine.Config.UI.MarginRight = myUI.MarginRight;
-            Engine.Config.UI.MarginTop = myUI.MarginTop;
-            Engine.Config.UI.MarginBottom = myUI.MarginBottom;
+            Engine.Config.UI.EnvelopMarginLeft = myUI.EnvelopMarginLeft;
+            Engine.Config.UI.EnvelopMarginRight = myUI.EnvelopMarginRight;
+            Engine.Config.UI.EnvelopMarginTop = myUI.EnvelopMarginTop;
+            Engine.Config.UI.EnvelopMarginBottom = myUI.EnvelopMarginBottom;
+            //
+            Engine.Config.UI.PostcardSize = myUI.PostcardSize;
+            Engine.Config.UI.PostcardWidth = myUI.PostcardWidth;
+            Engine.Config.UI.PostcardHeight = myUI.PostcardHeight;
+            Engine.Config.UI.PostcardMarginLeft = myUI.PostcardMarginLeft;
+            Engine.Config.UI.PostcardMarginRight = myUI.PostcardMarginRight;
+            Engine.Config.UI.PostcardMarginTop = myUI.PostcardMarginTop;
+            Engine.Config.UI.PostcardMarginBottom = myUI.PostcardMarginBottom;
+
 
             var finalDocuments = new List<string>();
             var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx").ToList();
-            documentsToPrint.RemoveAll(d=>d.Contains("~$"));
+            documentsToPrint.RemoveAll(d => d.Contains("~$"));
             switch (myUI.PrintPerContact)
             {
                 case REF.Scope.Letter:
@@ -729,8 +1026,8 @@ namespace CDMailer
             var selectedSize = PrinterUtils.PaperSizes[myUI.EnvelopSize];
             if (selectedSize.PaperName == "CUSTOM")
             {
-                txtWidth.ReadOnly = false;
-                txtHeight.ReadOnly = false;
+                txtEnvelopWidth.ReadOnly = false;
+                txtEnvelopHeight.ReadOnly = false;
             }
             else
             {
@@ -739,25 +1036,37 @@ namespace CDMailer
 
                 this.Invoke((MethodInvoker)delegate ()
                 {
-                    txtWidth.ReadOnly = true;
-                    txtHeight.ReadOnly = true;
+                    txtEnvelopWidth.ReadOnly = true;
+                    txtEnvelopHeight.ReadOnly = true;
+                });
+            }
+        }
+        private void cboPostcardSizes_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            var selectedSize = PrinterUtils.PaperSizes[myUI.PostcardSize];
+            if (selectedSize.PaperName == "CUSTOM")
+            {
+                txtPostcardWidth.ReadOnly = false;
+                txtPostcardHeight.ReadOnly = false;
+            }
+            else
+            {
+                myUI.PostcardWidth = selectedSize.Width;
+                myUI.PostcardHeight = selectedSize.Height;
+
+                this.Invoke((MethodInvoker)delegate ()
+                {
+                    txtPostcardWidth.ReadOnly = true;
+                    txtPostcardHeight.ReadOnly = true;
                 });
             }
         }
 
-        private void txtNumbersOnly(object sender, KeyPressEventArgs e)
-        {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) &&
-        (e.KeyChar != '.'))
-            {
-                e.Handled = true;
-            }
 
-            // only allow one decimal point
-            if ((e.KeyChar == '.') && ((sender as TextBox).Text.IndexOf('.') > -1))
-            {
+        private void txtMargin_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!MyExtensions.isNumber(e.KeyChar, (sender as TextBox).Text))
                 e.Handled = true;
-            }
         }
     }
 }
