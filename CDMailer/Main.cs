@@ -485,8 +485,9 @@ namespace CDMailer
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardSize);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardWidth].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardWidth))
-                    myUI.PostcardWidth = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardWidth].Value);
+                    myUI.PostcardWidth = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardWidth);
                 //------------------------------------------------------------------------------------------
@@ -1077,7 +1078,7 @@ namespace CDMailer
 
         private void txtMargin_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!MyExtensions.isNumber(e.KeyChar, (sender as TextBox).Text))
+            if (!MyExtensions.isInt(e.KeyChar, (sender as TextBox).Text))
                 e.Handled = true;
         }
     }
