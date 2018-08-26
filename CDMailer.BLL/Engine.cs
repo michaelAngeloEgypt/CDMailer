@@ -2,15 +2,11 @@
 using CsvHelper.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 
 namespace CDMailer.BLL
 {
@@ -328,8 +324,14 @@ namespace CDMailer.BLL
         }
         private static void GenerateFilled(string outputFolder, Contact contact, string templateFile)
         {
-            if (!contact.CDMailerTemplate.Contains("[") && !contact.CDMailerTemplate.Contains("]"))
-                throw new ApplicationException("Invalid template column");
+            if (string.IsNullOrEmpty(contact.CDMailerTemplate))
+            {
+                var x = new ApplicationException("Invalid template column");
+                x.Data.Add("contact.FirstName", contact.FirstName);
+                x.Data.Add("contact.LastName", contact.LastName);
+                x.Data.Add("contact.Template", contact.Template);
+                throw x;
+            }
 
             //if (contact.FirstName.Contains("Beth"))
             //    1.ToString();

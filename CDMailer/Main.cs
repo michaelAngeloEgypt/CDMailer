@@ -455,6 +455,7 @@ namespace CDMailer
         }
         private bool LoadSettings(out string exeVersion)
         {
+            int tempInt = 0;
             exeVersion = "";
             try
             {
@@ -489,28 +490,33 @@ namespace CDMailer
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardWidth);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardHeight].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardHeight))
-                    myUI.PostcardHeight = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardHeight].Value);
+                    myUI.PostcardHeight = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardHeight);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginLeft].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginLeft))
-                    myUI.PostcardMarginLeft = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginLeft].Value);
+                    myUI.PostcardMarginLeft = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginLeft);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginRight].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginRight))
-                    myUI.PostcardMarginRight = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginRight].Value);
+                    myUI.PostcardMarginRight = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginRight);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginTop].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginTop))
-                    myUI.PostcardMarginTop = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginTop].Value);
+                    myUI.PostcardMarginTop = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginTop);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginBottom))
-                    myUI.PostcardMarginBottom = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value);
+                    myUI.PostcardMarginBottom = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginBottom);
                 //------------------------------------------------------------------------------------------
@@ -520,33 +526,39 @@ namespace CDMailer
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardSize);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardWidth].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardWidth))
-                    myUI.PostcardWidth = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardWidth].Value);
+                    myUI.PostcardWidth = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardWidth);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardHeight].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardHeight))
-                    myUI.PostcardHeight = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardHeight].Value);
+                    myUI.PostcardHeight = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardHeight);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginLeft].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginLeft))
-                    myUI.PostcardMarginLeft = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginLeft].Value);
+                    myUI.PostcardMarginLeft = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginLeft);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginRight].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginRight))
-                    myUI.PostcardMarginRight = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginRight].Value);
+                    myUI.PostcardMarginRight = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginRight);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginTop].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginTop))
-                    myUI.PostcardMarginTop = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginTop].Value);
+                    myUI.PostcardMarginTop = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginTop);
                 //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value, out tempInt);
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginBottom))
-                    myUI.PostcardMarginBottom = int.Parse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value);
+                    myUI.PostcardMarginBottom = tempInt;
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginBottom);
                 //------------------------------------------------------------------------------------------
