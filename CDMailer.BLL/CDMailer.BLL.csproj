@@ -68,17 +68,17 @@
     <Reference Include="SautinSoft.Document, Version=3.3.3.26, Culture=neutral, PublicKeyToken=e759c76c7515592a, processorArchitecture=MSIL">
       <HintPath>..\packages\sautinsoft.document.3.3.3.26\lib\net461\SautinSoft.Document.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.Doc, Version=6.6.13.4040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+    <Reference Include="Spire.Doc, Version=6.7.12.4040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ref\Spire.Doc.6.7.12\NET4.0\Spire.Doc.dll</HintPath>
+      <HintPath>..\ref\Spire.Doc.6.8.11\NET4.0\Spire.Doc.dll</HintPath>
     </Reference>
     <Reference Include="Spire.License, Version=1.3.6.40, Culture=neutral, PublicKeyToken=b1144360237c8b3f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ref\Spire.Doc.6.7.12\NET4.0\Spire.License.dll</HintPath>
+      <HintPath>..\ref\Spire.Doc.6.8.11\NET4.0\Spire.License.dll</HintPath>
     </Reference>
-    <Reference Include="Spire.Pdf, Version=4.6.10.2040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
+    <Reference Include="Spire.Pdf, Version=4.7.10.2040, Culture=neutral, PublicKeyToken=663f351905198cb3, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ref\Spire.Doc.6.7.12\NET4.0\Spire.Pdf.dll</HintPath>
+      <HintPath>..\ref\Spire.Doc.6.8.11\NET4.0\Spire.Pdf.dll</HintPath>
     </Reference>
     <Reference Include="swxben.docxtemplateengine, Version=0.1.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\swxben.docxtemplateengine.0.1.5\lib\net40\swxben.docxtemplateengine.dll</HintPath>
