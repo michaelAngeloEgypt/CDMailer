@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Printing;
 using System.IO;
 using System.Linq;
@@ -204,6 +205,9 @@ namespace CDMailer.BLL
         /// <param name="printer"></param>
         public static void PrintWithSpire(string filename, string printer, bool isLandscape = false, PaperSize paperSize = null, Margins margins = null)
         {
+            if (REF.Constants.postcardIDs.Any(t => filename.ContainsString(filename)))
+                PrintPostCards_Spire(filename, printer);
+
             if (paperSize == null)
                 paperSize = PaperSizes["A4"];
 
@@ -233,6 +237,32 @@ namespace CDMailer.BLL
             //Background printing  
             printDoc.Print();
         }
+        private static void PrintPostCards_Spire(string filename, string printer)
+        {
+            Spire.Doc.Document doc = new Spire.Doc.Document();
+
+            //Load word document
+            doc.LoadFromFile(filename);
+
+            //Printing with Custom paper
+            SizeF sf = doc.Sections[0].PageSetup.PageSize;
+
+            float wd = sf.Width;
+            float ht = sf.Height;
+            System.Drawing.Printing.PrintDocument printDoc = doc.PrintDocument;
+            printDoc.DefaultPageSettings.PaperSize = new System.Drawing.Printing.PaperSize("custom", (int)wd / 72 * 100, (int)ht / 72 * 100);
+
+            doc.PrintDocument.PrinterSettings.PrinterName = printer;
+
+            if (doc.PrintDocument.PrinterSettings.CanDuplex)
+                //Setting Horizontal printing ;
+                doc.PrintDocument.PrinterSettings.Duplex = Duplex.Horizontal;
+
+            System.Drawing.Printing.PrintController printController = new System.Drawing.Printing.StandardPrintController();
+            printDoc.PrintController = printController;
+            printDoc.Print();
+        }
+
         //
         #endregion PAID
     }
