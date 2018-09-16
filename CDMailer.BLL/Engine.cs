@@ -95,8 +95,8 @@ namespace CDMailer.BLL
         }
         public static ExecutionResult DoCustom(string outputFolder, List<Contact> contacts, REF.Scope generatePerContact, string templateFile)
         {
-            var successfulContacts = new List<String>();
-            var failedContacts = new List<String>();
+            var successfulContacts = new List<Contact>();
+            var failedContacts = new List<Contact>();
 
             Contact contact = new Contact();
 
@@ -111,7 +111,7 @@ namespace CDMailer.BLL
 
                     if (!File.Exists(templateFile))
                         throw new ApplicationException($"Missing template file: {templateFile}");
-                    successfulContacts.Add(contact.OppName);
+                    successfulContacts.Add(contact);
                 }
                 catch (Exception x)
                 {
@@ -120,7 +120,7 @@ namespace CDMailer.BLL
                     if (!x.Data.Contains("templateFile")) x.Data.Add("templateFile", templateFile);
                     if (!x.Data.Contains("contact.OppName")) x.Data.Add("contact.OppName", contact.OppName);
                     XLogger.Error(x);
-                    failedContacts.Add(contact.OppName);
+                    failedContacts.Add(contact);
                 }
             }
 
@@ -136,7 +136,7 @@ namespace CDMailer.BLL
             }
             else
             {
-                CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nThese are the failed contacts:\n\n{String.Join("\n", failedContacts)}");
+                CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nBelow are the failed contacts:\n\n{String.Join("\n", failedContacts)}");
                 return ExecutionResult.PartialPass;
             }
         }
@@ -236,8 +236,8 @@ namespace CDMailer.BLL
         }
         private static ExecutionResult GenerateMessages(string templatesFolder, string outputFolder, REF.Scope generatePerContact, List<Contact> contacts)
         {
-            var successfulContacts = new List<String>();
-            var failedContacts = new List<String>();
+            var successfulContacts = new List<Contact>();
+            var failedContacts = new List<Contact>();
 
             Contact contact = new Contact();
 
@@ -246,15 +246,17 @@ namespace CDMailer.BLL
             {
                 try
                 {
+                    templateFile = "";
                     contact = contacts[i];
                     CallUpdateStatus($"Processing contact {i + 1} of {contacts.Count} contacts");
-                    templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.CDMailerTemplate), ".docx");
+                    if (!string.IsNullOrEmpty(contact.CDMailerTemplate))
+                        templateFile = Path.ChangeExtension(Path.Combine(templatesFolder, contact.CDMailerTemplate), ".docx");
 
                     GenerateContactCore(outputFolder, generatePerContact, contact, templateFile);
 
                     if (!File.Exists(templateFile))
                         throw new ApplicationException($"Missing template file: {templateFile}");
-                    successfulContacts.Add(contact.OppName);
+                    successfulContacts.Add(contact);
                 }
                 catch (Exception x)
                 {
@@ -263,7 +265,7 @@ namespace CDMailer.BLL
                     if (!x.Data.Contains("templateFile")) x.Data.Add("templateFile", templateFile);
                     if (!x.Data.Contains("contact.OppName")) x.Data.Add("contact.OppName", contact.OppName);
                     XLogger.Error(x);
-                    failedContacts.Add(contact.OppName);
+                    failedContacts.Add(contact);
                 }
             }
 
@@ -279,7 +281,7 @@ namespace CDMailer.BLL
             }
             else
             {
-                CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nThese are the failed contacts:\n\n{String.Join("\n", failedContacts)}");
+                CallUpdateStatus($"There was a problem generating some of the contact files. Successfully generated {successfulContacts.Count} contact files and failed to generate {failedContacts.Count} files. \nBelow are the failed contacts, make sure they have a valid template assigned:\n\n{String.Join("\n", failedContacts)}");
                 return ExecutionResult.PartialPass;
             }
         }
@@ -324,7 +326,7 @@ namespace CDMailer.BLL
         }
         private static void GenerateFilled(string outputFolder, Contact contact, string templateFile)
         {
-            if (string.IsNullOrEmpty(contact.CDMailerTemplate))
+            if (string.IsNullOrEmpty(contact.CDMailerTemplate) && string.IsNullOrEmpty(templateFile))
             {
                 var x = new ApplicationException("Invalid template column");
                 x.Data.Add("contact.FirstName", contact.FirstName);
@@ -351,12 +353,9 @@ namespace CDMailer.BLL
         }
         private static string GetFilledTemplateName(Contact contact, string template = null)
         {
-            //if (contact.FirstName.StartsWith("Donna"))
-            //    1.ToString();
-
             var filledTemplate = string.IsNullOrEmpty(template) ? contact.CDMailerTemplate : template;
             var reg = new Regex(@"\[.*?\]");
-            var matches = reg.Matches(contact.CDMailerTemplate);
+            var matches = reg.Matches(filledTemplate);
             foreach (var requiredVar in matches)
             {
                 var mappedVar = contact.GetMappedVar(requiredVar.ToString().Trim(new char[] { '[', ']' }));
@@ -374,7 +373,21 @@ namespace CDMailer.BLL
                 if (String.IsNullOrWhiteSpace(contactsFilepath) || !File.Exists(contactsFilepath))
                     throw new ArgumentNullException("contactsFilepath");
 
-                var csvConfig = new Configuration() { Delimiter = ",", HasHeaderRecord = true, IgnoreBlankLines = true, HeaderValidated = null, };
+                var csvConfig = new Configuration()
+                {
+                    Delimiter = ",",
+                    HasHeaderRecord = true,
+                    IgnoreBlankLines = true,
+                    HeaderValidated = null,
+                    MissingFieldFound = null
+                };
+                //csvConfig.MissingFieldFound = (headerNames, index, context) =>
+                //{
+                //    var mes = $"Field with names ['{string.Join("', '", headerNames)}'] at index '{index}' was not found.";
+                //    var x = new ApplicationException(mes);
+                //    x.Data.Add("contactsFilepath", contactsFilepath);
+                //    XLogger.Error(x);
+                //};
                 csvConfig.RegisterClassMap(new ContactMap());
                 using (var csv = new CsvReader(new StreamReader(contactsFilepath), csvConfig))
                 {

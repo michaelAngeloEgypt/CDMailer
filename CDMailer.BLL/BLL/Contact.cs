@@ -195,7 +195,7 @@ namespace CDMailer.BLL
 
         public override string ToString()
         {
-            return $"{FirstName} {LastName}";
+            return $"{FirstName} {LastName} - {OppName}";
         }
     }
 
