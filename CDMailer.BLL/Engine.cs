@@ -379,7 +379,8 @@ namespace CDMailer.BLL
                     HasHeaderRecord = true,
                     IgnoreBlankLines = true,
                     HeaderValidated = null,
-                    MissingFieldFound = null
+                    MissingFieldFound = null,
+                    DetectColumnCountChanges = false,
                 };
                 //csvConfig.MissingFieldFound = (headerNames, index, context) =>
                 //{

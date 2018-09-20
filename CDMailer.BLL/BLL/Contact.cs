@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CDMailer.BLL
 {
@@ -12,6 +10,7 @@ namespace CDMailer.BLL
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public string OppName { get; set; }
+        public string AssignedTo { get; set; }
         public string FsAddress { get; set; }
         public string Template { get; set; }
         public string A1_AddressLine1 { get; set; }
@@ -19,6 +18,11 @@ namespace CDMailer.BLL
         public string A1_City { get; set; }
         public string A1_State { get; set; }
         public string A1_ZipCode { get; set; }
+        public string A12_AddressLine1 { get; set; }
+        public string A12_AddressLine2 { get; set; }
+        public string A12_City { get; set; }
+        public string A12_State { get; set; }
+        public string A12_ZipCode { get; set; }
         public string A2_AddressLine1 { get; set; }
         public string A2_AddressLine2 { get; set; }
         public string A2_City { get; set; }
@@ -149,8 +153,8 @@ namespace CDMailer.BLL
             {
                 var AddressProperties = new Dictionary<string, string>()
                 {
-                    { "AddressLine1", $"A{i}_AddressLine1" },
-                    { "AddressLine2", $"A{i}_AddressLine2" },
+                    { "AddressLine1", $"A{i}_AddressLine1"},
+                    { "AddressLine2", $"A{i}_AddressLine2"},
                     { "City", $"A{i}_City"},
                     { "State", $"A{i}_State"},
                     { "ZipCode", $"A{i}_ZipCode"},
@@ -217,6 +221,7 @@ namespace CDMailer.BLL
             Map(x => x.FirstName).Index(++i);
             Map(x => x.LastName).Index(++i);
             Map(x => x.OppName).Index(++i);
+            Map(x => x.AssignedTo).Index(++i);
             Map(x => x.FsAddress).Index(++i);
             Map(x => x.Template).Index(++i);
             Map(x => x.A1_AddressLine1).Index(++i);
@@ -224,6 +229,11 @@ namespace CDMailer.BLL
             Map(x => x.A1_City).Index(++i);
             Map(x => x.A1_State).Index(++i);
             Map(x => x.A1_ZipCode).Index(++i);
+            Map(x => x.A12_AddressLine1).Index(++i);
+            Map(x => x.A12_AddressLine2).Index(++i);
+            Map(x => x.A12_City).Index(++i);
+            Map(x => x.A12_State).Index(++i);
+            Map(x => x.A12_ZipCode).Index(++i);
             Map(x => x.A2_AddressLine1).Index(++i);
             Map(x => x.A2_AddressLine2).Index(++i);
             Map(x => x.A2_City).Index(++i);
