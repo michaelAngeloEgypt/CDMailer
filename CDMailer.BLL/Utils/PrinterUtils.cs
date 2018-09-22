@@ -1,4 +1,5 @@
-﻿using System;
+﻿using S = Spire.Doc.Documents;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -205,7 +206,7 @@ namespace CDMailer.BLL
         /// <param name="printer"></param>
         public static void PrintWithSpire(string filename, string printer, bool isLandscape = false, PaperSize paperSize = null, Margins margins = null)
         {
-            if (REF.Constants.postcardIDs.Any(t => filename.ContainsString(filename)))
+            if (REF.Constants.postcardIDs.Any(t => filename.ContainsString(t)))
                 PrintPostCards_Spire(filename, printer);
 
             if (paperSize == null)
@@ -239,6 +240,11 @@ namespace CDMailer.BLL
         }
         private static void PrintPostCards_Spire(string filename, string printer)
         {
+            //method1(filename, printer);
+            method2(filename, printer);
+        }
+        private static  void method1(string filename, string printer)
+        {
             Spire.Doc.Document doc = new Spire.Doc.Document();
 
             //Load word document
@@ -262,7 +268,31 @@ namespace CDMailer.BLL
             printDoc.PrintController = printController;
             printDoc.Print();
         }
+        private static void method2(string filename, string printer)
+        {
+            Spire.Doc.Document doc = new Spire.Doc.Document();
 
+            doc.LoadFromFile(filename);
+
+            System.Drawing.Printing.PrintDocument printDoc = doc.PrintDocument;
+
+            //get the page size
+            SizeF sf = doc.Sections[0].PageSetup.PageSize;
+            float wd = sf.Width;
+            float ht = sf.Height;
+            float a = (S.PageSize.A4.Height - wd) / 2;
+            float b = (S.PageSize.A4.Width - ht) / 2;
+
+
+            //set printing margins
+            printDoc.OriginAtMargins = true;
+            //printDoc.DefaultPageSettings.Margins = new System.Drawing.Printing.Margins((int)(a), (int)(a), (int)(b), (int)(b));
+            printDoc.PrinterSettings.PrinterName = printer;
+            printDoc.PrinterSettings.Duplex = Duplex.Horizontal;
+            printDoc.DefaultPageSettings.PaperSize = new PaperSize("postcard",600,400);
+            printDoc.PrintController = new StandardPrintController();
+            printDoc.Print();
+        }
         //
         #endregion PAID
     }
