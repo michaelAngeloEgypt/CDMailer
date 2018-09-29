@@ -241,7 +241,8 @@ namespace CDMailer.BLL
         private static void PrintPostCards_Spire(string filename, string printer)
         {
             //method1(filename, printer);
-            method2(filename, printer);
+            //method2(filename, printer);
+            //method3(filename, printer);
         }
         private static  void method1(string filename, string printer)
         {
@@ -292,6 +293,15 @@ namespace CDMailer.BLL
             printDoc.DefaultPageSettings.PaperSize = new PaperSize("postcard",600,400);
             printDoc.PrintController = new StandardPrintController();
             printDoc.Print();
+        }
+        private static void method3(string filename, string printer)
+        {
+            MemoryStream ms = new MemoryStream();
+            Spire.Doc.Document doc = new Spire.Doc.Document();
+            doc.LoadFromFile(filename);
+            doc.SaveToStream(ms, Spire.Doc.FileFormat.XPS);
+            ms.Position = 0;
+            XpsPrintHelper.Print(ms, printer, $"{Path.GetFileName(filename)}", true);
         }
         //
         #endregion PAID
