@@ -728,6 +728,8 @@ namespace CDMailer
                 DefaultExt = ".csv",
                 Multiselect = false,
                 Title = "Please select the input csv coming from Apptivo",
+                Filter = @"csv files (*.csv)|*.*",
+                FilterIndex = 0,
             };
 
             if (dlgOpenSheet.ShowDialog() == System.Windows.Forms.DialogResult.OK)
