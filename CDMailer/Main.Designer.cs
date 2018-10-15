@@ -605,9 +605,9 @@
             this.label10.AutoSize = true;
             this.label10.Location = new System.Drawing.Point(437, 156);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(382, 13);
+            this.label10.Size = new System.Drawing.Size(314, 13);
             this.label10.TabIndex = 39;
-            this.label10.Text = "*Used only for Envelops and Postcards. Other documents are A4 with 0 margins";
+            this.label10.Text = "*Used only for Envelops. Other documents are A4 with 0 margins.";
             // 
             // label7
             // 

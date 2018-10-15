@@ -207,7 +207,10 @@ namespace CDMailer.BLL
         public static void PrintWithSpire(string filename, string printer, bool isLandscape = false, PaperSize paperSize = null, Margins margins = null)
         {
             if (REF.Constants.postcardIDs.Any(t => filename.ContainsString(t)))
+            {
                 PrintPostCards_Spire(filename, printer);
+                return;
+            }
 
             if (paperSize == null)
                 paperSize = PaperSizes["A4"];

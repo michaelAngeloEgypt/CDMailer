@@ -166,6 +166,7 @@ namespace CDMailer.BLL
                           new System.Drawing.Printing.PaperSize("CUSTOM", Config.UI.EnvelopWidth, Config.UI.EnvelopHeight);
                         margins = new Margins(Config.UI.EnvelopMarginLeft, Config.UI.EnvelopMarginRight, Config.UI.EnvelopMarginTop, Config.UI.EnvelopMarginBottom);
                     }
+                    /*
                     else if (isPostcard)
                     {
                         paperSize = !Config.UI.PostcardSize.Equals("CUSTOM") ? PrinterUtils.PaperSizes[Config.UI.EnvelopSize] :
@@ -173,7 +174,7 @@ namespace CDMailer.BLL
                         margins = new Margins(Config.UI.PostcardMarginLeft, Config.UI.PostcardMarginRight, Config.UI.PostcardMarginTop, Config.UI.PostcardMarginBottom);
                         isLandscape = true;
                     }
-
+                    */
 
                     switch (Config.UI.PrintMethod)
                     {

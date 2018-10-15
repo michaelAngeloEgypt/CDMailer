@@ -439,6 +439,10 @@ namespace CDMailer
             if (!LoadSettings(out exeVersion))
                 MessageBox.Show(@"Unable to read app settings. Please check the log file");
 
+            //hide Postcard controls
+            tcPrintingOptions.TabPages.Remove(tpPostcard);
+            
+
             Engine.Config = myUI.BuildConfig();
             Engine.Config.ExeVersion = exeVersion;
             Engine.Variables.BeginTimestamp = DateTime.Now;
@@ -480,6 +484,49 @@ namespace CDMailer
                     missingKeys.Add(ConfigKeys.UI.GeneratePerContact);
                 //------------------------------------------------------------------------------------------
                 //------------------------------------------------------------------------------------------
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopSize))
+                    myUI.EnvelopSize = config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopSize].Value;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.EnvelopSize);
+                //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopWidth].Value, out tempInt);
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopWidth))
+                    myUI.EnvelopWidth = tempInt;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.EnvelopWidth);
+                //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopHeight].Value, out tempInt);
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopHeight))
+                    myUI.EnvelopHeight = tempInt;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.EnvelopHeight);
+                //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginLeft].Value, out tempInt);
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopMarginLeft))
+                    myUI.EnvelopMarginLeft = tempInt;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.EnvelopMarginLeft);
+                //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginRight].Value, out tempInt);
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopMarginRight))
+                    myUI.EnvelopMarginRight = tempInt;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.EnvelopMarginRight);
+                //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginTop].Value, out tempInt);
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopMarginTop))
+                    myUI.EnvelopMarginTop = tempInt;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.EnvelopMarginTop);
+                //------------------------------------------------------------------------------------------
+                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginBottom].Value, out tempInt);
+                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.EnvelopMarginBottom))
+                    myUI.EnvelopMarginBottom = tempInt;
+                else
+                    missingKeys.Add(ConfigKeys.UI.Print.EnvelopMarginBottom);
+                //------------------------------------------------------------------------------------------
+                //------------------------------------------------------------------------------------------
+                /*
                 if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardSize))
                     myUI.PostcardSize = config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardSize].Value;
                 else
@@ -521,49 +568,7 @@ namespace CDMailer
                 else
                     missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginBottom);
                 //------------------------------------------------------------------------------------------
-                //------------------------------------------------------------------------------------------
-                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardSize))
-                    myUI.PostcardSize = config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardSize].Value;
-                else
-                    missingKeys.Add(ConfigKeys.UI.Print.PostcardSize);
-                //------------------------------------------------------------------------------------------
-                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardWidth].Value, out tempInt);
-                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardWidth))
-                    myUI.PostcardWidth = tempInt;
-                else
-                    missingKeys.Add(ConfigKeys.UI.Print.PostcardWidth);
-                //------------------------------------------------------------------------------------------
-                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardHeight].Value, out tempInt);
-                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardHeight))
-                    myUI.PostcardHeight = tempInt;
-                else
-                    missingKeys.Add(ConfigKeys.UI.Print.PostcardHeight);
-                //------------------------------------------------------------------------------------------
-                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginLeft].Value, out tempInt);
-                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginLeft))
-                    myUI.PostcardMarginLeft = tempInt;
-                else
-                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginLeft);
-                //------------------------------------------------------------------------------------------
-                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginRight].Value, out tempInt);
-                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginRight))
-                    myUI.PostcardMarginRight = tempInt;
-                else
-                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginRight);
-                //------------------------------------------------------------------------------------------
-                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginTop].Value, out tempInt);
-                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginTop))
-                    myUI.PostcardMarginTop = tempInt;
-                else
-                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginTop);
-                //------------------------------------------------------------------------------------------
-                int.TryParse(config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value, out tempInt);
-                if (config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardMarginBottom))
-                    myUI.PostcardMarginBottom = tempInt;
-                else
-                    missingKeys.Add(ConfigKeys.UI.Print.PostcardMarginBottom);
-                //------------------------------------------------------------------------------------------
-
+                */
 
                 if (missingKeys.Count > 0)
                     throw new ApplicationException("the following config keys are missing, they will be inserted on application exit: " + String.Join(", ", missingKeys));
@@ -633,6 +638,7 @@ namespace CDMailer
                     config.AppSettings.Settings[ConfigKeys.UI.Print.EnvelopMarginBottom].Value = myUI.EnvelopMarginBottom.ToString();
                 //------------------------------------------------------------------------------------------
                 //------------------------------------------------------------------------------------------
+                /*
                 if (!config.AppSettings.Settings.AllKeys.Contains(ConfigKeys.UI.Print.PostcardSize))
                     config.AppSettings.Settings.Add(ConfigKeys.UI.Print.PostcardSize, myUI.PostcardSize.ToString());
                 else
@@ -669,6 +675,7 @@ namespace CDMailer
                     config.AppSettings.Settings[ConfigKeys.UI.Print.PostcardMarginBottom].Value = myUI.PostcardMarginBottom.ToString();
                 //------------------------------------------------------------------------------------------
                 //------------------------------------------------------------------------------------------
+                */
 
                 config.Save(ConfigurationSaveMode.Modified);
             }
@@ -1004,6 +1011,7 @@ namespace CDMailer
             Engine.Config.UI.EnvelopMarginTop = myUI.EnvelopMarginTop;
             Engine.Config.UI.EnvelopMarginBottom = myUI.EnvelopMarginBottom;
             //
+            /*
             Engine.Config.UI.PostcardSize = myUI.PostcardSize;
             Engine.Config.UI.PostcardWidth = myUI.PostcardWidth;
             Engine.Config.UI.PostcardHeight = myUI.PostcardHeight;
@@ -1011,7 +1019,7 @@ namespace CDMailer
             Engine.Config.UI.PostcardMarginRight = myUI.PostcardMarginRight;
             Engine.Config.UI.PostcardMarginTop = myUI.PostcardMarginTop;
             Engine.Config.UI.PostcardMarginBottom = myUI.PostcardMarginBottom;
-
+            */
 
             var finalDocuments = new List<string>();
             var documentsToPrint = Directory.GetFiles(myUI.OutputFolder, "*.docx").ToList();
